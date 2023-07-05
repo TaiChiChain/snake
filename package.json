@@ -4,15 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc && cp -r src/contracts lib/",
     "test": "jest",
-    "lint": "eslint tests/**/*.ts"
+    "lint": "eslint src/**/*.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "jest": "^29.5.0",
-    "solc": "^0.8.0",
+    "solc": "^0.8.20",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "web3": "^4.0.2"
