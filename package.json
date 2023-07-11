@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc && cp -r src/contracts lib/",
     "test": "jest",
+    "smoke-test": "jest --testPathPattern src/tests/",
     "lint": "eslint src/**/*.ts"
   },
   "keywords": [],

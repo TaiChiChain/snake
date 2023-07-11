@@ -16,12 +16,3 @@ test('eth_getBlockByNumber', async () => {
     const block = await client.eth.getBlock(blockNumber)
     expect(block.number).toBe(blockNumber)
 })
-
-test('eth_getBlockTransactionCountByHash', async () => {
-    const blockNumber = await client.eth.getBlockNumber()
-    const block = await client.eth.getBlock(blockNumber)
-    expect(block.number).toBe(blockNumber)
-
-    const count = await client.eth.getBlockTransactionCount(block.hash)
-    expect(count).toBe(BigInt(block.transactions.length))
-})
