@@ -1,5 +1,5 @@
 import { test, expect } from '@jest/globals'
-import { client } from './heper'
+import { client} from './heper'
 
 test('eth_getBlockByHash', async () => {
     const blockNumber = await client.eth.getBlockNumber()
