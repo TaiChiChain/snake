@@ -1,10 +1,11 @@
 import { test, expect } from '@jest/globals';
 import { compile } from '../utils/compile';
+//import { compile } from '../utils/compile';
 import {
   ST_STORAGE_FILENAME,
   ST_STORAGE_CONTRACT_NAME,
 } from '../utils/contracts';
-import { client } from './heper';
+import { client } from './helper';
 
 test('eth_getBlockByHash', async () => {
   const blockNumber = await client.eth.getBlockNumber();
@@ -37,13 +38,13 @@ test('eth_testStorageContract', async () => {
     '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f';
   const account = client.eth.accounts.wallet.add(privateKeyString);
   const code = compile(ST_STORAGE_FILENAME, ST_STORAGE_CONTRACT_NAME);
-  console.log(code);
+  console.log('1.compile:', code);
   const bytecode =
     code.contracts[ST_STORAGE_CONTRACT_NAME]['EIP1153Skeleton'].evm.bytecode
       .object;
-  console.log(bytecode);
+  //console.log('2.contract bytecode:', bytecode);
   const abi = code.contracts[ST_STORAGE_CONTRACT_NAME]['EIP1153Skeleton'].abi;
-  console.log(abi);
+  //console.log('3.abi:', abi);
   const MyContract = new client.eth.Contract(abi);
   const myContract = MyContract.deploy({
     data: '0x' + bytecode,
@@ -64,9 +65,9 @@ test('eth_testStorageContract', async () => {
     })
     .on('error', (err) => console.log(err))
     .on('transactionHash', (hash) => {
-      console.log(hash);
+      console.log('4.deploy contract transactionHash:', hash);
     })
     .on('receipt', function (receipt) {
-      console.log(receipt.contractAddress); // contains the new contract address
+      console.log('5.contract address:', receipt.contractAddress); // contains the new contract address
     });
 });
