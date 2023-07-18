@@ -1,7 +1,8 @@
 import Web3 from 'web3'
-import axios from 'axios';
+import axios from 'axios'
 
-export const url = "http://127.0.0.1:8881"
+export const url = 'http://127.0.0.1:8881'
+// export const url = 'http://127.0.0.1:8545'
 export const client = new Web3(url)
 
 interface ethRequest {
@@ -20,12 +21,11 @@ export async function call(method: string, params?: any) {
     }
 
     const body = JSON.stringify(request)
-    console.log(body);
 
     try {
         const result = await axios.post(url, body, {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             }
         })
         return result.data
@@ -55,3 +55,5 @@ export async function newBlockFilter() {
 export async function newPendingTransactionFilter() {
     return await call('eth_newPendingTransactionFilter')
 }
+
+client.eth.sendSignedTransaction
