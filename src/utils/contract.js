@@ -33,7 +33,7 @@ class ContractUtils {
         }
         // Compile the Solidity code using solc
         const compiledCode = JSON.parse(solc.compile(JSON.stringify(input)))
-        console.log(compiledCode)
+
         this.ContractMap[contractName] =
             compiledCode.contracts['code'][contractName]
     }
