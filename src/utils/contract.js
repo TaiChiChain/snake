@@ -33,6 +33,17 @@ class ContractUtils {
         }
         // Compile the Solidity code using solc
         const compiledCode = JSON.parse(solc.compile(JSON.stringify(input)))
+        if (compiledCode['errors'] && compiledCode['errors'].length > 0) {
+            const errs = []
+            for (const info of compiledCode['errors']) {
+                if (info.type === '') {
+                    errs.add(info)
+                }
+            }
+            if (errs.length > 0) {
+                throw new Error(JSON.stringify(errs))
+            }
+        }
 
         this.ContractMap[contractName] =
             compiledCode.contracts['code'][contractName]
@@ -54,14 +65,15 @@ class ContractUtils {
         return this.ContractMap[contractName].abi
     }
 
-    async estimateGas(contractName) {
+    async estimateGas(contractName, ...params) {
         if (!this.ContractMap[contractName]) {
             throw new Error(`no such contract: ${contractName}`)
         }
 
         const contract = new this.client.eth.Contract(this.getAbi(contractName))
         const tx = contract.deploy({
-            data: '0x' + this.getByteCode(contractName)
+            data: '0x' + this.getByteCode(contractName),
+            arguments: params
         })
         const gas = await tx.estimateGas({
             from: this.account
@@ -73,16 +85,17 @@ class ContractUtils {
         return await this.client.eth.getGasPrice()
     }
 
-    async deploy(contractName) {
+    async deploy(contractName, ...params) {
         if (!this.ContractMap[contractName]) {
             throw new Error(`no such contract: ${contractName}`)
         }
 
         const contract = new this.client.eth.Contract(this.getAbi(contractName))
         const tx = contract.deploy({
-            data: '0x' + this.getByteCode(contractName)
+            data: '0x' + this.getByteCode(contractName),
+            arguments: params
         })
-        const gas = await this.estimateGas(contractName)
+        const gas = await this.estimateGas(contractName, ...params)
         const gasPrice = await this.getGasPrice()
 
         const res = await tx
@@ -120,7 +133,7 @@ class ContractUtils {
             callFunc.stateMutability === 'pure'
 
         if (isReadOnly) {
-            return await tx.call()
+            return await tx.call({from: this.account})
         } else {
             const gas = await tx.estimateGas({
                 from: this.account
@@ -133,7 +146,8 @@ class ContractUtils {
                     to: address,
                     data: rawTransactionData,
                     gas: gas.toString(),
-                    gasPrice: gasPrice
+                    gasPrice: gasPrice,
+                    value: this.client.utils.toWei('1', 'wei')
                 },
                 this.privateKeyString
             )
