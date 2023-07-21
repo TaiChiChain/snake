@@ -1,12 +1,12 @@
-import {test, expect} from '@jest/globals'
+import { test, expect } from '@jest/globals'
 import {
     ST_CONTRACT_DIR,
     ST_PRIVATEKRY,
     ST_STORAGE_CONTRACT_NAME,
     ST_STORAGE_FILENAME
 } from '../utils/contracts_static'
-import {ContractUtils} from '../utils/contract'
-import {client} from '../utils/rpc'
+import { ContractUtils } from '../utils/contract'
+import { client } from '../utils/rpc'
 
 test('eth_testStorageContract', async () => {
     const utils: ContractUtils = new ContractUtils(
@@ -16,7 +16,7 @@ test('eth_testStorageContract', async () => {
     )
     utils.compile(ST_STORAGE_FILENAME, ST_STORAGE_CONTRACT_NAME)
     const address = await utils.deploy(ST_STORAGE_CONTRACT_NAME)
-
+    console.log('Deploy contract address is : ', address)
     // key = 123 value = 456
     await utils.call(
         ST_STORAGE_CONTRACT_NAME,
