@@ -41,7 +41,7 @@ describe('test_getBlockNumber', () => {
 describe('test_getBalance', () => {
     test('get_balance_normal_1', async () => {
         const balance = await client.eth.getBalance("0xc0Ff2e0b3189132D815b8eb325bE17285AC898f8")
-        //console.log(balance)
+        console.log(balance)
         expect(balance).toBeGreaterThanOrEqual(0.0)
     })
 
@@ -103,7 +103,7 @@ describe('test_getBlockByNumber', () => {
     test('getBlockByNumber_normal_1', async () => {
         const blocknum = await client.eth.getBlockNumber()
         const block_transactions = (await client.eth.getBlock(blocknum, true)).transactions
-        //console.log(block_transactions)
+        console.log(block_transactions)
         expect(block_transactions).toMatchObject([{ blockNumber: blocknum }])
     })
 
