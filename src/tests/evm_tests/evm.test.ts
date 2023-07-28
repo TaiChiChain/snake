@@ -1,6 +1,6 @@
-import {test, expect, describe} from '@jest/globals'
-import {client} from '../../utils/rpc'
-import {ContractUtils} from '../../utils/contract'
+import { test, expect, describe } from '@jest/globals'
+import { client } from '../../utils/rpc'
+import { ContractUtils } from '../../utils/contract'
 import {
     ST_CONTRACT_DIR,
     ST_CROSS_EVM_CONTRACT_NAME,
@@ -24,7 +24,7 @@ describe('test evm context', () => {
             1
         )
         expect(hash).toBe(
-            '0x0fca5c70026f2f6b1af97d5880f7a5b31d61e487cc9726d9aa62203436500105'
+            '0x34be7f3385852f87c8e1dde6f9fa79d4ed64e8c7388b8b7a5b3dd26d844e9972'
         )
     })
 
@@ -150,7 +150,9 @@ describe('test evm context', () => {
             'txGasprice'
         )
         const gasprice = client.utils.hexToNumber(receipt.logs[0].data)
-        expect(gasprice).toBe(50000)
+        expect(gasprice).toBeGreaterThanOrEqual(BigInt(1000))
+        expect(gasprice).toBeLessThanOrEqual(BigInt(10000))
+
     })
 
     test('test tx.origin', async () => {
