@@ -55,5 +55,3 @@ export async function newBlockFilter() {
 export async function newPendingTransactionFilter() {
     return await call('eth_newPendingTransactionFilter')
 }
-
-client.eth.sendSignedTransaction
