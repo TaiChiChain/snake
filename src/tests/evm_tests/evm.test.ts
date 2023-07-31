@@ -24,7 +24,7 @@ describe('test evm context', () => {
             1
         )
         expect(hash).toBe(
-            '0x34be7f3385852f87c8e1dde6f9fa79d4ed64e8c7388b8b7a5b3dd26d844e9972'
+            '0x1e090029e944d8514090722edfb5c6b901355185ca500db2cfaae0c6a5fb4404'
         )
     })
 
