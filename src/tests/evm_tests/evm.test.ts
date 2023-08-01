@@ -150,7 +150,6 @@ describe('test evm context', () => {
             'txGasprice'
         )
         const gasprice = client.utils.hexToNumber(receipt.logs[0].data)
-        //expect(gasprice).toBe(50000)
         expect(gasprice).toBeGreaterThanOrEqual(BigInt(1000))
         expect(gasprice).toBeLessThanOrEqual(BigInt(10000))
 
