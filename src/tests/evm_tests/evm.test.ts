@@ -1,16 +1,16 @@
 import {test, expect, describe} from '@jest/globals'
-import {client} from '../../utils/rpc'
+import {ST_PRIVATEKRY, newRpcClient} from '../../utils/rpc'
 import {ContractUtils} from '../../utils/contract'
 import {
     ST_CONTRACT_DIR,
     ST_CROSS_EVM_CONTRACT_NAME,
     ST_CROSS_EVM_FILENAME,
     ST_EVM_CONTRACT_NAME,
-    ST_EVM_FILENAME,
-    ST_PRIVATEKRY
+    ST_EVM_FILENAME
 } from '../../utils/contracts_static'
 
 describe('test evm context', () => {
+    const client = newRpcClient()
     const utils = new ContractUtils(ST_CONTRACT_DIR, client, ST_PRIVATEKRY)
     utils.compile(ST_EVM_FILENAME, ST_EVM_CONTRACT_NAME)
     utils.compile(ST_CROSS_EVM_FILENAME, ST_CROSS_EVM_CONTRACT_NAME)
