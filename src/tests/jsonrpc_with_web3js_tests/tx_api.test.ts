@@ -1,15 +1,15 @@
 import { test, expect } from '@jest/globals'
 import {
     ST_CONTRACT_DIR,
-    ST_PRIVATEKRY,
     ST_STORAGE_CONTRACT_NAME,
     ST_STORAGE_FILENAME
 } from '../../utils/contracts_static'
 import { ContractUtils } from '../../utils/contract'
-import { client } from '../../utils/rpc'
+import { newRpcClient, ST_PRIVATEKRY } from '../../utils/rpc'
 
 describe('test_txAPI_by_contract', () => {
     test('test_StorageContract', async () => {
+        const client = newRpcClient()
         const utils: ContractUtils = new ContractUtils(
             ST_CONTRACT_DIR,
             client,
@@ -64,20 +64,16 @@ describe('test_txAPI_by_contract', () => {
     })
 
     test('get_transactionCount', async () => {
+        const client = newRpcClient()
         const nonce = await client.eth.getTransactionCount("0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013")
         console.log(nonce)
         expect(nonce).toBeGreaterThanOrEqual(BigInt(0))
     })
 
     test('get_transactionCount', async () => {
+        const client = newRpcClient()
         const nonce = await client.eth.getTransactionCount("0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013")
         console.log(nonce)
         expect(nonce).toBeGreaterThanOrEqual(BigInt(0))
     })
-
-    //test('get_transaction', async () => {
-    //    const nonce = await client.eth.getTransactionReceipt("0x18662647b66ceceb5e4d4024afd472da4fdd166228899dba38667fa8fb4b77ba")
-    //    console.log(nonce)
-    // expect(nonce).toBeGreaterThanOrEqual(BigInt(0))
-    //})
 })

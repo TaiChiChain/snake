@@ -1,13 +1,11 @@
-import Web3, {Address, Transaction, TransactionReceipt} from 'web3'
+import Web3, { Address, Transaction, TransactionReceipt } from 'web3'
 import axios from 'axios'
 import { ContractUtils } from '../utils/contract'
 import {
     ST_CONTRACT_DIR,
-    ST_PRIVATEKRY,
     ST_STORAGE_CONTRACT_NAME,
     ST_STORAGE_FILENAME
 } from '../utils/contracts_static'
-import { ethers } from "ethers";
 
 export const ST_PRIVATEKRY =
     '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
@@ -48,6 +46,7 @@ export async function request(method: string, params?: any) {
 }
 
 export async function deploy_storage_contract() {
+    const client = newRpcClient()
     const utils: ContractUtils = new ContractUtils(
         ST_CONTRACT_DIR,
         client,

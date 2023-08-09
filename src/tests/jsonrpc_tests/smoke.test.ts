@@ -1,5 +1,5 @@
 import { test, expect } from '@jest/globals'
-import { request, deploy_storage_contract, client } from '../../utils/rpc'
+import { request, deploy_storage_contract, newRpcClient } from '../../utils/rpc'
 
 //The first column of the cases element is the call input parameter
 //The second column of the cases elements is the result expected to be returned
@@ -127,6 +127,7 @@ describe('test_getBlockByHash', () => {
         expect(address).not.toBeNull()
     });
     test('eth_getBlockByHash_with_transactions', async () => {
+        const client = newRpcClient()
         for (var i = 0; i < len[0]; i++) {
             if (cases_of_getBlock_with_transactions[i]) {
                 const block_hash = (await client.eth.getBlock(cases_of_getBlock_with_transactions[i][0], true)).hash
@@ -137,6 +138,7 @@ describe('test_getBlockByHash', () => {
         }
     })
     test('eth_getBlockByHash_without_transactions', async () => {
+        const client = newRpcClient()
         for (var i = 0; i < len[1]; i++) {
             if (cases_of_getBlock_without_transactions[i]) {
                 const block_hash = (await client.eth.getBlock(cases_of_getBlock_without_transactions[i][0], false)).hash
