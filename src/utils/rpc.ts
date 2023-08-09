@@ -1,5 +1,11 @@
-import Web3, {Address, Transaction, TransactionReceipt} from 'web3'
+import Web3, { Address, Transaction, TransactionReceipt } from 'web3'
 import axios from 'axios'
+import { ContractUtils } from '../utils/contract'
+import {
+    ST_CONTRACT_DIR,
+    ST_STORAGE_CONTRACT_NAME,
+    ST_STORAGE_FILENAME
+} from '../utils/contracts_static'
 
 export const ST_PRIVATEKRY =
     '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
@@ -17,7 +23,7 @@ interface ethRequest {
     params: any
 }
 
-export async function call(method: string, params?: any) {
+export async function request(method: string, params?: any) {
     const request: ethRequest = {
         id: 1,
         jsonrpc: '2.0',
@@ -39,6 +45,22 @@ export async function call(method: string, params?: any) {
     }
 }
 
+export async function deploy_storage_contract() {
+    const client = newRpcClient()
+    const utils: ContractUtils = new ContractUtils(
+        ST_CONTRACT_DIR,
+        client,
+        ST_PRIVATEKRY
+    )
+    utils.compile(ST_STORAGE_FILENAME, ST_STORAGE_CONTRACT_NAME)
+    try {
+        const address = await utils.deploy(ST_STORAGE_CONTRACT_NAME)
+        return address
+    } catch (error: any) {
+        throw new Error(error.message)
+    }
+}
+
 declare type BlockTag = 'latest' | 'pending' | 'earliest'
 declare type HexString = string
 
@@ -50,15 +72,15 @@ export interface FilterParams {
 }
 
 export async function newFilter(params: FilterParams[]) {
-    return await call('eth_newFilter', params)
+    return await request('eth_newFilter', params)
 }
 
 export async function newBlockFilter() {
-    return await call('eth_newBlockFilter')
+    return await request('eth_newBlockFilter')
 }
 
 export async function newPendingTransactionFilter() {
-    return await call('eth_newPendingTransactionFilter')
+    return await request('eth_newPendingTransactionFilter')
 }
 
 export async function transfer(

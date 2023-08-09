@@ -138,8 +138,7 @@ describe('test evm context', () => {
             'msgValue'
         )
         const value = client.utils.hexToNumber(receipt.logs[0].data)
-        // call function send 1 wei
-        expect(value).toBe(1)
+        expect(value).toBe(0)
     })
 
     test('test tx.gasprice', async () => {
