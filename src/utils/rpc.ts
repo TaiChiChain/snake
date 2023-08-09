@@ -1,11 +1,17 @@
 import Web3 from 'web3'
 import axios from 'axios'
+import { ContractUtils } from '../utils/contract'
+import {
+    ST_CONTRACT_DIR,
+    ST_PRIVATEKRY,
+    ST_STORAGE_CONTRACT_NAME,
+    ST_STORAGE_FILENAME
+} from '../utils/contracts_static'
 import { ethers } from "ethers";
 
-export const url = 'http://127.0.0.1:8881'
-// export const url = 'http://127.0.0.1:8545'
+export const url = 'http://172.16.13.132:8881'
 export const client = new Web3(url)
-export const provider = new ethers.JsonRpcProvider(url)
+//export const provider = new ethers.JsonRpcProvider(url)
 
 interface ethRequest {
     id: number
@@ -14,7 +20,7 @@ interface ethRequest {
     params: any
 }
 
-export async function call(method: string, params?: any) {
+export async function request(method: string, params?: any) {
     const request: ethRequest = {
         id: 1,
         jsonrpc: '2.0',
@@ -36,6 +42,21 @@ export async function call(method: string, params?: any) {
     }
 }
 
+export async function deploy_storage_contract() {
+    const utils: ContractUtils = new ContractUtils(
+        ST_CONTRACT_DIR,
+        client,
+        ST_PRIVATEKRY
+    )
+    utils.compile(ST_STORAGE_FILENAME, ST_STORAGE_CONTRACT_NAME)
+    try {
+        const address = await utils.deploy(ST_STORAGE_CONTRACT_NAME)
+        return address
+    } catch (error: any) {
+        throw new Error(error.message)
+    }
+}
+
 declare type BlockTag = 'latest' | 'pending' | 'earliest'
 declare type HexString = string
 
@@ -47,13 +68,13 @@ export interface FilterParams {
 }
 
 export async function newFilter(params: FilterParams[]) {
-    return await call('eth_newFilter', params)
+    return await request('eth_newFilter', params)
 }
 
 export async function newBlockFilter() {
-    return await call('eth_newBlockFilter')
+    return await request('eth_newBlockFilter')
 }
 
 export async function newPendingTransactionFilter() {
-    return await call('eth_newPendingTransactionFilter')
+    return await request('eth_newPendingTransactionFilter')
 }

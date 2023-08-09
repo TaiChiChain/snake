@@ -49,7 +49,7 @@ describe('test_txAPI_by_contract', () => {
 
         //test GetTransactionReceipt
         const txReceipt = await client.eth.getTransactionReceipt(receipt.transactionHash)
-        console.log(txReceipt)
+        //console.log(txReceipt)
         expect(txReceipt.blockNumber).toBe(receipt.blockNumber);
 
         const receipt2 = await utils.call(
@@ -75,9 +75,9 @@ describe('test_txAPI_by_contract', () => {
         expect(nonce).toBeGreaterThanOrEqual(BigInt(0))
     })
 
-    test('get_transaction', async () => {
-        const nonce = await client.eth.getTransactionReceipt("0x18662647b66ceceb5e4d4024afd472da4fdd166228899dba38667fa8fb4b77ba")
-        console.log(nonce)
-        // expect(nonce).toBeGreaterThanOrEqual(BigInt(0))
-    })
+    //test('get_transaction', async () => {
+    //    const nonce = await client.eth.getTransactionReceipt("0x18662647b66ceceb5e4d4024afd472da4fdd166228899dba38667fa8fb4b77ba")
+    //    console.log(nonce)
+    // expect(nonce).toBeGreaterThanOrEqual(BigInt(0))
+    //})
 })

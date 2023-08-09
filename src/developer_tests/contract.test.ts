@@ -16,23 +16,26 @@ test('eth_testStorageContract', async () => {
     )
     utils.compile(ST_STORAGE_FILENAME, ST_STORAGE_CONTRACT_NAME)
     const address = await utils.deploy(ST_STORAGE_CONTRACT_NAME)
-    console.log('Deploy contract address is : ', address)
-    // key = 123 value = 456
-    await utils.call(
+    //console.log('Deploy contract address is : ', address)
+    const receipt1 = await utils.call(
         ST_STORAGE_CONTRACT_NAME,
         address,
         'store',
         '0x7b00000000000000000000000000000000000000000000000000000000000000',
         '0x1c80000000000000000000000000000000000000000000000000000000000000'
     )
+    expect(receipt1.to).toMatch(String(address).toLowerCase())
 
-    const receipt = await utils.call(
+    const receipt2 = await utils.call(
         ST_STORAGE_CONTRACT_NAME,
         address,
         'retrieve',
         '0x7b00000000000000000000000000000000000000000000000000000000000000'
     )
-    expect(receipt).toBe(
+    //console.log('get value is', receipt2)
+    expect(receipt2).toBe(
         '0x1c80000000000000000000000000000000000000000000000000000000000000'
     )
 })
+
+
