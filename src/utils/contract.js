@@ -1,5 +1,6 @@
 const solc = require('solc')
 const fs = require('fs')
+const {log} = require('console')
 
 class ContractUtils {
     constructor(contractDir, client, privateKeyString) {
@@ -97,7 +98,6 @@ class ContractUtils {
         })
         const gas = await tx.estimateGas(contractName, ...params)
         const gasPrice = await this.getGasPrice()
-
         const res = await tx
             .send({
                 from: this.account,

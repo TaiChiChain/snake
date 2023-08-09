@@ -1,16 +1,16 @@
-import { test, expect, describe } from '@jest/globals'
-import { client } from '../../utils/rpc'
-import { ContractUtils } from '../../utils/contract'
+import {test, expect, describe} from '@jest/globals'
+import {ST_PRIVATEKRY, newRpcClient} from '../../utils/rpc'
+import {ContractUtils} from '../../utils/contract'
 import {
     ST_CONTRACT_DIR,
     ST_CROSS_EVM_CONTRACT_NAME,
     ST_CROSS_EVM_FILENAME,
     ST_EVM_CONTRACT_NAME,
-    ST_EVM_FILENAME,
-    ST_PRIVATEKRY
+    ST_EVM_FILENAME
 } from '../../utils/contracts_static'
 
 describe('test evm context', () => {
+    const client = newRpcClient()
     const utils = new ContractUtils(ST_CONTRACT_DIR, client, ST_PRIVATEKRY)
     utils.compile(ST_EVM_FILENAME, ST_EVM_CONTRACT_NAME)
     utils.compile(ST_CROSS_EVM_FILENAME, ST_CROSS_EVM_CONTRACT_NAME)
@@ -23,7 +23,9 @@ describe('test evm context', () => {
             'getBlockhash',
             1
         )
-        expect(hash).not.toBeNull()
+        expect(hash).toBe(
+            '0xd0ec0bf6f97f779e22afe7a02718215117c4f5548a3d73e60c350b68580b6353'
+        )
     })
 
     test('test block.chainid', async () => {
@@ -147,9 +149,8 @@ describe('test evm context', () => {
             'txGasprice'
         )
         const gasprice = client.utils.hexToNumber(receipt.logs[0].data)
-        expect(gasprice).toBeGreaterThanOrEqual(BigInt(1000000000000))
-        expect(gasprice).toBeLessThanOrEqual(BigInt(1000000000000000))
-
+        expect(gasprice).toBeGreaterThanOrEqual(BigInt(1000 * 1e9))
+        expect(gasprice).toBeLessThanOrEqual(BigInt(10000 * 1e9))
     })
 
     test('test tx.origin', async () => {

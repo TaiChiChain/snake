@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+import Web3, {Address, Transaction, TransactionReceipt} from 'web3'
 import axios from 'axios'
 import { ContractUtils } from '../utils/contract'
 import {
@@ -9,9 +9,14 @@ import {
 } from '../utils/contracts_static'
 import { ethers } from "ethers";
 
-export const url = 'http://172.16.13.132:8881'
-export const client = new Web3(url)
-//export const provider = new ethers.JsonRpcProvider(url)
+export const ST_PRIVATEKRY =
+    '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
+export const ST_ADDRESS = '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013'
+export const ST_URL = 'http://127.0.0.1:8881'
+
+export function newRpcClient() {
+    return new Web3(ST_URL)
+}
 
 interface ethRequest {
     id: number
@@ -31,7 +36,7 @@ export async function request(method: string, params?: any) {
     const body = JSON.stringify(request)
 
     try {
-        const result = await axios.post(url, body, {
+        const result = await axios.post(ST_URL, body, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -77,4 +82,30 @@ export async function newBlockFilter() {
 
 export async function newPendingTransactionFilter() {
     return await request('eth_newPendingTransactionFilter')
+}
+
+export async function transfer(
+    fromAddr: Address,
+    toAddr: Address,
+    amount: string,
+    nonce: bigint,
+    privateKey: string
+): Promise<TransactionReceipt> {
+    const client = newRpcClient()
+    const gasPrice = await client.eth.getGasPrice()
+
+    const transactionObject: Transaction = {
+        from: fromAddr,
+        to: toAddr,
+        value: amount,
+        gasPrice: gasPrice,
+        gasLimit: 21000,
+        nonce: nonce
+    }
+    const signedTransaction = await client.eth.accounts.signTransaction(
+        transactionObject,
+        privateKey
+    )
+
+    return client.eth.sendSignedTransaction(signedTransaction.rawTransaction)
 }
