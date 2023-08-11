@@ -37,8 +37,8 @@ class ContractUtils {
         if (compiledCode['errors'] && compiledCode['errors'].length > 0) {
             const errs = []
             for (const info of compiledCode['errors']) {
-                if (info.type === '') {
-                    errs.add(info)
+                if (info.type.includes('Error')) {
+                    errs.push(info)
                 }
             }
             if (errs.length > 0) {
