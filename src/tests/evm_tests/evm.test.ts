@@ -1,6 +1,6 @@
-import {test, expect, describe} from '@jest/globals'
-import {ST_PRIVATEKRY, newRpcClient} from '../../utils/rpc'
-import {ContractUtils} from '../../utils/contract'
+import { test, expect, describe } from '@jest/globals'
+import { ST_PRIVATEKRY, newRpcClient } from '../../utils/rpc'
+import { ContractUtils } from '../../utils/contract'
 import {
     ST_CONTRACT_DIR,
     ST_CROSS_EVM_CONTRACT_NAME,
@@ -136,8 +136,7 @@ describe('test evm context', () => {
             'msgValue'
         )
         const value = client.utils.hexToNumber(receipt.logs[0].data)
-        // call function send 1 wei
-        expect(value).toBe(1)
+        expect(value).toBe(0)
     })
 
     test('test tx.gasprice', async () => {

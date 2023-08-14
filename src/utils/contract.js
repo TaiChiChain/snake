@@ -96,7 +96,7 @@ class ContractUtils {
             data: '0x' + this.getByteCode(contractName),
             arguments: params
         })
-        const gas = await this.estimateGas(contractName, ...params)
+        const gas = await tx.estimateGas(contractName, ...params)
         const gasPrice = await this.getGasPrice()
         const res = await tx
             .send({
@@ -133,7 +133,7 @@ class ContractUtils {
             callFunc.stateMutability === 'pure'
 
         if (isReadOnly) {
-            return await tx.call({from: this.account})
+            return await tx.call({ from: this.account })
         } else {
             const gas = await tx.estimateGas({
                 from: this.account
@@ -147,7 +147,6 @@ class ContractUtils {
                     data: rawTransactionData,
                     gas: gas.toString(),
                     gasPrice: gasPrice,
-                    value: this.client.utils.toWei('1', 'wei')
                 },
                 this.privateKeyString
             )
