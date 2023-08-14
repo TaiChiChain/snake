@@ -12,7 +12,7 @@ describe('test_getChainId', () => {
     ];
     test('eth_chainId', async () => {
         const res = await request("eth_chainId")
-        console.log('rpc post eth_chainId', res.result)
+        //console.log('rpc post eth_chainId', res.result)
         expect(parseInt(res.result, 16)).toBe(cases_of_getChainId[0][1])
     })
 })
@@ -25,7 +25,7 @@ describe('test_getBlockNumber', () => {
     ];
     test('eth_blockNumber', async () => {
         const res = await request("eth_blockNumber")
-        console.log('rpc post eth_blockNumber', res.result)
+        //console.log('rpc post eth_blockNumber', res.result)
         expect(parseInt(res.result, 16)).toBeGreaterThanOrEqual(cases_of_getBlockNumber[0][1])
     })
 })
@@ -179,7 +179,7 @@ describe('test_getCode', () => {
         console.log('Deploy contract address is : ', address)
         expect(address).not.toBeNull()
         var res = await request("eth_getCode", [address, "latest"])
-        console.log('rpc post eth_getCode of contract ', res.result)
+        //console.log('rpc post eth_getCode of contract ', res.result)
         expect(String(res.result)).toMatch("0x6080604052")
     })
 })
@@ -202,7 +202,7 @@ describe('test_getStorageAt', () => {
         for (var i = 0; i < len; i++) {
             if (cases_of_getStorageAt[i]) {
                 var res = await request("eth_getStorageAt", cases_of_getStorageAt[i][0])
-                console.log('rpc post eth_getStorageAt === index: ', i, res.result)
+                //console.log('rpc post eth_getStorageAt === index: ', i, res.result)
                 expect(String(res.result)).toMatch(cases_of_getStorageAt[i][1])
             }
         }
@@ -214,6 +214,5 @@ describe('test_getStorageAt', () => {
         expect(address).not.toBeNull()
         var res = await request("eth_getStorageAt", [address, "latest"])
         console.log('rpc post eth_getStorageAt of contract ', res.result)
-        //expect(String(res.result)).toMatch("0x6080604052")
     })
 })

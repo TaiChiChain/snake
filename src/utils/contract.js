@@ -1,6 +1,6 @@
 const solc = require('solc')
 const fs = require('fs')
-const {log} = require('console')
+const { log } = require('console')
 
 class ContractUtils {
     constructor(contractDir, client, privateKeyString) {
@@ -145,7 +145,7 @@ class ContractUtils {
                     from: this.account,
                     to: address,
                     data: rawTransactionData,
-                    gas: gas.toString(),
+                    gas: gas,
                     gasPrice: gasPrice,
                 },
                 this.privateKeyString
