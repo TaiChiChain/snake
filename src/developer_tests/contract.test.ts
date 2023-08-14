@@ -1,14 +1,14 @@
 import { test, expect } from '@jest/globals'
 import {
     ST_CONTRACT_DIR,
-    ST_PRIVATEKRY,
     ST_STORAGE_CONTRACT_NAME,
     ST_STORAGE_FILENAME
 } from '../utils/contracts_static'
 import { ContractUtils } from '../utils/contract'
-import { client } from '../utils/rpc'
+import { newRpcClient, ST_PRIVATEKRY } from '../utils/rpc'
 
 test('eth_testStorageContract', async () => {
+    const client = newRpcClient()
     const utils: ContractUtils = new ContractUtils(
         ST_CONTRACT_DIR,
         client,
