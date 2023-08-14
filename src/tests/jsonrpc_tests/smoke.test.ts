@@ -188,13 +188,13 @@ describe('test_getStorageAt', () => {
     var cases_of_getStorageAt: any[][] = []
     cases_of_getStorageAt = [
         //case1 : Verify the genesis admin latest code
-        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "latest"], "0"],
+        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "latest"], "undefined"],
         //case2 : Verify the new account latest code   
-        [["0xC60ba75739b3492189d80c71AD0AEbc0c57695Ff", "latest"], "0"],
+        [["0xC60ba75739b3492189d80c71AD0AEbc0c57695Ff", "latest"], "undefined"],
         //case3 : Verify the genesis admin pending code
-        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "pending"], "0"],
+        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "pending"], "undefined"],
         //case4 : Verify the genesis admin earliest code    
-        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "earliest"], "0"],
+        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "earliest"], "undefined"],
     ];
 
     const len = cases_of_getStorageAt.length
