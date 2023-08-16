@@ -47,7 +47,7 @@ describe('test_getBalance', () => {
         for (var i = 0; i < len; i++) {
             if (cases_of_getBalance[i]) {
                 var res = await request("eth_getBalance", cases_of_getBalance[i][0])
-                console.log('rpc post eth_getBalance', res.result)
+                //console.log('rpc post eth_getBalance', res.result)
                 expect(parseInt(res.result, 16)).toBeGreaterThanOrEqual(cases_of_getBalance[i][1])
             }
         }
@@ -132,7 +132,7 @@ describe('test_getBlockByHash', () => {
             if (cases_of_getBlock_with_transactions[i]) {
                 const block_hash = (await client.eth.getBlock(cases_of_getBlock_with_transactions[i][0], true)).hash
                 var res = await request("eth_getBlockByHash", [block_hash, true])
-                console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
+                //console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
                 expect(res.result.transactions).toMatchObject(cases_of_getBlock_with_transactions[i][1])
             }
         }
@@ -143,7 +143,7 @@ describe('test_getBlockByHash', () => {
             if (cases_of_getBlock_without_transactions[i]) {
                 const block_hash = (await client.eth.getBlock(cases_of_getBlock_without_transactions[i][0], false)).hash
                 var res = await request("eth_getBlockByHash", [block_hash, false])
-                console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
+                //console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
                 expect(res.result.transactions).not.toMatchObject(cases_of_getBlock_without_transactions[i][1])
             }
         }
@@ -168,7 +168,7 @@ describe('test_getCode', () => {
         for (var i = 0; i < len; i++) {
             if (cases_of_getCode[i]) {
                 var res = await request("eth_getCode", cases_of_getCode[i][0])
-                console.log('rpc post eth_getCode === index: ', i, res.result)
+                //console.log('rpc post eth_getCode === index: ', i, res.result)
                 expect(String(res.result)).toMatch(cases_of_getCode[i][1])
             }
         }
