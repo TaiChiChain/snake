@@ -32,3 +32,8 @@ export function hexToString(hexStr: any) {
     str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
   return str;
 }
+
+export function getValue(str: string, key: any) {
+  let result = new RegExp(`(?:^|,)${key}:([^,]*)`).exec(str);
+  return result && result[1]
+}
