@@ -111,7 +111,7 @@ describe('test council with admins', () => {
             console.log("5. admin4 vote this proposal")
             utils4.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
             try {
-                const receipt_4 = await utils4.call(
+                await utils4.call(
                     ST_GOVERNANCE_CONTRACT_NAME,
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
@@ -119,10 +119,9 @@ describe('test council with admins', () => {
                     0,
                     stringToByte("")
                 )
-                console.log(hexToString(receipt_4.logs[0].data))
             } catch (err) {
-                console.log(err)
-                //expect(String(err)).toMatch('invalid argument')
+                //console.log(err)
+                expect(String(err)).toMatch('Transaction has been reverted')
             }
         }
     })
