@@ -11,9 +11,16 @@ export const ST_PRIVATEKRY =
     '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
 export const ST_ADDRESS = '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013'
 export const ST_URL = 'http://127.0.0.1:8881'
+export const WS_URL = 'ws://127.0.0.1:9991'
 
 export function newRpcClient() {
     return new Web3(ST_URL)
+}
+
+export function newWsClient(){
+    const wsClient=new Web3(ST_URL)
+    wsClient.setProvider(new Web3.providers.WebsocketProvider(WS_URL));
+    return wsClient
 }
 
 interface ethRequest {
