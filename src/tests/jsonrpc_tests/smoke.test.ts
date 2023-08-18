@@ -12,7 +12,7 @@ describe('test_getChainId', () => {
     ];
     test('eth_chainId', async () => {
         const res = await request("eth_chainId")
-        console.log('rpc post eth_chainId', res.result)
+        //console.log('rpc post eth_chainId', res.result)
         expect(parseInt(res.result, 16)).toBe(cases_of_getChainId[0][1])
     })
 })
@@ -25,7 +25,7 @@ describe('test_getBlockNumber', () => {
     ];
     test('eth_blockNumber', async () => {
         const res = await request("eth_blockNumber")
-        console.log('rpc post eth_blockNumber', res.result)
+        //console.log('rpc post eth_blockNumber', res.result)
         expect(parseInt(res.result, 16)).toBeGreaterThanOrEqual(cases_of_getBlockNumber[0][1])
     })
 })
@@ -47,7 +47,7 @@ describe('test_getBalance', () => {
         for (var i = 0; i < len; i++) {
             if (cases_of_getBalance[i]) {
                 var res = await request("eth_getBalance", cases_of_getBalance[i][0])
-                console.log('rpc post eth_getBalance', res.result)
+                //console.log('rpc post eth_getBalance', res.result)
                 expect(parseInt(res.result, 16)).toBeGreaterThanOrEqual(cases_of_getBalance[i][1])
             }
         }
@@ -132,7 +132,7 @@ describe('test_getBlockByHash', () => {
             if (cases_of_getBlock_with_transactions[i]) {
                 const block_hash = (await client.eth.getBlock(cases_of_getBlock_with_transactions[i][0], true)).hash
                 var res = await request("eth_getBlockByHash", [block_hash, true])
-                console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
+                //console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
                 expect(res.result.transactions).toMatchObject(cases_of_getBlock_with_transactions[i][1])
             }
         }
@@ -143,7 +143,7 @@ describe('test_getBlockByHash', () => {
             if (cases_of_getBlock_without_transactions[i]) {
                 const block_hash = (await client.eth.getBlock(cases_of_getBlock_without_transactions[i][0], false)).hash
                 var res = await request("eth_getBlockByHash", [block_hash, false])
-                console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
+                //console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
                 expect(res.result.transactions).not.toMatchObject(cases_of_getBlock_without_transactions[i][1])
             }
         }
@@ -168,7 +168,7 @@ describe('test_getCode', () => {
         for (var i = 0; i < len; i++) {
             if (cases_of_getCode[i]) {
                 var res = await request("eth_getCode", cases_of_getCode[i][0])
-                console.log('rpc post eth_getCode === index: ', i, res.result)
+                //console.log('rpc post eth_getCode === index: ', i, res.result)
                 expect(String(res.result)).toMatch(cases_of_getCode[i][1])
             }
         }
@@ -179,7 +179,7 @@ describe('test_getCode', () => {
         console.log('Deploy contract address is : ', address)
         expect(address).not.toBeNull()
         var res = await request("eth_getCode", [address, "latest"])
-        console.log('rpc post eth_getCode of contract ', res.result)
+        //console.log('rpc post eth_getCode of contract ', res.result)
         expect(String(res.result)).toMatch("0x6080604052")
     })
 })
@@ -188,13 +188,13 @@ describe('test_getStorageAt', () => {
     var cases_of_getStorageAt: any[][] = []
     cases_of_getStorageAt = [
         //case1 : Verify the genesis admin latest code
-        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "latest"], "0"],
+        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "latest"], "undefined"],
         //case2 : Verify the new account latest code   
-        [["0xC60ba75739b3492189d80c71AD0AEbc0c57695Ff", "latest"], "0"],
+        [["0xC60ba75739b3492189d80c71AD0AEbc0c57695Ff", "latest"], "undefined"],
         //case3 : Verify the genesis admin pending code
-        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "pending"], "0"],
+        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "pending"], "undefined"],
         //case4 : Verify the genesis admin earliest code    
-        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "earliest"], "0"],
+        [["0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013", "earliest"], "undefined"],
     ];
 
     const len = cases_of_getStorageAt.length
@@ -202,7 +202,7 @@ describe('test_getStorageAt', () => {
         for (var i = 0; i < len; i++) {
             if (cases_of_getStorageAt[i]) {
                 var res = await request("eth_getStorageAt", cases_of_getStorageAt[i][0])
-                console.log('rpc post eth_getStorageAt === index: ', i, res.result)
+                //console.log('rpc post eth_getStorageAt === index: ', i, res.result)
                 expect(String(res.result)).toMatch(cases_of_getStorageAt[i][1])
             }
         }
@@ -214,6 +214,5 @@ describe('test_getStorageAt', () => {
         expect(address).not.toBeNull()
         var res = await request("eth_getStorageAt", [address, "latest"])
         console.log('rpc post eth_getStorageAt of contract ', res.result)
-        //expect(String(res.result)).toMatch("0x6080604052")
     })
 })

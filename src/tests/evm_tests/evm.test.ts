@@ -24,10 +24,6 @@ describe('test evm context', () => {
             1
         )
         expect(hash).not.toBeNull()
-        //todo: will open the precise check of this case after the axiom version is stable
-        //expect(hash).toBe(
-        //'0xd0ec0bf6f97f779e22afe7a02718215117c4f5548a3d73e60c350b68580b6353'
-        //)
     })
 
     test('test block.chainid', async () => {

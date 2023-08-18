@@ -11,6 +11,7 @@ export const ST_PRIVATEKRY =
     '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
 export const ST_ADDRESS = '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013'
 export const ST_URL = 'http://127.0.0.1:8881'
+//export const ST_URL = 'http://10.2.67.130:8881'
 
 export function newRpcClient() {
     return new Web3(ST_URL)
@@ -56,8 +57,9 @@ export async function deploy_storage_contract() {
     try {
         const address = await utils.deploy(ST_STORAGE_CONTRACT_NAME)
         return address
-    } catch (error: any) {
-        throw new Error(error.message)
+    } catch (e) {
+        //console.log("err is:", error)
+        throw new Error("deploy contract failed, address is nil!")
     }
 }
 

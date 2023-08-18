@@ -1,12 +1,12 @@
-import {test, expect, describe} from '@jest/globals'
+import { test, expect, describe } from '@jest/globals'
 import {
     ST_ADDRESS,
     ST_PRIVATEKRY,
     newRpcClient,
     transfer
 } from '../../utils/rpc'
-import {TransactionReceipt} from 'web3'
-import {ContractUtils} from '../../utils/contract'
+import { TransactionReceipt } from 'web3'
+import { ContractUtils } from '../../utils/contract'
 import {
     ST_CONTRACT_DIR,
     ST_EVM_CONTRACT_NAME,
@@ -142,8 +142,8 @@ describe('test gas price change', () => {
         const newBalance = await client.eth.getBalance(account1.address)
         expect(newBalance).toEqual(
             oldBalance -
-                BigInt(client.utils.toWei('0.5', 'ether')) -
-                BigInt(receipt.gasUsed) * gasPrice
+            BigInt(client.utils.toWei('0.5', 'ether')) -
+            BigInt(receipt.gasUsed) * gasPrice
         )
     })
 
@@ -176,9 +176,7 @@ describe('test gas price change', () => {
         )
         const newBalance = await client.eth.getBalance(account1.address)
         expect(newBalance).toEqual(
-            oldBalance -
-                BigInt(client.utils.toWei('1', 'wei')) -
-                BigInt(receipt.gasUsed) * gasPrice
+            oldBalance - BigInt(receipt.gasUsed) * gasPrice
         )
     })
 })

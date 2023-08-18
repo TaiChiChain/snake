@@ -8,6 +8,7 @@ import { ContractUtils } from '../utils/contract'
 import { newRpcClient, ST_PRIVATEKRY } from '../utils/rpc'
 
 test('eth_testStorageContract', async () => {
+    const client = newRpcClient()
     const utils: ContractUtils = new ContractUtils(
         ST_CONTRACT_DIR,
         newRpcClient,

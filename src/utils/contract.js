@@ -1,6 +1,6 @@
 const solc = require('solc')
 const fs = require('fs')
-const {log} = require('console')
+const { log } = require('console')
 
 class ContractUtils {
     constructor(contractDir, client, privateKeyString) {
@@ -37,8 +37,8 @@ class ContractUtils {
         if (compiledCode['errors'] && compiledCode['errors'].length > 0) {
             const errs = []
             for (const info of compiledCode['errors']) {
-                if (info.type === '') {
-                    errs.add(info)
+                if (info.type.includes('Error')) {
+                    errs.push(info)
                 }
             }
             if (errs.length > 0) {
@@ -145,7 +145,7 @@ class ContractUtils {
                     from: this.account,
                     to: address,
                     data: rawTransactionData,
-                    gas: gas.toString(),
+                    gas: gas,
                     gasPrice: gasPrice,
                 },
                 this.privateKeyString
