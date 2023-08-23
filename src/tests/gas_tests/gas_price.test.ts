@@ -52,9 +52,8 @@ describe('test gas price change', () => {
 
     test('gas price no change', async () => {
         const client = newRpcClient()
-        await sendTransaction(MAX_BATCH_SIZE / 2)
         const oldPrice = await client.eth.getGasPrice()
-        await sendTransaction(MIN_BATCH_SIZE)
+        await sendTransaction(MAX_BATCH_SIZE / 2)
         const newPrice = await client.eth.getGasPrice()
         expect(oldPrice).toBe(newPrice)
     })
