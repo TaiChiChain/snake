@@ -35,10 +35,10 @@ describe('test council with admins', () => {
 
     let extraArgs = {
         candidates: [
-            { address: ADMIN1_ADDRESS, weight: 1 },
-            { address: ADMIN2_ADDRESS, weight: 1 },
-            { address: ADMIN3_ADDRESS, weight: 1 },
-            { address: ADMIN4_ADDRESS, weight: 1 },
+            { address: ADMIN1_ADDRESS, weight: 1, name: "test 1" },
+            { address: ADMIN2_ADDRESS, weight: 1, name: "test 2" },
+            { address: ADMIN3_ADDRESS, weight: 1, name: "test 3" },
+            { address: ADMIN4_ADDRESS, weight: 1, name: "test 4" },
         ]
     };
 
@@ -162,6 +162,49 @@ describe('test council with admins', () => {
             //console.log("error message is :", err)
             expect(String(err)).toMatch("Transaction has been reverted")
         }
+
+        // finish the proposal
+        const match = str.match(/(\d+)/g)
+        //console.log(match)
+        if (match) {
+
+            const receipt_1 = await utils.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'vote',
+                match[0],
+                0,
+                stringToByte("")
+            )
+            var str = hexToString(receipt_1.logs[0].data)
+            expect(str).toMatch("\"Status\":0")
+
+            utils2.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+            const receipt_2 = await utils2.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'vote',
+                match[0],
+                0,
+                stringToByte("")
+            )
+            //console.log(hexToString(receipt_2.logs[0].data))
+            var str = hexToString(receipt_2.logs[0].data)
+            expect(str).toMatch("\"Status\":0")
+
+            utils3.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+            const receipt_3 = await utils3.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'vote',
+                match[0],
+                0,
+                stringToByte("")
+            )
+            //console.log(hexToString(receipt_3.logs[0].data))
+            var str = hexToString(receipt_3.logs[0].data)
+            expect(str).toMatch("\"Status\":1")
+        }
     })
 
     test('test repeat vote', async () => {
@@ -217,6 +260,32 @@ describe('test council with admins', () => {
                 expect(String(err)).toMatch("Transaction has been reverted")
             }
 
+            // finish the proposal
+            utils2.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+            const receipt_2 = await utils2.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'vote',
+                match[0],
+                0,
+                stringToByte("")
+            )
+            //console.log(hexToString(receipt_2.logs[0].data))
+            var str = hexToString(receipt_2.logs[0].data)
+            expect(str).toMatch("\"Status\":0")
+
+            utils3.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+            const receipt_3 = await utils3.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'vote',
+                match[0],
+                0,
+                stringToByte("")
+            )
+            //console.log(hexToString(receipt_3.logs[0].data))
+            var str = hexToString(receipt_3.logs[0].data)
+            expect(str).toMatch("\"Status\":1")
         }
     })
 })
@@ -244,10 +313,10 @@ describe('test council with community users ', () => {
 
     let extraArgs = {
         candidates: [
-            { address: ADMIN1_ADDRESS, weight: 1 },
-            { address: ADMIN2_ADDRESS, weight: 1 },
-            { address: ADMIN3_ADDRESS, weight: 1 },
-            { address: ADMIN4_ADDRESS, weight: 1 },
+            { address: ADMIN1_ADDRESS, weight: 1, name: "test user1" },
+            { address: ADMIN2_ADDRESS, weight: 1, name: "test user2" },
+            { address: ADMIN3_ADDRESS, weight: 1, name: "test user3" },
+            { address: ADMIN4_ADDRESS, weight: 1, name: "test user4" },
         ]
     };
     test('test community user propose', async () => {
@@ -319,6 +388,33 @@ describe('test council with community users ', () => {
                 //console.log("error message is :", err)
                 expect(String(err)).toMatch("Transaction has been reverted")
             }
+
+            // finish the proposal
+            utils2.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+            const receipt_2 = await utils2.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'vote',
+                match[0],
+                0,
+                stringToByte("")
+            )
+            //console.log(hexToString(receipt_2.logs[0].data))
+            var str = hexToString(receipt_2.logs[0].data)
+            expect(str).toMatch("\"Status\":0")
+
+            utils3.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+            const receipt_3 = await utils3.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'vote',
+                match[0],
+                0,
+                stringToByte("")
+            )
+            //console.log(hexToString(receipt_3.logs[0].data))
+            var str = hexToString(receipt_3.logs[0].data)
+            expect(str).toMatch("\"Status\":1")
         }
     })
 })
