@@ -1,18 +1,18 @@
-# snake
+# axiomTester
 
-A test tools for [@bitxhub](https://github.com/TaiChiChain/bitxhub)'s Ethereum JSON RPC🚀
+Test tools for [@axiomesh](https://github.com/axiomesh)
 
 ## Usage
 
 Install the dependencies
 
-``` shell
+```shell
 npm install
 ```
 
 Run the tests ✔️
 
-``` shell
+```shell
 npm test
 PASS  src/tests/block.test.ts
 ✓ eth_getBlockByHash (36 ms)
@@ -22,12 +22,12 @@ PASS  src/tests/block.test.ts
 
 ## Test RPC methods
 
-* `eth_getBlockByHash`
-* `eth_getBlockByNumber`
+-   `eth_getBlockByHash`
+-   `eth_getBlockByNumber`
 
 ## Change RPC URL
 
-``` typescirpt
+```typescirpt
 // src/utils/rpc.ts
 ...
 export const url = "http://127.0.0.1:8881"
