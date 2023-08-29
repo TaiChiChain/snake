@@ -1,4 +1,4 @@
-# axiomTester
+# axiom-tester
 
 Test tools for [@axiomesh](https://github.com/axiomesh)
 
