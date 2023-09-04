@@ -1,6 +1,6 @@
 const solc = require('solc')
 const fs = require('fs')
-const { log } = require('console')
+//const { log } = require('console')
 
 class ContractUtils {
     constructor(contractDir, client, privateKeyString) {

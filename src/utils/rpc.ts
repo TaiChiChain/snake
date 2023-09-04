@@ -1,6 +1,7 @@
-import Web3, { Address, Transaction, TransactionReceipt } from 'web3'
+import Web3, {Address, Transaction, TransactionReceipt} from 'web3'
+import {ethers} from '@axiomesh/axiom'
 import axios from 'axios'
-import { ContractUtils } from '../utils/contract'
+import {ContractUtils} from '../utils/contract'
 import {
     ST_CONTRACT_DIR,
     ST_STORAGE_CONTRACT_NAME,
@@ -10,11 +11,23 @@ import {
 export const ST_PRIVATEKRY =
     '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
 export const ST_ADDRESS = '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013'
-export const ST_URL = 'http://127.0.0.1:8881'
-//export const ST_URL = 'http://10.2.67.130:8881'
+//export const ST_URL = 'http://127.0.0.1:8881'
+export const ST_URL = 'http://172.16.13.132:8881'
 
 export function newRpcClient() {
     return new Web3(ST_URL)
+}
+
+export function newProvider() {
+    return new ethers.JsonRpcProvider(ST_URL)
+}
+
+export function newWallet(provider: ethers.Provider) {
+    return new ethers.Wallet(ST_PRIVATEKRY, provider)
+}
+
+export function newContract(contractAddress: any, abi: any, wallet: any) {
+    return new ethers.Contract(contractAddress, abi, wallet)
 }
 
 interface ethRequest {
@@ -59,7 +72,7 @@ export async function deploy_storage_contract() {
         return address
     } catch (e) {
         //console.log("err is:", error)
-        throw new Error("deploy contract failed, address is nil!")
+        throw new Error('deploy contract failed, address is nil!')
     }
 }
 
@@ -72,7 +85,6 @@ export interface FilterParams {
     address?: HexString[]
     topics?: HexString[][]
 }
-
 export async function newFilter(params: FilterParams[]) {
     return await request('eth_newFilter', params)
 }
@@ -100,7 +112,7 @@ export async function transfer(
         to: toAddr,
         value: amount,
         gasPrice: gasPrice,
-        gasLimit: 21000,
+        gasLimit: 210000,
         nonce: nonce
     }
     const signedTransaction = await client.eth.accounts.signTransaction(
