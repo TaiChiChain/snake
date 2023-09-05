@@ -6,7 +6,7 @@ import {
     ST_GOVERNANCE_COUNCIL_ADDRESS,
     PROPOSAL_TYPE_COUNCIL_ELECT
 } from '../../utils/contracts_static'
-import {stringToByte, stringToUint8Array} from '../../utils/util'
+import {stringToUint8Array} from '../../utils/util'
 
 describe('TestCases of Filter API', () => {
     it('perpare testData: try propose a proposal first', async () => {
