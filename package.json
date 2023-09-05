@@ -7,7 +7,7 @@
     "build": "tsc && cp -r src/contracts lib/",
     "format": "prettier --write '**/*.ts' '**/*.js'",
     "test": "jest",
-    "smoke-test": "jest --testPathPattern src/tests/evm_test src/tests/jsonrpc_test && jest --testPathPattern src/tests/gas_tests",
+    "smoke-test": "jest --testPathPattern src/tests/evm_test src/tests/jsonrpc_test src/tests/jsonrpc_axiomjs_tests && jest --testPathPattern src/tests/gas_tests",
     "lint": "eslint src/**/*.ts"
   },
   "keywords": [],
