@@ -75,17 +75,18 @@ describe('test council with admins', () => {
         //console.log(match)
         if (match) {
             console.log('2. admin1 vote this proposal')
-            const receipt_1 = await utils.call(
-                ST_GOVERNANCE_CONTRACT_NAME,
-                ST_GOVERNANCE_COUNCIL_ADDRESS,
-                'vote',
-                match[0],
-                0,
-                stringToByte('')
-            )
-            //console.log(hexToString(receipt_1.logs[0].data))
-            var str = hexToString(receipt_1.logs[0].data)
-            expect(str).toMatch('"Status":0')
+            try {
+                await utils.call(
+                    ST_GOVERNANCE_CONTRACT_NAME,
+                    ST_GOVERNANCE_COUNCIL_ADDRESS,
+                    'vote',
+                    match[0],
+                    0,
+                    stringToByte('')
+                )
+            } catch (error) {
+                expect(String(error)).toMatch('Transaction has been reverted')
+            }
 
             console.log('3. admin2 vote this proposal')
             utils2.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
@@ -174,17 +175,6 @@ describe('test council with admins', () => {
         const match = str.match(/(\d+)/g)
         //console.log(match)
         if (match) {
-            const receipt_1 = await utils.call(
-                ST_GOVERNANCE_CONTRACT_NAME,
-                ST_GOVERNANCE_COUNCIL_ADDRESS,
-                'vote',
-                match[0],
-                0,
-                stringToByte('')
-            )
-            var str = hexToString(receipt_1.logs[0].data)
-            expect(str).toMatch('"Status":0')
-
             utils2.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
             const receipt_2 = await utils2.call(
                 ST_GOVERNANCE_CONTRACT_NAME,
@@ -237,8 +227,9 @@ describe('test council with admins', () => {
         const match = str.match(/(\d+)/g)
         //console.log(match)
         if (match) {
-            console.log('2. admin1 vote this proposal')
-            const receipt_1 = await utils.call(
+            console.log('2. admin2 vote this proposal')
+            utils2.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+            const receipt_2 = await utils2.call(
                 ST_GOVERNANCE_CONTRACT_NAME,
                 ST_GOVERNANCE_COUNCIL_ADDRESS,
                 'vote',
@@ -246,13 +237,12 @@ describe('test council with admins', () => {
                 0,
                 stringToByte('')
             )
-            //console.log(hexToString(receipt_1.logs[0].data))
-            var str = hexToString(receipt_1.logs[0].data)
+            var str = hexToString(receipt_2.logs[0].data)
             expect(str).toMatch('"Status":0')
 
-            console.log('3. admin1 repeat vote this proposal')
+            console.log('3. admin2 repeat vote this proposal')
             try {
-                await utils.call(
+                await utils2.call(
                     ST_GOVERNANCE_CONTRACT_NAME,
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
@@ -266,19 +256,6 @@ describe('test council with admins', () => {
             }
 
             // finish the proposal
-            utils2.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
-            const receipt_2 = await utils2.call(
-                ST_GOVERNANCE_CONTRACT_NAME,
-                ST_GOVERNANCE_COUNCIL_ADDRESS,
-                'vote',
-                match[0],
-                0,
-                stringToByte('')
-            )
-            //console.log(hexToString(receipt_2.logs[0].data))
-            var str = hexToString(receipt_2.logs[0].data)
-            expect(str).toMatch('"Status":0')
-
             utils3.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
             const receipt_3 = await utils3.call(
                 ST_GOVERNANCE_CONTRACT_NAME,
@@ -288,7 +265,6 @@ describe('test council with admins', () => {
                 0,
                 stringToByte('')
             )
-            //console.log(hexToString(receipt_3.logs[0].data))
             var str = hexToString(receipt_3.logs[0].data)
             expect(str).toMatch('"Status":1')
         }
@@ -303,7 +279,7 @@ describe('test council with community users ', () => {
     const utils5 = new ContractUtils(ST_CONTRACT_DIR, client5, user_key)
 
     it('prepare test', async () => {
-        console.log('1. transfer to user5 some axm ')
+        console.log('1. transfer to user5 some AXM ')
         let nonce = await client.eth.getTransactionCount(ST_ADDRESS)
         await transfer(
             ST_ADDRESS,
@@ -367,20 +343,7 @@ describe('test council with community users ', () => {
         const match = str.match(/(\d+)/g)
         //console.log(match)
         if (match) {
-            console.log('2. admin1 vote this proposal')
-            const receipt_1 = await utils.call(
-                ST_GOVERNANCE_CONTRACT_NAME,
-                ST_GOVERNANCE_COUNCIL_ADDRESS,
-                'vote',
-                match[0],
-                0,
-                stringToByte('')
-            )
-            //console.log(hexToString(receipt_1.logs[0].data))
-            var str = hexToString(receipt_1.logs[0].data)
-            expect(str).toMatch('"Status":0')
-
-            console.log('3. user5 vote this proposal')
+            console.log('2. user5 vote this proposal')
             try {
                 await utils5.call(
                     ST_GOVERNANCE_CONTRACT_NAME,
