@@ -1,4 +1,5 @@
 import Web3, {Address, Transaction, TransactionReceipt} from 'web3'
+import * as fs from 'fs'
 import {Wallet, ethers} from '@axiomesh/axiom'
 import axios from 'axios'
 import {ContractUtils} from '../utils/contract'
@@ -58,6 +59,28 @@ export async function request(method: string, params?: any) {
     }
 }
 
+export async function deploy_contract(
+    wallet: Wallet,
+    contractPath: string
+): Promise<string> {
+    const bytecode = fs.readFileSync(
+        ST_CONTRACT_DIR + contractPath + '.bin',
+        'utf8'
+    )
+    const abi = fs.readFileSync(ST_CONTRACT_DIR + contractPath + '.abi', 'utf8')
+
+    const instance = new ethers.ContractFactory(abi, bytecode, wallet)
+    try {
+        const deploy = await instance.deploy()
+        const txReceipt = await deploy.deploymentTransaction()?.wait()
+        const contractAddress = String(txReceipt?.contractAddress)
+        console.log('deploy contract successful with address:', contractAddress)
+        return contractAddress
+    } catch (e) {
+        throw new Error('deploy contract failed, address is nil!')
+    }
+}
+
 export async function deploy_storage_contract() {
     const client = newRpcClient()
     const utils: ContractUtils = new ContractUtils(
@@ -91,7 +114,7 @@ export async function transferAXM(
     nonce: number,
     amount: string
 ): Promise<ethers.TransactionResponse> {
-    console.log('transfer AXM from', wallet.address, 'to', toAddr)
+    //console.log('transfer AXM from', wallet.address, 'to', toAddr)
     // Create tx object
     const tx = {
         to: toAddr,
