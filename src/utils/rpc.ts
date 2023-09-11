@@ -74,7 +74,7 @@ export async function deploy_contract(
         const deploy = await instance.deploy()
         const txReceipt = await deploy.deploymentTransaction()?.wait()
         const contractAddress = String(txReceipt?.contractAddress)
-        console.log('deploy contract successful with address:', contractAddress)
+        //console.log('deploy contract successful with address:', contractAddress)
         return contractAddress
     } catch (e) {
         throw new Error('deploy contract failed, address is nil!')
