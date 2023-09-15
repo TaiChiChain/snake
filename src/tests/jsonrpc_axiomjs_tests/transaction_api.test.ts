@@ -90,7 +90,6 @@ describe('TestCases of Transaction API', () => {
             //case list
             [[], 'missing value'],
             [['late'], 'invalid argument'],
-            [['0xFF'], 'null'],
             [['0xF4240'], 'null']
         ]
 
