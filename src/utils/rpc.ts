@@ -1,5 +1,6 @@
 import Web3, {Address, Transaction, TransactionReceipt} from 'web3'
-import {ethers} from '@axiomesh/axiom'
+import * as fs from 'fs'
+import {Wallet, ethers} from '@axiomesh/axiom'
 import axios from 'axios'
 import {ContractUtils} from '../utils/contract'
 import {
@@ -58,6 +59,28 @@ export async function request(method: string, params?: any) {
     }
 }
 
+export async function deploy_contract(
+    wallet: Wallet,
+    contractPath: string
+): Promise<string> {
+    const bytecode = fs.readFileSync(
+        ST_CONTRACT_DIR + contractPath + '.bin',
+        'utf8'
+    )
+    const abi = fs.readFileSync(ST_CONTRACT_DIR + contractPath + '.abi', 'utf8')
+
+    const instance = new ethers.ContractFactory(abi, bytecode, wallet)
+    try {
+        const deploy = await instance.deploy()
+        const txReceipt = await deploy.deploymentTransaction()?.wait()
+        const contractAddress = String(txReceipt?.contractAddress)
+        //console.log('deploy contract successful with address:', contractAddress)
+        return contractAddress
+    } catch (e) {
+        throw new Error('deploy contract failed, address is nil!')
+    }
+}
+
 export async function deploy_storage_contract() {
     const client = newRpcClient()
     const utils: ContractUtils = new ContractUtils(
@@ -84,16 +107,25 @@ export interface FilterParams {
     address?: HexString[]
     topics?: HexString[][]
 }
-export async function newFilter(params: FilterParams[]) {
-    return await request('eth_newFilter', params)
-}
 
-export async function newBlockFilter() {
-    return await request('eth_newBlockFilter')
-}
-
-export async function newPendingTransactionFilter() {
-    return await request('eth_newPendingTransactionFilter')
+export async function transferAXM(
+    wallet: Wallet,
+    toAddr: Address,
+    nonce: number,
+    amount: string
+): Promise<ethers.TransactionResponse> {
+    //console.log('transfer AXM from', wallet.address, 'to', toAddr)
+    // Create tx object
+    const tx = {
+        to: toAddr,
+        nonce: nonce,
+        value: ethers.parseEther(amount)
+    }
+    // Sign and send tx and wait for receipt
+    const receipt = await wallet.sendTransaction(tx)
+    await receipt.wait()
+    //console.log('Transaction successful with hash:', receipt.hash)
+    return receipt
 }
 
 export async function transfer(
@@ -118,6 +150,5 @@ export async function transfer(
         transactionObject,
         privateKey
     )
-
     return client.eth.sendSignedTransaction(signedTransaction.rawTransaction)
 }

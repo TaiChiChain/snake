@@ -4,7 +4,7 @@ import {request, deploy_storage_contract, newRpcClient} from '../../utils/rpc'
 //The first column of the cases element is the call input parameter
 //The second column of the cases elements is the result expected to be returned
 
-describe('test_getChainId', () => {
+describe('test getChainId', () => {
     var cases_of_getChainId: any[][] = []
     cases_of_getChainId = [
         //case1 : Verify the default chainId is 1356
@@ -17,7 +17,7 @@ describe('test_getChainId', () => {
     })
 })
 
-describe('test_getBlockNumber', () => {
+describe('test getBlockNumber', () => {
     var cases_of_getBlockNumber: any[][] = []
     cases_of_getBlockNumber = [
         //case1 : Verify the blocknumber must be greater than or equal to 1
@@ -32,7 +32,7 @@ describe('test_getBlockNumber', () => {
     })
 })
 
-describe('test_getBalance', () => {
+describe('test getBalance', () => {
     var cases_of_getBalance: any[][] = []
     cases_of_getBalance = [
         //case1 : Verify the genesis admin latest balance is greater than or equal to 10000
