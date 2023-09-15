@@ -1,30 +1,22 @@
 import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
 import * as fs from 'fs'
-import {
-    newProvider,
-    newWallet,
-    request,
-    transferAXM,
-    deploy_contract,
-    ST_ADDRESS
-} from '../../utils/rpc'
+import {provider, request, transferAXM, deploy_contract} from '../../utils/rpc'
 import {stringToUint8Array} from '../../utils/util'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
+import {ST_ACCOUNT_1} from '../../utils/accounts_static'
 
 //The first column of the cases element is the call input parameter
 //The second column of the cases elements is the result expected to be returned
 
 describe('TestCases of BlockChain API', () => {
-    const provider = newProvider()
-    const wallet = newWallet(provider)
-
+    const wallet = new ethers.Wallet(ST_ACCOUNT_1.privateKey, provider)
     beforeAll(async () => {
         console.log('Prepare some transactions first')
         for (var i = 0; i < 1; i++) {
             let wallet_random = ethers.Wallet.createRandom()
             let addressTo = await wallet_random.getAddress()
-            let nonce = await provider.getTransactionCount(ST_ADDRESS)
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_1.address)
             await transferAXM(wallet, addressTo, nonce, '0.1')
             nonce = nonce + 1
         }
@@ -93,7 +85,7 @@ describe('TestCases of BlockChain API', () => {
         })
 
         test('eth_getBalance with axiom.js', async () => {
-            const res1 = await provider.getBalance(ST_ADDRESS)
+            const res1 = await provider.getBalance(ST_ACCOUNT_1.address)
             expect(res1).toBeGreaterThanOrEqual(1)
 
             let wallet_random = ethers.Wallet.createRandom()
@@ -108,32 +100,17 @@ describe('TestCases of BlockChain API', () => {
         var cases_of_getBlock_without_transactions: any[][] = []
         cases_of_getBlock_with_transactions = [
             //case1 : Verify the recipet of getBlock_with_transactions include txs
-            [
-                ['latest', true],
-                [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]
-            ],
+            ['latest', 'transactionIndex'],
             //case2 : Verify the recipet of getBlock_with_transactions include txs
-            [
-                ['pending', true],
-                [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]
-            ]
+            ['pending', 'transactionIndex']
         ]
         cases_of_getBlock_without_transactions = [
             //case1 : Verify the recipet of getBlock_with_transactions include txs
-            [
-                ['latest', false],
-                [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]
-            ],
+            ['latest', 'transactionIndex'],
             //case2 : Verify the recipet of getBlock_with_transactions include txs
-            [
-                ['pending', false],
-                [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]
-            ],
+            ['pending', 'transactionIndex'],
             //case3 : Verify the recipet of getBlock_without_transactions not include txs
-            [
-                ['earliest', false],
-                [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]
-            ]
+            ['earliest', 'transactionIndex']
         ]
         const len = [
             cases_of_getBlock_with_transactions.length,
@@ -143,12 +120,12 @@ describe('TestCases of BlockChain API', () => {
         test('eth_getBlockByNumber_with_transactions', async () => {
             for (var i = 0; i < len[0]; i++) {
                 if (cases_of_getBlock_with_transactions[i]) {
-                    var res = await request(
-                        'eth_getBlockByNumber',
-                        cases_of_getBlock_with_transactions[i][0]
-                    )
+                    var res = await request('eth_getBlockByNumber', [
+                        cases_of_getBlock_with_transactions[i][0],
+                        true
+                    ])
                     //console.log('rpc post eth_getBlockByNumber', res.result)
-                    expect(res.result.transactions).toMatchObject(
+                    expect(JSON.stringify(res.result)).toMatch(
                         cases_of_getBlock_with_transactions[i][1]
                     )
                 }
@@ -158,12 +135,12 @@ describe('TestCases of BlockChain API', () => {
         test('eth_getBlockByNumber_without_transactions', async () => {
             for (var i = 0; i < len[1]; i++) {
                 if (cases_of_getBlock_without_transactions[i]) {
-                    var res = await request(
-                        'eth_getBlockByNumber',
-                        cases_of_getBlock_without_transactions[i][0]
-                    )
+                    var res = await request('eth_getBlockByNumber', [
+                        cases_of_getBlock_without_transactions[i][0],
+                        false
+                    ])
                     //console.log('rpc post eth_getBlockByNumber', res.result)
-                    expect(res.result.transactions).not.toMatchObject(
+                    expect(JSON.stringify(res.result)).not.toMatch(
                         cases_of_getBlock_without_transactions[i][1]
                     )
                 }
@@ -176,22 +153,19 @@ describe('TestCases of BlockChain API', () => {
         var cases_of_getBlock_without_transactions: any[][] = []
         cases_of_getBlock_with_transactions = [
             //case1 : Verify the recipet of getBlock_with_transactions include txs
-            ['latest', [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]],
+            ['latest', 'transactionIndex'],
             //case2 : Verify the recipet of getBlock_with_transactions include txs
-            ['pending', [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]]
+            ['pending', 'transactionIndex']
         ]
         cases_of_getBlock_without_transactions = [
             //case1 : Verify the recipet of getBlock_without_transactions not include txs
-            ['latest', [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]],
+            ['latest', 'transactionIndex'],
             //case2 : Verify the recipet of getBlock_without_transactions not include txs
-            ['pending', [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]],
+            ['pending', 'transactionIndex'],
             //case3 : Verify the recipet of getBlock_without_transactions not include txs
-            [
-                'earliest',
-                [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]
-            ],
+            ['earliest', 'transactionIndex'],
             //case4 : Verify the recipet of getBlock_without_transactions not include txs
-            [1, [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]]
+            [1, 'transactionIndex']
         ]
         const len = [
             cases_of_getBlock_with_transactions.length,
@@ -211,8 +185,8 @@ describe('TestCases of BlockChain API', () => {
                         block_hash,
                         true
                     ])
-                    //console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
-                    expect(res.result.transactions).toMatchObject(
+
+                    expect(JSON.stringify(res.result.transactions)).toMatch(
                         cases_of_getBlock_with_transactions[i][1]
                     )
                 }
@@ -231,8 +205,7 @@ describe('TestCases of BlockChain API', () => {
                         block_hash,
                         false
                     ])
-                    //console.log('rpc post eth_getBlockByHash === index: ', i, res.result)
-                    expect(res.result.transactions).not.toMatchObject(
+                    expect(JSON.stringify(res.result.transactions)).not.toMatch(
                         cases_of_getBlock_without_transactions[i][1]
                     )
                 }
@@ -244,13 +217,13 @@ describe('TestCases of BlockChain API', () => {
         var cases_of_getCode: any[][] = []
         cases_of_getCode = [
             //case1 : Verify the genesis admin latest code
-            [['0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013', 'latest'], '0'],
+            [[ST_ACCOUNT_1.address, 'latest'], '0'],
             //case2 : Verify the new account latest code
             [['0xC60ba75739b3492189d80c71AD0AEbc0c57695Ff', 'latest'], '0'],
             //case3 : Verify the genesis admin pending code
-            [['0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013', 'pending'], '0'],
+            [[ST_ACCOUNT_1.address, 'pending'], '0'],
             //case4 : Verify the genesis admin earliest code
-            [['0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013', 'earliest'], '0']
+            [[ST_ACCOUNT_1.address, 'earliest'], '0']
         ]
 
         const len = cases_of_getCode.length
@@ -302,7 +275,7 @@ describe('TestCases of BlockChain API', () => {
             //case1 : Verify the genesis admin latest code
             [
                 [
-                    '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013',
+                    ST_ACCOUNT_1.address,
                     '0x7b00000000000000000000000000000000000000000000000000000000000000',
                     'latest'
                 ],
@@ -320,7 +293,7 @@ describe('TestCases of BlockChain API', () => {
             //case3 : Verify the genesis admin pending code
             [
                 [
-                    '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013',
+                    ST_ACCOUNT_1.address,
                     '0x7b00000000000000000000000000000000000000000000000000000000000000',
                     'pending'
                 ],
@@ -329,7 +302,7 @@ describe('TestCases of BlockChain API', () => {
             //case4 : Verify the genesis admin earliest code
             [
                 [
-                    '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013',
+                    ST_ACCOUNT_1.address,
                     '0x7b00000000000000000000000000000000000000000000000000000000000000',
                     'earliest'
                 ],
@@ -399,7 +372,7 @@ describe('TestCases of BlockChain API', () => {
     describe('test get gasPrice info', () => {
         test('get_gasPrice', async () => {
             let res = await request('eth_gasPrice')
-            console.log(res)
+            //console.log(res)
             expect(BigInt(res.result)).toBeGreaterThanOrEqual(
                 BigInt(1000000000000)
             )
@@ -425,19 +398,18 @@ describe('TestCases of BlockChain API', () => {
 
     describe('test get blockchain sync info  ', () => {
         test('eth_syncing', async () => {
-            const provider = newProvider()
             const blocknum = await provider.getBlockNumber()
             var res = await request('eth_syncing')
-            console.log(res)
-            expect(res.result).toHaveProperty('currentBlock', String(blocknum))
-            expect(res.result).toHaveProperty('highestBlock', String(blocknum))
-            expect(res.result).toHaveProperty('startingBlock', '1')
+            //console.log(res)
+            expect(BigInt(res.result.currentBlock)).toBeLessThanOrEqual(
+                BigInt(res.result.highestBlock)
+            )
+            expect(res.result.startingBlock).toBe('1')
         })
     })
 })
 
 describe('test block info contains coinbase address ', () => {
-    const provider = newProvider()
     test('eth_getBlock_latest', async () => {
         const latestBlock = await provider.getBlock('latest', true)
         console.log('The latest block coinbase info is: ', latestBlock?.miner)

@@ -1,15 +1,19 @@
 import {test, expect} from '@jest/globals'
-import {newProvider, newWallet, newContract, request} from '../../utils/rpc'
+import {ethers} from '@axiomesh/axiom'
+import {provider, newContract, request} from '../../utils/rpc'
 import * as fs from 'fs'
 import {
     ST_CONTRACT_DIR,
     ST_GOVERNANCE_COUNCIL_ADDRESS,
     PROPOSAL_TYPE_COUNCIL_ELECT
 } from '../../utils/contracts_static'
+import {ST_ADMIN_2} from '../../utils/accounts_static'
 import {stringToUint8Array} from '../../utils/util'
 
 describe('TestCases of Filter API', () => {
-    it('perpare testData: try propose a proposal first', async () => {
+    const wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)
+    beforeAll(async () => {
+        console.log('perpare testData: try propose a proposal first')
         let extraArgs = {
             candidates: [
                 {
@@ -34,8 +38,6 @@ describe('TestCases of Filter API', () => {
                 }
             ]
         }
-        const provider = newProvider()
-        const wallet = newWallet(provider)
 
         const abi = fs.readFileSync(
             ST_CONTRACT_DIR + 'Governance/governance.abi',
@@ -55,11 +57,11 @@ describe('TestCases of Filter API', () => {
                 stringToUint8Array(JSON.stringify(extraArgs))
             )
             await createReceipt.wait()
-            console.log('Tx successful with hash:', createReceipt.hash)
+            //console.log('Tx successful with hash:', createReceipt.hash)
         } catch (error) {
+            //console.log(error)
             console.log(
                 'This error does not affect the subsequent testing process'
-                //error
             )
         }
     })
@@ -234,7 +236,6 @@ describe('TestCases of Filter API', () => {
                         'eth_getLogs',
                         cases_of_get_logs[i][0]
                     )
-                    //console.log('post eth_getLogs normal', i, '==', res.result[0])
                     expect(res.result).not.toBeNull()
                     expect(res.result[0]?.address).toMatch(
                         cases_of_get_logs[i][1]

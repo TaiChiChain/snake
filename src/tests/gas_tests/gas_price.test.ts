@@ -1,17 +1,13 @@
-import { test, expect, describe } from '@jest/globals'
-import {
-    ST_ADDRESS,
-    ST_PRIVATEKRY,
-    newRpcClient,
-    transfer
-} from '../../utils/rpc'
-import { TransactionReceipt } from 'web3'
-import { ContractUtils } from '../../utils/contract'
+import {test, expect, describe} from '@jest/globals'
+import {newRpcClient, transfer} from '../../utils/rpc'
+import {TransactionReceipt} from 'web3'
+import {ContractUtils} from '../../utils/contract'
 import {
     ST_CONTRACT_DIR,
     ST_EVM_CONTRACT_NAME,
     ST_EVM_FILENAME
 } from '../../utils/contracts_static'
+import {ST_ACCOUNT_2} from '../../utils/accounts_static'
 
 const MIN_BATCH_SIZE = 1
 const MAX_BATCH_SIZE = 10
@@ -117,13 +113,13 @@ describe('test gas price change', () => {
     test('transfer with amount and gas', async () => {
         const client = newRpcClient()
         const account1 = client.eth.accounts.create()
-        let nonce = await client.eth.getTransactionCount(ST_ADDRESS)
+        let nonce = await client.eth.getTransactionCount(ST_ACCOUNT_2.address)
         await transfer(
-            ST_ADDRESS,
+            ST_ACCOUNT_2.address,
             account1.address,
             client.utils.toWei('1', 'ether'),
             nonce,
-            ST_PRIVATEKRY
+            ST_ACCOUNT_2.privateKey
         )
         const account2 = client.eth.accounts.create()
 
@@ -141,21 +137,21 @@ describe('test gas price change', () => {
         const newBalance = await client.eth.getBalance(account1.address)
         expect(newBalance).toEqual(
             oldBalance -
-            BigInt(client.utils.toWei('0.5', 'ether')) -
-            BigInt(receipt.gasUsed) * gasPrice
+                BigInt(client.utils.toWei('0.5', 'ether')) -
+                BigInt(receipt.gasUsed) * gasPrice
         )
     })
 
     test('invoke contract with gas', async () => {
         const client = newRpcClient()
         const account1 = client.eth.accounts.create()
-        const nonce = await client.eth.getTransactionCount(ST_ADDRESS)
+        const nonce = await client.eth.getTransactionCount(ST_ACCOUNT_2.address)
         await transfer(
-            ST_ADDRESS,
+            ST_ACCOUNT_2.address,
             account1.address,
             client.utils.toWei('2', 'ether'),
             nonce,
-            ST_PRIVATEKRY
+            ST_ACCOUNT_2.privateKey
         )
 
         const utils = new ContractUtils(
@@ -183,16 +179,16 @@ describe('test gas price change', () => {
 async function sendTransaction(count: number) {
     const client = newRpcClient()
     const account = client.eth.accounts.create()
-    let nonce = await client.eth.getTransactionCount(ST_ADDRESS)
+    let nonce = await client.eth.getTransactionCount(ST_ACCOUNT_2.address)
 
     const tasks: Promise<TransactionReceipt>[] = []
     for (let i = 0; i < count; i++) {
         const task = transfer(
-            ST_ADDRESS,
+            ST_ACCOUNT_2.address,
             account.address,
             client.utils.toWei('0.1', 'Gwei'),
             nonce,
-            ST_PRIVATEKRY
+            ST_ACCOUNT_2.privateKey
         )
         nonce++
         tasks.push(task)
