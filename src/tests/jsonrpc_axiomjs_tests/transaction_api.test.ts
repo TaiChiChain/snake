@@ -1,20 +1,20 @@
 import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
-import {ST_ADMIN_4} from '../../utils/accounts_static'
+import {ST_ACCOUNT_4} from '../../utils/accounts_static'
 import {provider, request, transferAXM} from '../../utils/rpc'
 
 //The first column of the cases element is the call input parameter
 //The second column of the cases elements is the result expected to be returned
 
 describe('TestCases of Transaction API', () => {
-    const wallet = new ethers.Wallet(ST_ADMIN_4.privateKey, provider)
+    const wallet = new ethers.Wallet(ST_ACCOUNT_4.privateKey, provider)
 
     beforeAll(async () => {
         console.log('Prepare some transactions first')
         for (var i = 0; i < 1; i++) {
             let wallet_random = ethers.Wallet.createRandom()
             let addressTo = await wallet_random.getAddress()
-            let nonce = await provider.getTransactionCount(ST_ADMIN_4.address)
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_4.address)
             await transferAXM(wallet, addressTo, nonce, '0.1')
             nonce = nonce + 1
         }
@@ -25,11 +25,11 @@ describe('TestCases of Transaction API', () => {
         let cases_of_getTransactionCount_counter: any[][] = []
         cases_of_getTransactionCount = [
             //case list
-            [[ST_ADMIN_4.address, 'earliest'], 1],
-            [[ST_ADMIN_4.address, 'pending'], 1],
-            [[ST_ADMIN_4.address, 'latest'], 1],
-            [[ST_ADMIN_4.address], 1],
-            [[ST_ADMIN_4.address, '0x2'], 1],
+            [[ST_ACCOUNT_4.address, 'earliest'], 1],
+            [[ST_ACCOUNT_4.address, 'pending'], 1],
+            [[ST_ACCOUNT_4.address, 'latest'], 1],
+            [[ST_ACCOUNT_4.address], 1],
+            [[ST_ACCOUNT_4.address, '0x2'], 1],
             [['0x320Bdc9DB071aD9B8A9aC6eE71D7C3CAc3217E2d', 'latest'], 0],
             [['0x320Bdc9DB071aD9B8A9aC6eE71D7C3CAc3217E2d'], 0]
         ]
@@ -314,10 +314,10 @@ describe('TestCases of Transaction API', () => {
         test('eth_getTransactionByHash', async () => {
             let wallet_random = ethers.Wallet.createRandom()
             let addressTo = await wallet_random.getAddress()
-            let nonce = await provider.getTransactionCount(ST_ADMIN_4.address)
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_4.address)
             const response = await transferAXM(wallet, addressTo, nonce, '0.1')
             var res1 = await provider.getTransaction(response.hash)
-            expect(res1?.from).toBe(ST_ADMIN_4.address)
+            expect(res1?.from).toBe(ST_ACCOUNT_4.address)
 
             // try http-post
             var res1_1 = await request('eth_getTransactionByHash', [
@@ -325,7 +325,7 @@ describe('TestCases of Transaction API', () => {
             ])
 
             expect(JSON.stringify(res1_1?.result.from)).toMatch(
-                ST_ADMIN_4.address.toLowerCase()
+                ST_ACCOUNT_4.address.toLowerCase()
             )
 
             var res1_2 = await request('eth_getTransactionByHash', [
@@ -350,17 +350,17 @@ describe('TestCases of Transaction API', () => {
         test('eth_getTransactionReceipt', async () => {
             let wallet_random = ethers.Wallet.createRandom()
             let addressTo = await wallet_random.getAddress()
-            let nonce = await provider.getTransactionCount(ST_ADMIN_4.address)
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_4.address)
             const response = await transferAXM(wallet, addressTo, nonce, '0.1')
             var res1 = await provider.getTransactionReceipt(response.hash)
-            expect(res1?.from).toBe(ST_ADMIN_4.address)
+            expect(res1?.from).toBe(ST_ACCOUNT_4.address)
 
             // try http-post
             var res1_1 = await request('eth_getTransactionReceipt', [
                 response.hash
             ])
             expect(JSON.stringify(res1_1?.result.from)).toMatch(
-                ST_ADMIN_4.address.toLowerCase()
+                ST_ACCOUNT_4.address.toLowerCase()
             )
 
             var res1_2 = await request('eth_getTransactionReceipt', [

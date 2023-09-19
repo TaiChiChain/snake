@@ -17,11 +17,6 @@ const MAX_PRICE = 10000000000000
 const MAX_RATE = 1.125
 
 describe('test gas price change', () => {
-    // test('initial gas price is 5000', async () => {
-    //     const price = await client.eth.getGasPrice()
-    //     expect(price).toBe(BigInt(5000))
-    // })
-
     test('gas price min is 1000', async () => {
         const client = newRpcClient()
         const nowPrice = await client.eth.getGasPrice()

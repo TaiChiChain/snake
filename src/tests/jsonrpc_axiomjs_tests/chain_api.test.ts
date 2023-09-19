@@ -4,19 +4,19 @@ import * as fs from 'fs'
 import {provider, request, transferAXM, deploy_contract} from '../../utils/rpc'
 import {stringToUint8Array} from '../../utils/util'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
-import {ST_ACCOUNT_1} from '../../utils/accounts_static'
+import {ST_ACCOUNT_3} from '../../utils/accounts_static'
 
 //The first column of the cases element is the call input parameter
 //The second column of the cases elements is the result expected to be returned
 
 describe('TestCases of BlockChain API', () => {
-    const wallet = new ethers.Wallet(ST_ACCOUNT_1.privateKey, provider)
+    const wallet = new ethers.Wallet(ST_ACCOUNT_3.privateKey, provider)
     beforeAll(async () => {
         console.log('Prepare some transactions first')
         for (var i = 0; i < 1; i++) {
             let wallet_random = ethers.Wallet.createRandom()
             let addressTo = await wallet_random.getAddress()
-            let nonce = await provider.getTransactionCount(ST_ACCOUNT_1.address)
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_3.address)
             await transferAXM(wallet, addressTo, nonce, '0.1')
             nonce = nonce + 1
         }
@@ -85,7 +85,7 @@ describe('TestCases of BlockChain API', () => {
         })
 
         test('eth_getBalance with axiom.js', async () => {
-            const res1 = await provider.getBalance(ST_ACCOUNT_1.address)
+            const res1 = await provider.getBalance(ST_ACCOUNT_3.address)
             expect(res1).toBeGreaterThanOrEqual(1)
 
             let wallet_random = ethers.Wallet.createRandom()
@@ -217,13 +217,13 @@ describe('TestCases of BlockChain API', () => {
         var cases_of_getCode: any[][] = []
         cases_of_getCode = [
             //case1 : Verify the genesis admin latest code
-            [[ST_ACCOUNT_1.address, 'latest'], '0'],
+            [[ST_ACCOUNT_3.address, 'latest'], '0'],
             //case2 : Verify the new account latest code
             [['0xC60ba75739b3492189d80c71AD0AEbc0c57695Ff', 'latest'], '0'],
             //case3 : Verify the genesis admin pending code
-            [[ST_ACCOUNT_1.address, 'pending'], '0'],
+            [[ST_ACCOUNT_3.address, 'pending'], '0'],
             //case4 : Verify the genesis admin earliest code
-            [[ST_ACCOUNT_1.address, 'earliest'], '0']
+            [[ST_ACCOUNT_3.address, 'earliest'], '0']
         ]
 
         const len = cases_of_getCode.length
@@ -275,7 +275,7 @@ describe('TestCases of BlockChain API', () => {
             //case1 : Verify the genesis admin latest code
             [
                 [
-                    ST_ACCOUNT_1.address,
+                    ST_ACCOUNT_3.address,
                     '0x7b00000000000000000000000000000000000000000000000000000000000000',
                     'latest'
                 ],
@@ -293,7 +293,7 @@ describe('TestCases of BlockChain API', () => {
             //case3 : Verify the genesis admin pending code
             [
                 [
-                    ST_ACCOUNT_1.address,
+                    ST_ACCOUNT_3.address,
                     '0x7b00000000000000000000000000000000000000000000000000000000000000',
                     'pending'
                 ],
@@ -302,7 +302,7 @@ describe('TestCases of BlockChain API', () => {
             //case4 : Verify the genesis admin earliest code
             [
                 [
-                    ST_ACCOUNT_1.address,
+                    ST_ACCOUNT_3.address,
                     '0x7b00000000000000000000000000000000000000000000000000000000000000',
                     'earliest'
                 ],
@@ -412,15 +412,15 @@ describe('TestCases of BlockChain API', () => {
 describe('test block info contains coinbase address ', () => {
     test('eth_getBlock_latest', async () => {
         const latestBlock = await provider.getBlock('latest', true)
-        console.log('The latest block coinbase info is: ', latestBlock?.miner)
+        //console.log('The latest block coinbase info is: ', latestBlock?.miner)
         expect(latestBlock?.miner).not.toBeNull
     })
 
     test('eth_getBlock_earliest', async () => {
-        const latestBlock = await provider.getBlock('earliest', true)
-        console.log('The latest block coinbase info is: ', latestBlock?.miner)
-        expect(latestBlock?.miner).not.toBeNull
-        expect(latestBlock?.miner).toBe(
+        const earliestBlock = await provider.getBlock('earliest', true)
+        //console.log('The earliest block coinbase info is: ',earliestBlock?.miner)
+        expect(earliestBlock?.miner).not.toBeNull
+        expect(earliestBlock?.miner).toBe(
             '0x0000000000000000000000000000000000000000'
         )
     })
