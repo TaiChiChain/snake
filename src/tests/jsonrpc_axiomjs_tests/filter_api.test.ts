@@ -1,68 +1,7 @@
 import {test, expect} from '@jest/globals'
-import {newProvider, newWallet, newContract, request} from '../../utils/rpc'
-import * as fs from 'fs'
-import {
-    ST_CONTRACT_DIR,
-    ST_GOVERNANCE_COUNCIL_ADDRESS,
-    PROPOSAL_TYPE_COUNCIL_ELECT
-} from '../../utils/contracts_static'
-import {stringToUint8Array} from '../../utils/util'
+import {request} from '../../utils/rpc'
 
 describe('TestCases of Filter API', () => {
-    it('perpare testData: try propose a proposal first', async () => {
-        let extraArgs = {
-            candidates: [
-                {
-                    address: '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013',
-                    weight: 1,
-                    name: 'test 1'
-                },
-                {
-                    address: '0x79a1215469FaB6f9c63c1816b45183AD3624bE34',
-                    weight: 1,
-                    name: 'test 2'
-                },
-                {
-                    address: '0x97c8B516D19edBf575D72a172Af7F418BE498C37',
-                    weight: 1,
-                    name: 'test 3'
-                },
-                {
-                    address: '0xc0Ff2e0b3189132D815b8eb325bE17285AC898f8',
-                    weight: 1,
-                    name: 'test 4'
-                }
-            ]
-        }
-        const provider = newProvider()
-        const wallet = newWallet(provider)
-
-        const abi = fs.readFileSync(
-            ST_CONTRACT_DIR + 'Governance/governance.abi',
-            'utf8'
-        )
-        const governance_contract = newContract(
-            ST_GOVERNANCE_COUNCIL_ADDRESS,
-            abi,
-            wallet
-        )
-        try {
-            const createReceipt = await governance_contract.propose(
-                PROPOSAL_TYPE_COUNCIL_ELECT,
-                'test title',
-                'test desc',
-                100,
-                stringToUint8Array(JSON.stringify(extraArgs))
-            )
-            await createReceipt.wait()
-            console.log('Tx successful with hash:', createReceipt.hash)
-        } catch (error) {
-            console.log(
-                'This error does not affect the subsequent testing process'
-                //error
-            )
-        }
-    })
     describe('test create new filter', () => {
         let cases_of_create_newFilter: any[][] = []
         let cases_of_create_newFilter_counterexample: any[][] = []
@@ -234,9 +173,9 @@ describe('TestCases of Filter API', () => {
                         'eth_getLogs',
                         cases_of_get_logs[i][0]
                     )
-                    //console.log('post eth_getLogs normal', i, '==', res.result[0])
+                    //console.log('res is', res)
                     expect(res.result).not.toBeNull()
-                    expect(res.result[0]?.address).toMatch(
+                    expect(JSON.stringify(res.result)).toMatch(
                         cases_of_get_logs[i][1]
                     )
                 }

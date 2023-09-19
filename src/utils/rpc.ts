@@ -8,11 +8,12 @@ import {
     ST_STORAGE_CONTRACT_NAME,
     ST_STORAGE_FILENAME
 } from '../utils/contracts_static'
+import {ST_ADMIN_1} from '../utils/accounts_static'
 
-export const ST_PRIVATEKRY =
-    '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
-export const ST_ADDRESS = '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013'
 export const ST_URL = process.env.ST_URL || 'http://127.0.0.1:8881'
+
+export const provider = new ethers.JsonRpcProvider(ST_URL)
+//export const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
 
 export function newRpcClient() {
     return new Web3(ST_URL)
@@ -23,7 +24,7 @@ export function newProvider() {
 }
 
 export function newWallet(provider: ethers.Provider) {
-    return new ethers.Wallet(ST_PRIVATEKRY, provider)
+    return new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
 }
 
 export function newContract(contractAddress: any, abi: any, wallet: any) {
@@ -81,33 +82,6 @@ export async function deploy_contract(
     }
 }
 
-export async function deploy_storage_contract() {
-    const client = newRpcClient()
-    const utils: ContractUtils = new ContractUtils(
-        ST_CONTRACT_DIR,
-        client,
-        ST_PRIVATEKRY
-    )
-    utils.compile(ST_STORAGE_FILENAME, ST_STORAGE_CONTRACT_NAME)
-    try {
-        const address = await utils.deploy(ST_STORAGE_CONTRACT_NAME)
-        return address
-    } catch (e) {
-        //console.log("err is:", error)
-        throw new Error('deploy contract failed, address is nil!')
-    }
-}
-
-declare type BlockTag = 'latest' | 'pending' | 'earliest'
-declare type HexString = string
-
-export interface FilterParams {
-    fromBlock?: HexString | BlockTag
-    toBlock?: HexString | BlockTag
-    address?: HexString[]
-    topics?: HexString[][]
-}
-
 export async function transferAXM(
     wallet: Wallet,
     toAddr: Address,
@@ -151,4 +125,21 @@ export async function transfer(
         privateKey
     )
     return client.eth.sendSignedTransaction(signedTransaction.rawTransaction)
+}
+
+export async function deploy_storage_contract() {
+    const client = newRpcClient()
+    const utils: ContractUtils = new ContractUtils(
+        ST_CONTRACT_DIR,
+        client,
+        ST_ADMIN_1.privateKey
+    )
+    utils.compile(ST_STORAGE_FILENAME, ST_STORAGE_CONTRACT_NAME)
+    try {
+        const address = await utils.deploy(ST_STORAGE_CONTRACT_NAME)
+        return address
+    } catch (e) {
+        //console.log("err is:", error)
+        throw new Error('deploy contract failed, address is nil!')
+    }
 }

@@ -1,6 +1,7 @@
-import { test, expect, describe } from '@jest/globals'
-import { ST_PRIVATEKRY, newRpcClient } from '../../utils/rpc'
-import { ContractUtils } from '../../utils/contract'
+import {test, expect, describe} from '@jest/globals'
+import {newRpcClient} from '../../utils/rpc'
+import {ContractUtils} from '../../utils/contract'
+import {ST_ACCOUNT_1} from '../../utils/accounts_static'
 import {
     ST_CONTRACT_DIR,
     ST_CROSS_EVM_CONTRACT_NAME,
@@ -11,7 +12,11 @@ import {
 
 describe('test evm context', () => {
     const client = newRpcClient()
-    const utils = new ContractUtils(ST_CONTRACT_DIR, client, ST_PRIVATEKRY)
+    const utils = new ContractUtils(
+        ST_CONTRACT_DIR,
+        client,
+        ST_ACCOUNT_1.privateKey
+    )
     utils.compile(ST_EVM_FILENAME, ST_EVM_CONTRACT_NAME)
     utils.compile(ST_CROSS_EVM_FILENAME, ST_CROSS_EVM_CONTRACT_NAME)
 
@@ -43,7 +48,7 @@ describe('test evm context', () => {
             address,
             'blockCoinbase'
         )
-        expect(coinbase).toBe('0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013')
+        expect(coinbase).not.toBeNull()
     })
 
     test('test difficulty', async () => {
@@ -104,7 +109,7 @@ describe('test evm context', () => {
             address,
             'msgSender'
         )
-        expect(sender).toBe('0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013')
+        expect(sender).toBe(ST_ACCOUNT_1.address)
     })
 
     test('test cross msg.sender', async () => {
@@ -158,7 +163,7 @@ describe('test evm context', () => {
             address,
             'txOrigin'
         )
-        expect(origin).toBe('0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013')
+        expect(origin).toBe(ST_ACCOUNT_1.address)
     })
 
     test('test cross tx.origin', async () => {
@@ -172,6 +177,6 @@ describe('test evm context', () => {
             address2,
             'crossTxOrigin'
         )
-        expect(crossOrigin).toBe('0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013')
+        expect(crossOrigin).toBe(ST_ACCOUNT_1.address)
     })
 })

@@ -1,15 +1,16 @@
 import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
-import {ST_URL, ST_ADDRESS, ST_PRIVATEKRY} from '../../utils/rpc'
+import {provider} from '../../utils/rpc'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
+import {
+    ST_ACCOUNT_1,
+    ST_ACCOUNT_2,
+    ST_ACCOUNT_3,
+    ST_ACCOUNT_4
+} from '../../utils/accounts_static'
 import * as fs from 'fs'
 
 describe('test_connect_axiom', () => {
-    const addressTo = '0xE55Db6E6743111F35F18af34E8331AB1E27214de'
-    const provider = new ethers.JsonRpcProvider(ST_URL)
-    const wallet = new ethers.Wallet(ST_PRIVATEKRY, provider)
-    //const wallet2 = new (ethers.Wallet as any).createRandom()
-
     test('eth_getBlockNumber', async () => {
         const latestBlock = await provider.getBlockNumber()
         console.log('The latest block number is', latestBlock)
@@ -17,10 +18,13 @@ describe('test_connect_axiom', () => {
     })
 
     test('transfer AXM', async () => {
-        const balance = await provider.getBalance(ST_ADDRESS)
+        let wallet = new ethers.Wallet(ST_ACCOUNT_1.privateKey, provider)
+        const balance = await provider.getBalance(ST_ACCOUNT_1.address)
         console.log('This from address balance is', balance)
         expect(balance).toBeGreaterThanOrEqual(BigInt(1))
 
+        const wallet_random = ethers.Wallet.createRandom()
+        const addressTo = await wallet_random.getAddress()
         console.log('transfer AXM from', wallet.address, 'to', addressTo)
         // Create tx object
         const tx = {
@@ -34,6 +38,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('deploy and invoke ERC20 contract', async () => {
+        let wallet = new ethers.Wallet(ST_ACCOUNT_2.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC20/ERC20.bin',
             'utf8'
@@ -51,13 +56,14 @@ describe('test_connect_axiom', () => {
         )
 
         const erc20_contract = new ethers.Contract(contractAddress, abi, wallet)
-        console.log('Mint 1000000000 TAXM at :', ST_ADDRESS)
+        console.log('Mint 1000000000 TAXM at :', ST_ACCOUNT_2.address)
         const createReceipt = await erc20_contract.mint(1000000000000)
         await createReceipt.wait()
         console.log('Tx successful with hash:', createReceipt.hash)
     })
 
     test('deploy and invoke ERC721 contract', async () => {
+        let wallet = new ethers.Wallet(ST_ACCOUNT_3.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC721/ERC721.bin',
             'utf8'
@@ -89,9 +95,9 @@ describe('test_connect_axiom', () => {
             abi,
             wallet
         )
-        console.log('Mint NFT at :', ST_ADDRESS)
+        console.log('Mint NFT at :', ST_ACCOUNT_3.address)
         const createReceipt = await erc721_contract.mintNFT(
-            ST_ADDRESS,
+            ST_ACCOUNT_3.address,
             '123456'
         )
         await createReceipt.wait()
@@ -99,6 +105,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('deploy and invoke ERC1155 contract', async () => {
+        let wallet = new ethers.Wallet(ST_ACCOUNT_4.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC1155/ERC1155.bin',
             'utf8'
@@ -133,7 +140,7 @@ describe('test_connect_axiom', () => {
             abi,
             wallet
         )
-        console.log('Mint some NFT at :', ST_ADDRESS)
+        console.log('Mint some NFT at :', ST_ACCOUNT_4.address)
         const createReceipt = await erc1155_contract.mintToken(1, 10)
         await createReceipt.wait()
         console.log('Tx successful with hash:', createReceipt.hash)
