@@ -90,7 +90,7 @@ describe('TestCases of Transaction API', () => {
             //case list
             [[], 'missing value'],
             [['late'], 'invalid argument'],
-            [['0xF4240'], 'null']
+            [['0x5F5E100'], 'null']
         ]
 
         const len = cases_of_getBlockTransactionCount_byNumber.length
@@ -378,6 +378,25 @@ describe('TestCases of Transaction API', () => {
 
             var res2_2 = await request('eth_getTransactionReceipt')
             expect(JSON.stringify(res2_2?.error)).toMatch('missing value')
+        })
+    })
+
+    describe('test eth_sendRawTransaction', () => {
+        test('transfer AXM with err chainId', async () => {
+            const wallet_random = ethers.Wallet.createRandom()
+            const addressTo = await wallet_random.getAddress()
+            console.log('transfer AXM from', wallet.address, 'to', addressTo)
+            // Create tx object
+            const tx = {
+                chainId: '1234',
+                to: addressTo,
+                value: ethers.parseEther('1')
+            }
+            // Signtx - wait for receipt
+            const singnedTx = await wallet.signTransaction(tx)
+            var res = await request('eth_sendRawTransaction', [singnedTx])
+            //console.log('res is :', res)
+            expect(JSON.stringify(res.error)).toMatch('verify tx err')
         })
     })
 })
