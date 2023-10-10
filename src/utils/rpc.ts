@@ -10,7 +10,8 @@ import {
 } from '../utils/contracts_static'
 import {ST_ADMIN_1} from '../utils/accounts_static'
 
-export const ST_URL = process.env.ST_URL || 'http://127.0.0.1:8881'
+export const ST_URL = process.env.ST_URL || 'http://172.16.13.131:8881'
+export const WS_URL = process.env.WS_URL || 'ws://172.16.13.131:9091'
 
 export const provider = new ethers.JsonRpcProvider(ST_URL)
 //export const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
@@ -21,6 +22,9 @@ export function newRpcClient() {
 
 export function newProvider() {
     return new ethers.JsonRpcProvider(ST_URL)
+}
+export function newWebSocketProvider() {
+    return new ethers.WebSocketProvider(WS_URL)
 }
 
 export function newWallet(provider: ethers.Provider) {
