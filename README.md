@@ -13,7 +13,7 @@ npm install
 Run the tests ✔️
 
 ```shell
-npm test
+npm run smoke-test
 PASS  src/tests/block.test.ts
 ✓ eth_getBlockByHash (36 ms)
 ✓ eth_getBlockByNumber (7 ms)

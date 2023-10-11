@@ -46,3 +46,7 @@ export function getValue(str: string, key: any) {
     const result = new RegExp(`(?:^|,)${key}:([^,]*)`).exec(str)
     return result && result[1]
 }
+
+export async function waitAsync(milliseconds: number) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
