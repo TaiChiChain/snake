@@ -1,5 +1,6 @@
 import Web3, {Address, Transaction, TransactionReceipt} from 'web3'
 import * as fs from 'fs'
+const solc = require('solc')
 import {Wallet, ethers} from '@axiomesh/axiom'
 import axios from 'axios'
 import {ContractUtils} from '../utils/contract'
@@ -11,6 +12,7 @@ import {
 import {ST_ADMIN_1} from '../utils/accounts_static'
 
 export const ST_URL = process.env.ST_URL || 'http://127.0.0.1:8881'
+export const WS_URL = process.env.WS_URL || 'ws://127.0.0.1:9991'
 
 export const provider = new ethers.JsonRpcProvider(ST_URL)
 //export const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
@@ -21,6 +23,9 @@ export function newRpcClient() {
 
 export function newProvider() {
     return new ethers.JsonRpcProvider(ST_URL)
+}
+export function newWebSocketProvider() {
+    return new ethers.WebSocketProvider(WS_URL)
 }
 
 export function newWallet(provider: ethers.Provider) {
@@ -58,6 +63,41 @@ export async function request(method: string, params?: any) {
     } catch (error: any) {
         throw new Error(error.message)
     }
+}
+
+export function compile_contract(contractFile: string) {
+    const contractPath = ST_CONTRACT_DIR + contractFile
+    const sourceCode = fs.readFileSync(contractPath, 'utf8')
+    // solc compiler config
+    const input = {
+        language: 'Solidity',
+        sources: {
+            ['code']: {
+                content: sourceCode
+            }
+        },
+        settings: {
+            outputSelection: {
+                '*': {
+                    '*': ['*']
+                }
+            }
+        }
+    }
+
+    const compiledCode = JSON.parse(solc.compile(JSON.stringify(input)))
+    if (compiledCode['errors'] && compiledCode['errors'].length > 0) {
+        const errs = []
+        for (const info of compiledCode['errors']) {
+            if (info.type.includes('Error')) {
+                errs.push(info)
+            }
+        }
+        if (errs.length > 0) {
+            throw new Error(JSON.stringify(errs))
+        }
+    }
+    return compiledCode
 }
 
 export async function deploy_contract(

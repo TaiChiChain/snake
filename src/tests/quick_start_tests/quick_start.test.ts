@@ -1,6 +1,6 @@
 import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
-import {provider} from '../../utils/rpc'
+import {provider, compile_contract} from '../../utils/rpc'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
 import {
     ST_ACCOUNT_1,
@@ -38,7 +38,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('deploy and invoke ERC20 contract', async () => {
-        let wallet = new ethers.Wallet(ST_ACCOUNT_2.privateKey, provider)
+        const wallet = new ethers.Wallet(ST_ACCOUNT_2.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC20/ERC20.bin',
             'utf8'
@@ -63,7 +63,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('deploy and invoke ERC721 contract', async () => {
-        let wallet = new ethers.Wallet(ST_ACCOUNT_3.privateKey, provider)
+        const wallet = new ethers.Wallet(ST_ACCOUNT_3.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC721/ERC721.bin',
             'utf8'
@@ -144,5 +144,19 @@ describe('test_connect_axiom', () => {
         const createReceipt = await erc1155_contract.mintToken(1, 10)
         await createReceipt.wait()
         console.log('Tx successful with hash:', createReceipt.hash)
+    })
+
+    test('compile evm contract', async () => {
+        const compiledCode = compile_contract('evm.sol')
+        //console.log('compiledCode:', compiledCode)
+        expect(JSON.stringify(compiledCode)).toMatch('code')
+        const bytecode =
+            compiledCode.contracts['code']['EVM'].evm.bytecode.object
+
+        const abi = compiledCode.contracts['code']['EVM'].abi
+        //console.log('contractBytecode:', bytecode)
+        //console.log('contractAbi:', abi)
+        expect(bytecode).not.toBeNull
+        expect(abi).not.toBeNull
     })
 })
