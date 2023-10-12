@@ -65,7 +65,7 @@ export async function request(method: string, params?: any) {
     }
 }
 
-export function compile_contract(contractFile: string, contractName: string) {
+export function compile_contract(contractFile: string) {
     const contractPath = ST_CONTRACT_DIR + contractFile
     const sourceCode = fs.readFileSync(contractPath, 'utf8')
     // solc compiler config

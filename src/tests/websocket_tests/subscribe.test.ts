@@ -40,7 +40,7 @@ describe('TestCases of Subscribe', () => {
 
     test('subscribe new block and new transaction ', async () => {
         const wsProvider = newWebSocketProvider()
-        let blockNo = await provider.getBlockNumber()
+        const blockNo = await provider.getBlockNumber()
         wsProvider.on('block', async blockNumber => {
             console.log('new block number is:', blockNumber)
             expect(blockNumber).toBe(blockNo + 1)

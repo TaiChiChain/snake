@@ -1,5 +1,4 @@
 import {test, expect} from '@jest/globals'
-const solc = require('solc')
 import {ethers} from '@axiomesh/axiom'
 import {provider, compile_contract} from '../../utils/rpc'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
@@ -39,7 +38,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('deploy and invoke ERC20 contract', async () => {
-        let wallet = new ethers.Wallet(ST_ACCOUNT_2.privateKey, provider)
+        const wallet = new ethers.Wallet(ST_ACCOUNT_2.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC20/ERC20.bin',
             'utf8'
@@ -64,7 +63,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('deploy and invoke ERC721 contract', async () => {
-        let wallet = new ethers.Wallet(ST_ACCOUNT_3.privateKey, provider)
+        const wallet = new ethers.Wallet(ST_ACCOUNT_3.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC721/ERC721.bin',
             'utf8'
@@ -147,8 +146,8 @@ describe('test_connect_axiom', () => {
         console.log('Tx successful with hash:', createReceipt.hash)
     })
 
-    test('compile contract', async () => {
-        const compiledCode = compile_contract('evm.sol', 'EVM')
+    test('compile evm contract', async () => {
+        const compiledCode = compile_contract('evm.sol')
         //console.log('compiledCode:', compiledCode)
         expect(JSON.stringify(compiledCode)).toMatch('code')
         const bytecode =

@@ -5,7 +5,7 @@ import {request, deploy_storage_contract, newRpcClient} from '../../utils/rpc'
 //The second column of the cases elements is the result expected to be returned
 
 describe('test getChainId', () => {
-    var cases_of_getChainId: any[][] = []
+    let cases_of_getChainId: any[][] = []
     cases_of_getChainId = [
         //case1 : Verify the default chainId is 1356
         [' ', 1356]
@@ -18,7 +18,7 @@ describe('test getChainId', () => {
 })
 
 describe('test getBlockNumber', () => {
-    var cases_of_getBlockNumber: any[][] = []
+    let cases_of_getBlockNumber: any[][] = []
     cases_of_getBlockNumber = [
         //case1 : Verify the blocknumber must be greater than or equal to 1
         [' ', 1]
@@ -33,7 +33,7 @@ describe('test getBlockNumber', () => {
 })
 
 describe('test getBalance', () => {
-    var cases_of_getBalance: any[][] = []
+    let cases_of_getBalance: any[][] = []
     cases_of_getBalance = [
         //case1 : Verify the genesis admin latest balance is greater than or equal to 10000
         [['0xc0Ff2e0b3189132D815b8eb325bE17285AC898f8', 'latest'], 10000],
@@ -46,9 +46,9 @@ describe('test getBalance', () => {
     ]
     const len = cases_of_getBalance.length
     test('eth_getBalance', async () => {
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
             if (cases_of_getBalance[i]) {
-                var res = await request(
+                let res = await request(
                     'eth_getBalance',
                     cases_of_getBalance[i][0]
                 )
@@ -62,8 +62,8 @@ describe('test getBalance', () => {
 })
 
 describe('test_getBlockByNumber', () => {
-    var cases_of_getBlock_with_transactions: any[][] = []
-    var cases_of_getBlock_without_transactions: any[][] = []
+    let cases_of_getBlock_with_transactions: any[][] = []
+    let cases_of_getBlock_without_transactions: any[][] = []
     cases_of_getBlock_with_transactions = [
         //case1 : Verify the recipet of getBlock_with_transactions include txs
         [
@@ -104,9 +104,9 @@ describe('test_getBlockByNumber', () => {
         expect(address).not.toBeNull()
     })
     test('eth_getBlockByNumber_with_transactions', async () => {
-        for (var i = 0; i < len[0]; i++) {
+        for (let i = 0; i < len[0]; i++) {
             if (cases_of_getBlock_with_transactions[i]) {
-                var res = await request(
+                let res = await request(
                     'eth_getBlockByNumber',
                     cases_of_getBlock_with_transactions[i][0]
                 )
@@ -119,9 +119,9 @@ describe('test_getBlockByNumber', () => {
     })
 
     test('eth_getBlockByNumber_without_transactions', async () => {
-        for (var i = 0; i < len[1]; i++) {
+        for (let i = 0; i < len[1]; i++) {
             if (cases_of_getBlock_without_transactions[i]) {
-                var res = await request(
+                let res = await request(
                     'eth_getBlockByNumber',
                     cases_of_getBlock_without_transactions[i][0]
                 )
@@ -135,8 +135,8 @@ describe('test_getBlockByNumber', () => {
 })
 
 describe('test_getBlockByHash', () => {
-    var cases_of_getBlock_with_transactions: any[][] = []
-    var cases_of_getBlock_without_transactions: any[][] = []
+    let cases_of_getBlock_with_transactions: any[][] = []
+    let cases_of_getBlock_without_transactions: any[][] = []
     cases_of_getBlock_with_transactions = [
         //case1 : Verify the recipet of getBlock_with_transactions include txs
         ['latest', [{from: '0xc7f999b83af6df9e67d0a37ee7e900bf38b3d013'}]],
@@ -165,7 +165,7 @@ describe('test_getBlockByHash', () => {
     })
     test('eth_getBlockByHash_with_transactions', async () => {
         const client = newRpcClient()
-        for (var i = 0; i < len[0]; i++) {
+        for (let i = 0; i < len[0]; i++) {
             if (cases_of_getBlock_with_transactions[i]) {
                 const block_hash = (
                     await client.eth.getBlock(
@@ -173,7 +173,7 @@ describe('test_getBlockByHash', () => {
                         true
                     )
                 ).hash
-                var res = await request('eth_getBlockByHash', [
+                let res = await request('eth_getBlockByHash', [
                     block_hash,
                     true
                 ])
@@ -186,7 +186,7 @@ describe('test_getBlockByHash', () => {
     })
     test('eth_getBlockByHash_without_transactions', async () => {
         const client = newRpcClient()
-        for (var i = 0; i < len[1]; i++) {
+        for (let i = 0; i < len[1]; i++) {
             if (cases_of_getBlock_without_transactions[i]) {
                 const block_hash = (
                     await client.eth.getBlock(
@@ -194,7 +194,7 @@ describe('test_getBlockByHash', () => {
                         false
                     )
                 ).hash
-                var res = await request('eth_getBlockByHash', [
+                let res = await request('eth_getBlockByHash', [
                     block_hash,
                     false
                 ])
@@ -208,7 +208,7 @@ describe('test_getBlockByHash', () => {
 })
 
 describe('test_getCode', () => {
-    var cases_of_getCode: any[][] = []
+    let cases_of_getCode: any[][] = []
     cases_of_getCode = [
         //case1 : Verify the genesis admin latest code
         [['0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013', 'latest'], '0'],
@@ -222,9 +222,9 @@ describe('test_getCode', () => {
 
     const len = cases_of_getCode.length
     test('eth_getCode', async () => {
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
             if (cases_of_getCode[i]) {
-                var res = await request('eth_getCode', cases_of_getCode[i][0])
+                let res = await request('eth_getCode', cases_of_getCode[i][0])
                 //console.log('rpc post eth_getCode === index: ', i, res.result)
                 expect(String(res.result)).toMatch(cases_of_getCode[i][1])
             }
@@ -235,14 +235,14 @@ describe('test_getCode', () => {
         const address = await deploy_storage_contract()
         console.log('Deploy contract address is : ', address)
         expect(address).not.toBeNull()
-        var res = await request('eth_getCode', [address, 'latest'])
+        let res = await request('eth_getCode', [address, 'latest'])
         //console.log('rpc post eth_getCode of contract ', res.result)
         expect(String(res.result)).toMatch('0x6080604052')
     })
 })
 
 describe('test_getStorageAt', () => {
-    var cases_of_getStorageAt: any[][] = []
+    let cases_of_getStorageAt: any[][] = []
     cases_of_getStorageAt = [
         //case1 : Verify the genesis admin latest code
         [['0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013', 'latest'], 'undefined'],
@@ -262,9 +262,9 @@ describe('test_getStorageAt', () => {
 
     const len = cases_of_getStorageAt.length
     test('eth_getStorageAt', async () => {
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
             if (cases_of_getStorageAt[i]) {
-                var res = await request(
+                let res = await request(
                     'eth_getStorageAt',
                     cases_of_getStorageAt[i][0]
                 )
@@ -278,7 +278,7 @@ describe('test_getStorageAt', () => {
         const address = await deploy_storage_contract()
         console.log('Deploy contract address is : ', address)
         expect(address).not.toBeNull()
-        var res = await request('eth_getStorageAt', [address, 'latest'])
+        let res = await request('eth_getStorageAt', [address, 'latest'])
         console.log('rpc post eth_getStorageAt of contract ', res.result)
     })
 })
