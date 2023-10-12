@@ -1,6 +1,7 @@
 import {test, expect} from '@jest/globals'
+const solc = require('solc')
 import {ethers} from '@axiomesh/axiom'
-import {provider} from '../../utils/rpc'
+import {provider, compile_contract} from '../../utils/rpc'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
 import {
     ST_ACCOUNT_1,
@@ -144,5 +145,19 @@ describe('test_connect_axiom', () => {
         const createReceipt = await erc1155_contract.mintToken(1, 10)
         await createReceipt.wait()
         console.log('Tx successful with hash:', createReceipt.hash)
+    })
+
+    test('compile contract', async () => {
+        const compiledCode = compile_contract('evm.sol', 'EVM')
+        //console.log('compiledCode:', compiledCode)
+        expect(JSON.stringify(compiledCode)).toMatch('code')
+        const bytecode =
+            compiledCode.contracts['code']['EVM'].evm.bytecode.object
+
+        const abi = compiledCode.contracts['code']['EVM'].abi
+        //console.log('contractBytecode:', bytecode)
+        //console.log('contractAbi:', abi)
+        expect(bytecode).not.toBeNull
+        expect(abi).not.toBeNull
     })
 })
