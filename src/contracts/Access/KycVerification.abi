@@ -1,0 +1,28 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "extra",
+				"type": "bytes"
+			}
+		],
+		"name": "Remove",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "extra",
+				"type": "bytes"
+			}
+		],
+		"name": "Submit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

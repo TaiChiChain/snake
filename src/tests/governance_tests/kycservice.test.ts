@@ -16,12 +16,10 @@ describe('test case for kyc service', () => {
     const extraArgs = {
         Services: [
             {
-                rawAddress: ethers.getBytes(ST_ACCOUNT_1.address),  // Convert to byte array
-                addressStr: ST_ACCOUNT_1.address  // Keep as a checksum address string
+                KycAddr: ST_ACCOUNT_1.address,
             },
             {
-                rawAddress: ethers.getBytes(ST_ACCOUNT_2.address),
-                addressStr: ST_ACCOUNT_2.address
+                KycAddr: ST_ACCOUNT_2.address,
             },
         ]
     }
@@ -50,7 +48,7 @@ describe('test case for kyc service', () => {
             // let str = hexToString(tx.logs[0].data)
             expect(str).toMatch('"Status":0')
             // eslint-disable-next-line no-control-regex
-            str = str.replace(/^\u0000/, '');
+            // str = str.replace(/^\u0000/, '');
             let obj;
             try {
                 obj = JSON.parse(str);

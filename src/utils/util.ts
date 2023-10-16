@@ -34,6 +34,7 @@ export function stringToUint8Array(str: string) {
 }
 
 export function hexStringToString(hex: string): string {
+    hex = hex.substr(2,hex.length);
     const length = hex.length / 2; // 2 characters per byte
     const result = new Uint8Array(length);
     for (let i = 0; i < length; i++) {
