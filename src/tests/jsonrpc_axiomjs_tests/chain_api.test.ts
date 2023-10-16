@@ -1,7 +1,12 @@
 import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
 import * as fs from 'fs'
-import {provider, request, transferAXM, deploy_contract} from '../../utils/rpc'
+import {
+    newProvider,
+    request,
+    transferAXM,
+    deploy_contract
+} from '../../utils/rpc'
 import {stringToUint8Array} from '../../utils/util'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
 import {ST_ACCOUNT_3} from '../../utils/accounts_static'
@@ -10,6 +15,7 @@ import {ST_ACCOUNT_3} from '../../utils/accounts_static'
 //The second column of the cases elements is the result expected to be returned
 
 describe('TestCases of BlockChain API', () => {
+    const provider = newProvider()
     const wallet = new ethers.Wallet(ST_ACCOUNT_3.privateKey, provider)
     beforeAll(async () => {
         console.log('Prepare some transactions first')
@@ -397,6 +403,7 @@ describe('TestCases of BlockChain API', () => {
     })
 
     describe('test get blockchain sync info  ', () => {
+        const provider = newProvider()
         test('eth_syncing', async () => {
             const blocknum = await provider.getBlockNumber()
             var res = await request('eth_syncing')
@@ -410,6 +417,7 @@ describe('TestCases of BlockChain API', () => {
 })
 
 describe('test block info contains coinbase address ', () => {
+    const provider = newProvider()
     test('eth_getBlock_latest', async () => {
         const latestBlock = await provider.getBlock('latest', true)
         //console.log('The latest block coinbase info is: ', latestBlock?.miner)

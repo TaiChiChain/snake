@@ -1,6 +1,6 @@
 import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
-import {provider, compile_contract} from '../../utils/rpc'
+import {newProvider, compile_contract} from '../../utils/rpc'
 import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
 import {
     ST_ACCOUNT_1,
@@ -11,6 +11,7 @@ import {
 import * as fs from 'fs'
 
 describe('test_connect_axiom', () => {
+    const provider = newProvider()
     test('eth_getBlockNumber', async () => {
         const latestBlock = await provider.getBlockNumber()
         console.log('The latest block number is', latestBlock)
@@ -18,7 +19,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('transfer AXM', async () => {
-        let wallet = new ethers.Wallet(ST_ACCOUNT_1.privateKey, provider)
+        const wallet = new ethers.Wallet(ST_ACCOUNT_1.privateKey, provider)
         const balance = await provider.getBalance(ST_ACCOUNT_1.address)
         console.log('This from address balance is', balance)
         expect(balance).toBeGreaterThanOrEqual(BigInt(1))
@@ -105,7 +106,7 @@ describe('test_connect_axiom', () => {
     })
 
     test('deploy and invoke ERC1155 contract', async () => {
-        let wallet = new ethers.Wallet(ST_ACCOUNT_4.privateKey, provider)
+        const wallet = new ethers.Wallet(ST_ACCOUNT_4.privateKey, provider)
         const bytecode = fs.readFileSync(
             ST_CONTRACT_DIR + 'ERC1155/ERC1155.bin',
             'utf8'

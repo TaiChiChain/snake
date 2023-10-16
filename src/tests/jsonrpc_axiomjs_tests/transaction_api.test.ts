@@ -1,12 +1,13 @@
 import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
 import {ST_ACCOUNT_4} from '../../utils/accounts_static'
-import {provider, request, transferAXM} from '../../utils/rpc'
+import {newProvider, request, transferAXM} from '../../utils/rpc'
 
 //The first column of the cases element is the call input parameter
 //The second column of the cases elements is the result expected to be returned
 
 describe('TestCases of Transaction API', () => {
+    const provider = newProvider()
     const wallet = new ethers.Wallet(ST_ACCOUNT_4.privateKey, provider)
 
     beforeAll(async () => {

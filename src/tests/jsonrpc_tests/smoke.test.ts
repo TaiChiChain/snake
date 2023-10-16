@@ -278,7 +278,7 @@ describe('test_getStorageAt', () => {
         const address = await deploy_storage_contract()
         console.log('Deploy contract address is : ', address)
         expect(address).not.toBeNull()
-        let res = await request('eth_getStorageAt', [address, 'latest'])
+        const res = await request('eth_getStorageAt', [address, 'latest'])
         console.log('rpc post eth_getStorageAt of contract ', res.result)
     })
 })
