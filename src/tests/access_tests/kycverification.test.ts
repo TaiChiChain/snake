@@ -16,16 +16,6 @@ describe('test case for kyc verification', () => {
         // const Unverified = 0
         const expires = Math.floor(Date.now() / 1000 + 1000);
         const abi = fs.readFileSync(ST_CONTRACT_DIR + 'Access/KycVerification.abi', 'utf8')
-        const extraSubmitArgs = {
-            KycInfos: [
-                {
-                    User: randomWallet.address,
-                    KycAddr: ST_ADMIN_1.address,
-                    KycFlag: Verified,
-                    Expires: expires,
-                },
-            ]
-        }
         test ('test user1 cannot send raw transaction', async () => {
             const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider);
             let txDetails = {
@@ -55,6 +45,11 @@ describe('test case for kyc verification', () => {
         test('test set user1 kycinfo verified', async () => {
             const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
             const contract = new ethers.Contract(ST_ACCESS_KYC_ADDRESS, abi, wallet);
+            const extraSubmitArgs = {
+                Addresses: [
+                    randomWallet.address
+                ]
+            }
             const toByte = stringToUint8Array(JSON.stringify(extraSubmitArgs));
             const submit = await contract.Submit(
                 toByte
