@@ -12,7 +12,7 @@ import {
 import {ST_ADMIN_1} from '../utils/accounts_static'
 
 export const ST_URL = process.env.ST_URL || 'http://127.0.0.1:8881'
-export const WS_URL = process.env.WS_URL || 'ws://127.0.0.1:9091'
+export const WS_URL = process.env.WS_URL || 'ws://127.0.0.1:9991'
 
 export const provider = new ethers.JsonRpcProvider(ST_URL)
 
