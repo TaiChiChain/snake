@@ -20,7 +20,7 @@
 				"type": "bytes"
 			}
 		],
-		"name": "QueryKycServices",
+		"name": "QueryWhiteListProvider",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
