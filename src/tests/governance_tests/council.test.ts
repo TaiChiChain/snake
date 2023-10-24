@@ -15,6 +15,7 @@ import {
     PROPOSAL_TYPE_COUNCIL_ELECT
 } from '../../utils/contracts_static'
 import {stringToByte, hexToString} from '../../utils/util'
+import { JsonRpcApiPollingProvider } from '@axiomesh/axiom/lib.commonjs/providers/provider-jsonrpc'
 
 describe('TestCases of council ', () => {
     const client = newRpcClient()
@@ -416,6 +417,18 @@ describe('TestCases of council ', () => {
                 var str = hexToString(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
             }
+        })
+
+        test('test get proposal', async () => {
+            console.log('1. community user5 get a proposal')
+
+            var res = await utils5.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'proposal',
+                1,
+            )
+            console.log(hexToString(res))
         })
     })
 })

@@ -7,4 +7,6 @@ interface Governance {
     function propose(uint8 proposalType, string calldata  title, string calldata desc, uint64 blockNumber, bytes calldata extra) external;
 
     function vote(uint64 proposalID, uint8 voteResult, bytes calldata extra) external;
+
+    function proposal(uint64 proposalID) external view returns (bytes calldata proposal);
 }
