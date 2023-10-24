@@ -1,5 +1,5 @@
 import {test, expect, describe} from '@jest/globals'
-import {ethers, id} from '@axiomesh/axiom'
+import {ethers} from '@axiomesh/axiom'
 import {
     ST_CONTRACT_DIR,
     ST_GOVERNANCE_KYC_ADDRESS,
@@ -12,7 +12,9 @@ import {
     ST_ACCOUNT_1,
     ST_ACCOUNT_2,
     ST_ADMIN_2,
-    ST_ADMIN_3
+    ST_ADMIN_3,
+    ST_ACCOUNT_3,
+    ST_ACCOUNT_4
 } from '../../utils/accounts_static'
 import {hexStringToString, stringToUint8Array} from '../../utils/util'
 import fs from 'fs'
@@ -24,12 +26,12 @@ describe('TestCases for kyc service', () => {
         'utf8'
     )
     let extraArgs = {
-        Services: [
+        Providers: [
             {
-                KycAddr: ST_ACCOUNT_1.address
+                WhiteListProviderAddr: ST_ACCOUNT_1.address
             },
             {
-                KycAddr: ST_ACCOUNT_2.address
+                WhiteListProviderAddr: ST_ACCOUNT_2.address
             }
         ]
     }
@@ -274,12 +276,12 @@ describe('TestCases for kyc service', () => {
 
     describe('test add same kyc services one time and test remove nonexistent kyc services', () => {
         let extraArgs_1 = {
-            Services: [
+            Providers: [
                 {
-                    KycAddr: ST_ACCOUNT_1.address
+                    WhiteListProviderAddr: ST_ACCOUNT_1.address
                 },
                 {
-                    KycAddr: ST_ACCOUNT_1.address
+                    WhiteListProviderAddr: ST_ACCOUNT_1.address
                 }
             ]
         }
@@ -312,12 +314,12 @@ describe('TestCases for kyc service', () => {
             let wallet_random = ethers.Wallet.createRandom()
             let address = await wallet_random.getAddress()
             let extraArgs_2 = {
-                Services: [
+                Providers: [
                     {
-                        KycAddr: ST_ACCOUNT_1.address
+                        WhiteListProviderAddr: ST_ACCOUNT_1.address
                     },
                     {
-                        KycAddr: address
+                        WhiteListProviderAddr: address
                     }
                 ]
             }
@@ -402,12 +404,23 @@ describe('TestCases for kyc service', () => {
                 abi,
                 wallet
             )
+            let extraArgs_3 = {
+                Providers: [
+                    {
+                        WhiteListProviderAddr: ST_ACCOUNT_3.address
+                    },
+                    {
+                        WhiteListProviderAddr: ST_ACCOUNT_4.address
+                    }
+                ]
+            }
+            let args_3 = stringToUint8Array(JSON.stringify(extraArgs_3))
             const propose = await contract.propose(
                 PROPOSAL_TYPE_KYC_SERVICE_ADD,
                 'add kyc services',
                 'add kyc services',
                 1000,
-                args
+                args_3
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)

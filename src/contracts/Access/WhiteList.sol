@@ -8,5 +8,5 @@ interface WhiteList {
 
     function QueryAuthInfo(bytes calldata extra) external;
 
-    function QueryKycServices(bytes calldata extra) external;
+    function QueryWhiteListProvider(bytes calldata extra) external;
 }

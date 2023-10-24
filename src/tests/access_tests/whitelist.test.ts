@@ -76,23 +76,23 @@ describe('TestCases for kyc verification', () => {
 
     describe('test case for query', () => {
         const abi = fs.readFileSync(ST_CONTRACT_DIR + 'Access/WhiteList.abi', 'utf8')
-        test ('test query kyc services', async () => {
+        test ('test query WhiteListProvider', async () => {
             const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
             const contract = new ethers.Contract(ST_ACCESS_KYC_ADDRESS, abi, wallet);
-            const extraQueryKycServiceArgs = {
-                KycAddr: ST_ADMIN_1.address
+            const extraQueryWhiteListProviderArgs = {
+                WhiteListProviderAddr: wallet.address
             }
-            const toByte = stringToUint8Array(JSON.stringify(extraQueryKycServiceArgs));
-            const submit = await contract.QueryKycServices(
+            const toByte = stringToUint8Array(JSON.stringify(extraQueryWhiteListProviderArgs));
+            const submit = await contract.QueryWhiteListProvider(
                 toByte
             );
             await submit.wait()
             const tx = await provider.getTransactionReceipt(submit.hash)
             let s = hexToString(tx?.logs[0].data);
             console.log(s)
-            // get KycAddr from s which is a json string like {"KycAddr":"0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013"}
+            // get KycAddr from s which is a json string like {"KycAddr":"0x..."}
             let obj = JSON.parse(s);
-            expect(obj.KycAddr).toBe(ST_ADMIN_1.address)
+            expect(obj.WhiteListProviderAddr).toBe(wallet.address)
         })
 
         const SuperUser = 1
