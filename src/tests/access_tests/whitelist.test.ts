@@ -6,7 +6,7 @@ import {
 } from "../../utils/contracts_static";
 import {newProvider} from "../../utils/rpc";
 import {ST_ADMIN_1} from "../../utils/accounts_static";
-import {stringToUint8Array} from "../../utils/util";
+import {hexToString, stringToUint8Array} from "../../utils/util";
 import fs from "fs";
 
 describe('TestCases for kyc verification', () => {
@@ -17,7 +17,7 @@ describe('TestCases for kyc verification', () => {
         const Verified = 1
         // const Unverified = 0
         const expires = Math.floor(Date.now() / 1000 + 1000);
-        const abi = fs.readFileSync(ST_CONTRACT_DIR + 'Access/KycVerification.abi', 'utf8')
+        const abi = fs.readFileSync(ST_CONTRACT_DIR + 'Access/WhiteList.abi', 'utf8')
         test ('test user1 cannot send raw transaction', async () => {
             const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider);
             let txDetails = {
@@ -73,4 +73,46 @@ describe('TestCases for kyc verification', () => {
             expect(receipt?.status).toBe(1)
         })
     })
+
+    describe('test case for query', () => {
+        const abi = fs.readFileSync(ST_CONTRACT_DIR + 'Access/WhiteList.abi', 'utf8')
+        test ('test query kyc services', async () => {
+            const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
+            const contract = new ethers.Contract(ST_ACCESS_KYC_ADDRESS, abi, wallet);
+            const extraQueryKycServiceArgs = {
+                KycAddr: ST_ADMIN_1.address
+            }
+            const toByte = stringToUint8Array(JSON.stringify(extraQueryKycServiceArgs));
+            const submit = await contract.QueryKycServices(
+                toByte
+            );
+            await submit.wait()
+            const tx = await provider.getTransactionReceipt(submit.hash)
+            let s = hexToString(tx?.logs[0].data);
+            console.log(s)
+            // get KycAddr from s which is a json string like {"KycAddr":"0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013"}
+            let obj = JSON.parse(s);
+            expect(obj.KycAddr).toBe(ST_ADMIN_1.address)
+        })
+
+        const SuperUser = 1
+        test ('test query auth info', async () => {
+            const contract = new ethers.Contract(ST_ACCESS_KYC_ADDRESS, abi, new ethers.Wallet(ST_ADMIN_1.privateKey, provider));
+            const extraQueryAuthInfoArgs = {
+                User: ST_ADMIN_1.address
+            }
+            const submit = await contract.QueryAuthInfo(
+                stringToUint8Array(JSON.stringify(extraQueryAuthInfoArgs))
+            );
+            await submit.wait()
+            const tx = await provider.getTransactionReceipt(submit.hash)
+            let s = hexToString(tx?.logs[0].data);
+            console.log(s)
+            // get KycAddr from s which is a json string like {"KycAddr":"0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013"}
+            let obj = JSON.parse(s);
+            expect(obj.User).toBe(ST_ADMIN_1.address)
+            expect(obj.Role).toBe(SuperUser)
+        })
+    });
+
 })

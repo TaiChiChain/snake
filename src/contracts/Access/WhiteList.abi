@@ -1,0 +1,54 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "extra",
+				"type": "bytes"
+			}
+		],
+		"name": "QueryAuthInfo",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "extra",
+				"type": "bytes"
+			}
+		],
+		"name": "QueryKycServices",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "extra",
+				"type": "bytes"
+			}
+		],
+		"name": "Remove",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "extra",
+				"type": "bytes"
+			}
+		],
+		"name": "Submit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

@@ -49,6 +49,10 @@ export function hexStringToString(hex: any): string {
 
 // Convert a hex string to a ASCII string
 export function hexToString(hexStr: any) {
+    // if hexstr has prefix '0x' then remove this prefix
+    if (hexStr.substr(0, 2) == '0x') {
+        hexStr = hexStr.substr(2, hexStr.length)
+    }
     let str = ''
     if (hexStr == null) {
         return str
