@@ -15,7 +15,6 @@ export const ST_URL = process.env.ST_URL || 'http://127.0.0.1:8881'
 export const WS_URL = process.env.WS_URL || 'ws://127.0.0.1:9991'
 
 export const provider = new ethers.JsonRpcProvider(ST_URL)
-//export const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
 
 export function newRpcClient() {
     return new Web3(ST_URL)
