@@ -107,29 +107,20 @@ describe('test gas price change', () => {
 
     test('transfer with amount and gas', async () => {
         const client = newRpcClient()
-        const account1 = client.eth.accounts.create()
-        let nonce = await client.eth.getTransactionCount(ST_ACCOUNT_2.address)
-        await transfer(
-            ST_ACCOUNT_2.address,
-            account1.address,
-            client.utils.toWei('1', 'ether'),
-            nonce,
-            ST_ACCOUNT_2.privateKey
-        )
         const account2 = client.eth.accounts.create()
 
-        const oldBalance = await client.eth.getBalance(account1.address)
-        nonce = await client.eth.getTransactionCount(account1.address)
+        const oldBalance = await client.eth.getBalance(ST_ACCOUNT_2.address)
+        const nonce = await client.eth.getTransactionCount(ST_ACCOUNT_2.address)
         const gasPrice = await client.eth.getGasPrice()
 
         const receipt = await transfer(
-            account1.address,
+            ST_ACCOUNT_2.address,
             account2.address,
             client.utils.toWei('0.5', 'ether'),
             nonce,
-            account1.privateKey
+            ST_ACCOUNT_2.privateKey
         )
-        const newBalance = await client.eth.getBalance(account1.address)
+        const newBalance = await client.eth.getBalance(ST_ACCOUNT_2.address)
         expect(newBalance).toEqual(
             oldBalance -
                 BigInt(client.utils.toWei('0.5', 'ether')) -
@@ -139,32 +130,24 @@ describe('test gas price change', () => {
 
     test('invoke contract with gas', async () => {
         const client = newRpcClient()
-        const account1 = client.eth.accounts.create()
         const nonce = await client.eth.getTransactionCount(ST_ACCOUNT_2.address)
-        await transfer(
-            ST_ACCOUNT_2.address,
-            account1.address,
-            client.utils.toWei('2', 'ether'),
-            nonce,
-            ST_ACCOUNT_2.privateKey
-        )
 
         const utils = new ContractUtils(
             ST_CONTRACT_DIR,
             client,
-            account1.privateKey
+            ST_ACCOUNT_2.privateKey
         )
         utils.compile(ST_EVM_FILENAME, ST_EVM_CONTRACT_NAME)
         const address = await utils.deploy(ST_EVM_CONTRACT_NAME)
 
-        const oldBalance = await client.eth.getBalance(account1.address)
+        const oldBalance = await client.eth.getBalance(ST_ACCOUNT_2.address)
         const gasPrice = await client.eth.getGasPrice()
         const receipt = await utils.call(
             ST_EVM_CONTRACT_NAME,
             address,
             'msgValue'
         )
-        const newBalance = await client.eth.getBalance(account1.address)
+        const newBalance = await client.eth.getBalance(ST_ACCOUNT_2.address)
         expect(newBalance).toEqual(
             oldBalance - BigInt(receipt.gasUsed) * gasPrice
         )
