@@ -77,7 +77,7 @@ describe('TestCases for kyc verification', () => {
     describe('test case for query', () => {
         const abi = fs.readFileSync(ST_CONTRACT_DIR + 'Access/WhiteList.abi', 'utf8')
         test ('test query WhiteListProvider', async () => {
-            const wallet = new ethers.Wallet(ST_ACCOUNT_1.privateKey, provider)
+            const wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
             const contract = new ethers.Contract(ST_ACCESS_KYC_ADDRESS, abi, wallet);
             const extraQueryWhiteListProviderArgs = {
                 WhiteListProviderAddr: wallet.address
