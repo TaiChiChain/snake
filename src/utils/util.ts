@@ -33,10 +33,31 @@ export function stringToUint8Array(str: string) {
     return tmpUint8Array
 }
 
+export function hexStringToString(hex: any): string {
+    hex = hex.substr(2, hex.length)
+    const length = hex.length / 2 // 2 characters per byte
+    const result = new Uint8Array(length)
+    for (let i = 0; i < length; i++) {
+        result[i] = parseInt(hex.substr(i * 2, 2), 16)
+    }
+    let str = ''
+    for (let i = 0; i < result.length; ++i) {
+        str += String.fromCharCode(result[i])
+    }
+    return str
+}
+
 // Convert a hex string to a ASCII string
 export function hexToString(hexStr: any) {
-    const hex = hexStr.toString() //force conversion
+    // if hexstr has prefix '0x' then remove this prefix
+    if (hexStr.substr(0, 2) == '0x') {
+        hexStr = hexStr.substr(2, hexStr.length)
+    }
     let str = ''
+    if (hexStr == null) {
+        return str
+    }
+    const hex = hexStr.toString() //force conversion
     for (let i = 0; i < hex.length; i += 2)
         str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
     return str
