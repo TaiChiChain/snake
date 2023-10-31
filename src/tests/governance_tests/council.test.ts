@@ -4,7 +4,8 @@ import {
     ST_ADMIN_1,
     ST_ADMIN_2,
     ST_ADMIN_3,
-    ST_ADMIN_4
+    ST_ADMIN_4,
+    ST_ACCOUNT_5
 } from '../../utils/accounts_static'
 import {ContractUtils} from '../../utils/contract'
 import {
@@ -61,7 +62,7 @@ describe('TestCases of council ', () => {
                 PROPOSAL_TYPE_COUNCIL_ELECT,
                 'test title',
                 'test desc',
-                100,
+                1000,
                 stringToByte(JSON.stringify(extraArgs))
             )
 
@@ -156,7 +157,7 @@ describe('TestCases of council ', () => {
                 PROPOSAL_TYPE_COUNCIL_ELECT,
                 'test title',
                 'test desc',
-                100,
+                1000,
                 stringToByte(JSON.stringify(extraArgs))
             )
 
@@ -176,7 +177,7 @@ describe('TestCases of council ', () => {
                     PROPOSAL_TYPE_COUNCIL_ELECT,
                     'test title',
                     'test desc',
-                    100,
+                    1000,
                     stringToByte(JSON.stringify(extraArgs))
                 )
             } catch (err) {
@@ -231,7 +232,7 @@ describe('TestCases of council ', () => {
                 PROPOSAL_TYPE_COUNCIL_ELECT,
                 'test title',
                 'test desc',
-                100,
+                1000,
                 stringToByte(JSON.stringify(extraArgs))
             )
 
@@ -298,23 +299,12 @@ describe('TestCases of council ', () => {
 
     describe('test council with community users ', () => {
         const client5 = newRpcClient()
-        const user_address = '0x14E1D181F211Eb211b24fe53bd8ebB1580A00eab'
-        const user_key =
-            '0xf7b0475accc21905e81790dda6e3948da8aafa6bac4f4b9034a4eb5a5d9ba729'
-        const utils5 = new ContractUtils(ST_CONTRACT_DIR, client5, user_key)
-
-        it('prepare test', async () => {
-            console.log('1. transfer to user5 some AXM ')
-            let nonce = await client.eth.getTransactionCount(ST_ADMIN_1.address)
-            await transfer(
-                ST_ADMIN_1.address,
-                user_address,
-                client.utils.toWei('0.5', 'ether'),
-                nonce,
-                ST_ADMIN_1.privateKey
-            )
-        })
-
+        //const user_address = '0x14E1D181F211Eb211b24fe53bd8ebB1580A00eab'
+        const utils5 = new ContractUtils(
+            ST_CONTRACT_DIR,
+            client5,
+            ST_ACCOUNT_5.privateKey
+        )
         utils.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
         utils5.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
 
@@ -336,7 +326,7 @@ describe('TestCases of council ', () => {
                     PROPOSAL_TYPE_COUNCIL_ELECT,
                     'test title',
                     'test desc',
-                    100,
+                    1000,
                     stringToByte(JSON.stringify(extraArgs))
                 )
             } catch (err) {
@@ -354,7 +344,7 @@ describe('TestCases of council ', () => {
                 PROPOSAL_TYPE_COUNCIL_ELECT,
                 'test title',
                 'test desc',
-                100,
+                1000,
                 stringToByte(JSON.stringify(extraArgs))
             )
             expect(receipt.to).toBe(ST_GOVERNANCE_COUNCIL_ADDRESS)

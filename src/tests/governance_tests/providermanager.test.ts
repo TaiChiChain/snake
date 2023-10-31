@@ -58,14 +58,12 @@ describe('TestCases for kyc service', () => {
             expect(receipt?.to).toBe(ST_GOVERNANCE_KYC_ADDRESS)
             let data = hexStringToString(receipt?.logs[0].data)
 
-            console.log(data)
             expect(data).toMatch('"Status":0')
 
             let obj = JSON.parse(data)
 
             //const match = data.match(/(\d+)/g)
             if (obj.ID) {
-                //console.log(BigInt(match[0]))
                 console.log('2. admin2 vote this proposal')
                 wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)
                 let contract = new ethers.Contract(
@@ -98,7 +96,6 @@ describe('TestCases for kyc service', () => {
                     0,
                     stringToUint8Array('test')
                 )
-                //console.log(hexStringToString(receipt_3.logs[0].data))
                 await result_3.wait()
                 const receipt_3 = await provider.getTransactionReceipt(
                     result_3.hash
@@ -127,7 +124,6 @@ describe('TestCases for kyc service', () => {
             let recipet = await provider.getTransactionReceipt(propose.hash)
             let data = hexStringToString(recipet?.logs[0].data)
 
-            console.log(data)
             expect(data).toMatch('"Status":0')
 
             let obj = JSON.parse(data)
@@ -144,7 +140,6 @@ describe('TestCases for kyc service', () => {
                     0,
                     stringToUint8Array('test')
                 )
-                //console.log(hexStringToString(receipt_2.logs[0].data))
                 await result_2.wait()
                 const receipt_2 = await provider.getTransactionReceipt(
                     result_2.hash
@@ -164,7 +159,6 @@ describe('TestCases for kyc service', () => {
                     0,
                     stringToUint8Array('test')
                 )
-                //console.log(hexStringToString(receipt_3.logs[0].data))
                 await result_3.wait()
                 const receipt_3 = await provider.getTransactionReceipt(
                     result_3.hash
@@ -210,7 +204,6 @@ describe('TestCases for kyc service', () => {
                 )
                 await res.wait()
             } catch (err) {
-                //console.log('error massage is:', err)
                 expect(String(err)).toMatch('transaction execution reverted')
             }
 
@@ -245,7 +238,6 @@ describe('TestCases for kyc service', () => {
                     )
                     await res.wait()
                 } catch (err) {
-                    //console.log('error massage is:', err)
                     expect(String(err)).toMatch(
                         'transaction execution reverted'
                     )
@@ -305,7 +297,6 @@ describe('TestCases for kyc service', () => {
                 )
                 await propose.wait()
             } catch (error) {
-                console.log('error massage is:', error)
                 expect(String(error)).toMatch('transaction execution reverted')
             }
         })
@@ -343,7 +334,6 @@ describe('TestCases for kyc service', () => {
                 )
                 await propose.wait()
             } catch (error) {
-                console.log('error massage is:', error)
                 expect(String(error)).toMatch('transaction execution reverted')
             }
         })
@@ -368,7 +358,6 @@ describe('TestCases for kyc service', () => {
                 )
                 await propose.wait()
             } catch (error) {
-                console.log('error massage is:', error)
                 expect(String(error)).toMatch('transaction execution reverted')
             }
         })
@@ -391,7 +380,6 @@ describe('TestCases for kyc service', () => {
                 )
                 await propose.wait()
             } catch (error) {
-                console.log('error massage is:', error)
                 expect(String(error)).toMatch('transaction execution reverted')
             }
         })
@@ -427,7 +415,6 @@ describe('TestCases for kyc service', () => {
             expect(receipt?.to).toBe(ST_GOVERNANCE_KYC_ADDRESS)
             let data = hexStringToString(receipt?.logs[0].data)
 
-            console.log(data)
             expect(data).toMatch('"Status":0')
 
             let obj = JSON.parse(data)
@@ -449,7 +436,6 @@ describe('TestCases for kyc service', () => {
                     )
                     await res_2.wait()
                 } catch (error) {
-                    console.log('error massage is:', error)
                     expect(String(error)).toMatch(
                         'transaction execution reverted'
                     )
