@@ -141,9 +141,11 @@ describe('TestCases of council ', () => {
                         0,
                         stringToByte('')
                     )
-                } catch (err) {
-                    //console.log(err)
-                    expect(String(err)).toMatch('Transaction has been reverted')
+                } catch (error) {
+                    //console.log(error)
+                    expect(String(error)).toMatch(
+                        'Transaction has been reverted'
+                    )
                 }
             }
         })
@@ -180,9 +182,9 @@ describe('TestCases of council ', () => {
                     1000,
                     stringToByte(JSON.stringify(extraArgs))
                 )
-            } catch (err) {
-                //console.log("error message is :", err)
-                expect(String(err)).toMatch('Transaction has been reverted')
+            } catch (error) {
+                //console.log("error message is :", error)
+                expect(String(error)).toMatch('Transaction has been reverted')
             }
 
             // finish the proposal
@@ -273,9 +275,11 @@ describe('TestCases of council ', () => {
                         0,
                         stringToByte('')
                     )
-                } catch (err) {
+                } catch (error) {
                     //console.log("error message is :", err)
-                    expect(String(err)).toMatch('Transaction has been reverted')
+                    expect(String(error)).toMatch(
+                        'Transaction has been reverted'
+                    )
                 }
 
                 // finish the proposal
@@ -329,9 +333,9 @@ describe('TestCases of council ', () => {
                     1000,
                     stringToByte(JSON.stringify(extraArgs))
                 )
-            } catch (err) {
-                //console.log("error message is :", err)
-                expect(String(err)).toMatch('Transaction has been reverted')
+            } catch (error) {
+                //console.log("error message is :", error)
+                expect(String(error)).toMatch('Transaction has been reverted')
             }
         })
 
@@ -368,9 +372,11 @@ describe('TestCases of council ', () => {
                         0,
                         stringToByte('')
                     )
-                } catch (err) {
-                    //console.log("error message is :", err)
-                    expect(String(err)).toMatch('Transaction has been reverted')
+                } catch (error) {
+                    //console.log("error message is :", error)
+                    expect(String(error)).toMatch(
+                        'Transaction has been reverted'
+                    )
                 }
 
                 // finish the proposal
@@ -405,6 +411,74 @@ describe('TestCases of council ', () => {
                 //console.log(hexToString(receipt_3.logs[0].data))
                 var str = hexToString(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
+            }
+        })
+    })
+
+    describe('test council with error params ', () => {
+        utils.compile(ST_GOVERNANCE_FILENAME, ST_GOVERNANCE_CONTRACT_NAME)
+
+        let extraArgs = {
+            candidates: [
+                {address: ST_ADMIN_1.address, weight: 1, name: 'test user1'},
+                {address: ST_ADMIN_2.address, weight: 1, name: 'test user2'},
+                {address: ST_ADMIN_3.address, weight: 1, name: 'test user3'},
+                {address: ST_ADMIN_4.address, weight: 1, name: 'test user4'}
+            ]
+        }
+        test('test propose with error expired block height', async () => {
+            console.log(
+                'admin1 post a proposal with error expired block height'
+            )
+            try {
+                await utils.call(
+                    ST_GOVERNANCE_CONTRACT_NAME,
+                    ST_GOVERNANCE_COUNCIL_ADDRESS,
+                    'propose',
+                    PROPOSAL_TYPE_COUNCIL_ELECT,
+                    'test title',
+                    'test desc',
+                    1,
+                    stringToByte(JSON.stringify(extraArgs))
+                )
+            } catch (error) {
+                expect(JSON.stringify(error)).toMatch(
+                    'Transaction has been reverted'
+                )
+                expect(JSON.stringify(error)).toMatch(
+                    'block number is out of date'
+                )
+            }
+        })
+    })
+
+    describe('test query proposal', () => {
+        test('test normal query proposal', async () => {
+            console.log('admin1 get a proposal')
+
+            var res = await utils.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'proposal',
+                1
+            )
+            expect(hexToString(res)).toMatch('"ID":1')
+        })
+
+        test('test abnormal query proposal', async () => {
+            console.log('admin1 get a proposal')
+            try {
+                await utils.call(
+                    ST_GOVERNANCE_CONTRACT_NAME,
+                    ST_GOVERNANCE_COUNCIL_ADDRESS,
+                    'proposal',
+                    10000
+                )
+            } catch (error) {
+                //console.log(JSON.stringify(error))
+                expect(JSON.stringify(error)).toMatch(
+                    'council proposal not found for the id'
+                )
             }
         })
     })
