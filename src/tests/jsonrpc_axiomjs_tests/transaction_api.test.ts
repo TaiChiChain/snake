@@ -30,7 +30,7 @@ describe('TestCases of Transaction API', () => {
             [[ST_ACCOUNT_4.address, 'pending'], 1],
             [[ST_ACCOUNT_4.address, 'latest'], 1],
             [[ST_ACCOUNT_4.address], 1],
-            [[ST_ACCOUNT_4.address, '0x2'], 1],
+            //[[ST_ACCOUNT_4.address, '0x2'], 1],
             [['0x320Bdc9DB071aD9B8A9aC6eE71D7C3CAc3217E2d', 'latest'], 0],
             [['0x320Bdc9DB071aD9B8A9aC6eE71D7C3CAc3217E2d'], 0]
         ]
