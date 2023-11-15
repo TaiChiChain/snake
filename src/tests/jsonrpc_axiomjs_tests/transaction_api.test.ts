@@ -26,7 +26,7 @@ describe('TestCases of Transaction API', () => {
         let cases_of_getTransactionCount_counter: any[][] = []
         cases_of_getTransactionCount = [
             //case list
-            [[ST_ACCOUNT_4.address, 'earliest'], 1],
+            [[ST_ACCOUNT_4.address, 'earliest'], 0],
             [[ST_ACCOUNT_4.address, 'pending'], 1],
             [[ST_ACCOUNT_4.address, 'latest'], 1],
             [[ST_ACCOUNT_4.address], 1],
