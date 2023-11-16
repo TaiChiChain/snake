@@ -190,7 +190,7 @@ describe('TestCases of Transaction API', () => {
             [['pending'], 'missing value'],
             [['latest'], 'missing value'],
             [[], 'missing value'],
-            [['0xF4240', '0x0'], 'out of bounds']
+            [['0xF4240', '0x0'], 'not found in DB']
         ]
         const len = cases_of_getTx_ByBlockNumberAndIndex.length
         const len2 = cases_of_getTx_ByBlockNumberAndIndex_counter.length
