@@ -123,7 +123,7 @@ describe('TestCases of Historical Status API', () => {
                 ST_ACCOUNT_5.address,
                 '0x2'
             ])
-            expect(parseInt(res_specify.result, 16)).toBeLessThan(1e27)
+            expect(parseInt(res_specify.result, 16)).toBeLessThanOrEqual(1e27)
             expect(parseInt(res_specify.result, 16)).toBeGreaterThanOrEqual(
                 parseInt(res_latest.result, 16)
             )

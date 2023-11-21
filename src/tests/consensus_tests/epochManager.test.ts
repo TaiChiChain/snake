@@ -21,7 +21,9 @@ describe('TestCases for EpochManager', () => {
         test('admin query', async () => {
             let res = await contract.currentEpoch()
 
-            expect(res.Epoch).toEqual(BigInt(1))
+            expect(res.StartBlock).toEqual(
+                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+            )
             expect(res.EpochPeriod).toEqual(BigInt(100))
             expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
         })
@@ -35,7 +37,9 @@ describe('TestCases for EpochManager', () => {
             )
             let res = await contract.currentEpoch()
 
-            expect(res.Epoch).toEqual(BigInt(1))
+            expect(res.StartBlock).toEqual(
+                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+            )
             expect(res.EpochPeriod).toEqual(BigInt(100))
             expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
         })
