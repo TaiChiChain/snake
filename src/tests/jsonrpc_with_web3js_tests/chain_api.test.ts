@@ -170,7 +170,7 @@ describe('test_getBlockByNumber', () => {
         try {
             await client.eth.getBlock(blocknum + BigInt(1), true)
         } catch (err) {
-            expect(String(err)).toMatch('out of bounds')
+            expect(String(err)).toMatch('not found in DB')
         }
     })
 
@@ -180,7 +180,7 @@ describe('test_getBlockByNumber', () => {
         try {
             await client.eth.getBlock(blocknum + BigInt(2), false)
         } catch (err) {
-            expect(String(err)).toMatch('out of bounds')
+            expect(String(err)).toMatch('not found in DB')
         }
     })
 
@@ -189,7 +189,7 @@ describe('test_getBlockByNumber', () => {
         try {
             await client.eth.getBlock(BigInt(0), true)
         } catch (err) {
-            expect(String(err)).toMatch('out of bounds')
+            expect(String(err)).toMatch('not found in DB')
         }
     })
     test('getBlockByNumber_abnormal_4', async () => {

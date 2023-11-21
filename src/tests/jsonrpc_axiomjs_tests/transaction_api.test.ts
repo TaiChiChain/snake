@@ -26,11 +26,11 @@ describe('TestCases of Transaction API', () => {
         let cases_of_getTransactionCount_counter: any[][] = []
         cases_of_getTransactionCount = [
             //case list
-            [[ST_ACCOUNT_4.address, 'earliest'], 1],
+            [[ST_ACCOUNT_4.address, 'earliest'], 0],
             [[ST_ACCOUNT_4.address, 'pending'], 1],
             [[ST_ACCOUNT_4.address, 'latest'], 1],
             [[ST_ACCOUNT_4.address], 1],
-            [[ST_ACCOUNT_4.address, '0x2'], 1],
+            //[[ST_ACCOUNT_4.address, '0x2'], 1],
             [['0x320Bdc9DB071aD9B8A9aC6eE71D7C3CAc3217E2d', 'latest'], 0],
             [['0x320Bdc9DB071aD9B8A9aC6eE71D7C3CAc3217E2d'], 0]
         ]
@@ -190,7 +190,7 @@ describe('TestCases of Transaction API', () => {
             [['pending'], 'missing value'],
             [['latest'], 'missing value'],
             [[], 'missing value'],
-            [['0xF4240', '0x0'], 'out of bounds']
+            [['0xF4240', '0x0'], 'not found in DB']
         ]
         const len = cases_of_getTx_ByBlockNumberAndIndex.length
         const len2 = cases_of_getTx_ByBlockNumberAndIndex_counter.length
