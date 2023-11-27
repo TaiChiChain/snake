@@ -453,20 +453,73 @@ describe('TestCases of council ', () => {
     })
 
     describe('test query proposal', () => {
-        test('test normal query proposal', async () => {
-            console.log('admin1 get a proposal')
-
-            var res = await utils.call(
+        test('test normal propose and query proposal', async () => {
+            console.log('1. admin1 post a proposal')
+            const receipt = await utils.call(
                 ST_GOVERNANCE_CONTRACT_NAME,
                 ST_GOVERNANCE_COUNCIL_ADDRESS,
-                'proposal',
-                1
+                'propose',
+                PROPOSAL_TYPE_COUNCIL_ELECT,
+                'test title',
+                'test desc',
+                10000,
+                stringToByte(JSON.stringify(extraArgs))
             )
-            expect(hexToString(res)).toMatch('"ID":1')
+
+            expect(receipt.to).toBe(ST_GOVERNANCE_COUNCIL_ADDRESS)
+            var str = hexToString(receipt.logs[0].data)
+            expect(str).toMatch('"Status":0')
+
+            const tx = await client.eth.getTransaction(receipt.transactionHash)
+            expect(hexToString(tx.data)).toMatch(JSON.stringify(extraArgs))
+
+            const match = str.match(/(\d+)/g)
+            //console.log(match)
+            if (match) {
+                console.log('2. admin1 query this proposal')
+                var res = await utils.call(
+                    ST_GOVERNANCE_CONTRACT_NAME,
+                    ST_GOVERNANCE_COUNCIL_ADDRESS,
+                    'proposal',
+                    match[0]
+                )
+                expect(hexToString(res)).toMatch(match[0])
+
+                console.log('3. finish this proposal')
+                utils2.compile(
+                    ST_GOVERNANCE_FILENAME,
+                    ST_GOVERNANCE_CONTRACT_NAME
+                )
+                const receipt_2 = await utils2.call(
+                    ST_GOVERNANCE_CONTRACT_NAME,
+                    ST_GOVERNANCE_COUNCIL_ADDRESS,
+                    'vote',
+                    match[0],
+                    0,
+                    stringToByte('')
+                )
+                var str = hexToString(receipt_2.logs[0].data)
+                expect(str).toMatch('"Status":0')
+
+                utils3.compile(
+                    ST_GOVERNANCE_FILENAME,
+                    ST_GOVERNANCE_CONTRACT_NAME
+                )
+                const receipt_3 = await utils3.call(
+                    ST_GOVERNANCE_CONTRACT_NAME,
+                    ST_GOVERNANCE_COUNCIL_ADDRESS,
+                    'vote',
+                    match[0],
+                    0,
+                    stringToByte('')
+                )
+                var str = hexToString(receipt_3.logs[0].data)
+                expect(str).toMatch('"Status":1')
+            }
         })
 
         test('test abnormal query proposal', async () => {
-            console.log('admin1 get a proposal')
+            console.log('admin1 query a nonexistent proposal')
             try {
                 await utils.call(
                     ST_GOVERNANCE_CONTRACT_NAME,
@@ -475,7 +528,6 @@ describe('TestCases of council ', () => {
                     10000
                 )
             } catch (error) {
-                //console.log(JSON.stringify(error))
                 expect(JSON.stringify(error)).toMatch(
                     'council proposal not found for the id'
                 )
