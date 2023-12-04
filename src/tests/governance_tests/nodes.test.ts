@@ -158,6 +158,45 @@ describe('TestCases for nodes manager', () => {
             }
         })
 
+        test('admin post a proposal add already existing nodes  ', async () => {
+            console.log('1. admin1 post a proposal to add admin nodes')
+            let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
+            let contract = new ethers.Contract(
+                ST_GOVERNANCE_NODE_MANAGER_ADDRESS,
+                abi,
+                wallet
+            )
+            let extraArgs = {
+                Nodes: [
+                    {
+                        NodeId: ST_ADMIN_1.p2pId,
+                        Address: ST_ADMIN_1.address,
+                        Name: 'ST_ADMIN_1'
+                    },
+                    {
+                        NodeId: ST_ACCOUNT_11.p2pId,
+                        Address: ST_ACCOUNT_11.address,
+                        Name: 'ST_ACCOUNT_11'
+                    }
+                ]
+            }
+            let args = stringToUint8Array(JSON.stringify(extraArgs))
+            try {
+                let propose = await contract.propose(
+                    PROPOSAL_TYPE_NODE_ADD,
+                    'test add node',
+                    'test add node',
+                    1000000,
+                    args
+                )
+                await propose.wait()
+                expect(true).toBe(false)
+            } catch (error: any) {
+                console.log('error is:', error.message)
+                expect(error.message).toMatch('transaction execution reverted')
+            }
+        })
+
         test('admin post a proposal to add nodes with wrong blocks ', async () => {
             console.log('1. admin1 post a proposal to add nodes')
             let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
@@ -356,7 +395,9 @@ describe('TestCases for nodes upgrade', () => {
         await propose.wait()
         const receipt = await provider.getTransactionReceipt(propose.hash)
         expect(receipt?.to).toBe(ST_GOVERNANCE_NODE_MANAGER_ADDRESS)
+        console.log('receipt is ', receipt)
         let data = hexStringToString(receipt?.logs[0].data)
+        console.log('data is ', data)
         let obj = JSON.parse(data)
         expect(obj.ID).toBeGreaterThan(0)
         expect(obj.Type).toBe(PROPOSAL_TYPE_NODE_UPGRADE)
