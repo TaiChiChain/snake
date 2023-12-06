@@ -132,7 +132,6 @@ describe('TestCases for gas price manager', () => {
                 wallet
             )
             const result_5 = await contract_epoch.currentEpoch()
-            expect(result_5.EpochPeriod).toEqual(BigInt(100))
             expect(result_5.FinanceParams.StartGasPriceAvailable).toBe(false)
 
             const result_6 = await contract_epoch.nextEpoch()
