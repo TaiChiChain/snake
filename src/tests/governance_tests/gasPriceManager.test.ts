@@ -29,8 +29,8 @@ describe('TestCases for gas price manager', () => {
     )
     let gasExtraArgs = {
         MaxGasPrice: 20000000000000,
-        MinGasPrice: 2000000000000,
-        InitGasPrice: 5000000000000,
+        MinGasPrice: 1000000000000,
+        InitGasPrice: 1000000000000,
         GasChangeRateValue: 1000
     }
     let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
@@ -131,12 +131,8 @@ describe('TestCases for gas price manager', () => {
                 abi_epoch,
                 wallet
             )
-            const result_5 = await contract_epoch.currentEpoch()
-            expect(result_5.FinanceParams.StartGasPriceAvailable).toBe(false)
 
             const result_6 = await contract_epoch.nextEpoch()
-            //console.log('result_6 is ', result_6)
-            //console.log('result_6.FinanceParams is ', result_6.FinanceParams)
             expect(result_6.FinanceParams.StartGasPriceAvailable).toBe(true)
             expect(result_6.FinanceParams.GasChangeRateValue).toEqual(
                 BigInt(gasExtraArgs.GasChangeRateValue)

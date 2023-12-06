@@ -192,7 +192,7 @@ describe('TestCases for nodes manager', () => {
                 await propose.wait()
                 expect(true).toBe(false)
             } catch (error: any) {
-                console.log('error is:', error.message)
+                //console.log('error is:', error.message)
                 expect(error.message).toMatch('transaction execution reverted')
             }
         })
