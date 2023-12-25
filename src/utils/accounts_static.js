@@ -2,22 +2,26 @@
 const ST_ADMIN_1 = {
     address: '0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013',
     privateKey:
-        '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
+        '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f',
+    p2pId: '16Uiu2HAmJ38LwfY6pfgDWNvk3ypjcpEMSePNTE6Ma2NCLqjbZJSF'
 }
 const ST_ADMIN_2 = {
     address: '0x79a1215469FaB6f9c63c1816b45183AD3624bE34',
     privateKey:
-        '0x05c3708d30c2c72c4b36314a41f30073ab18ea226cf8c6b9f566720bfe2e8631'
+        '0x05c3708d30c2c72c4b36314a41f30073ab18ea226cf8c6b9f566720bfe2e8631',
+    p2pId: '16Uiu2HAmRypzJbdbUNYsCV2VVgv9UryYS5d7wejTJXT73mNLJ8AK'
 }
 const ST_ADMIN_3 = {
     address: '0x97c8B516D19edBf575D72a172Af7F418BE498C37',
     privateKey:
-        '0x85a94dd51403590d4f149f9230b6f5de3a08e58899dcaf0f77768efb1825e854'
+        '0x85a94dd51403590d4f149f9230b6f5de3a08e58899dcaf0f77768efb1825e854',
+    p2pId: '16Uiu2HAmTwEET536QC9MZmYFp1NUshjRuaq5YSH1sLjW65WasvRk'
 }
 const ST_ADMIN_4 = {
     address: '0xc0Ff2e0b3189132D815b8eb325bE17285AC898f8',
     privateKey:
-        '0x72efcf4bb0e8a300d3e47e6a10f630bcd540de933f01ed5380897fc5e10dc95d'
+        '0x72efcf4bb0e8a300d3e47e6a10f630bcd540de933f01ed5380897fc5e10dc95d',
+    p2pId: '16Uiu2HAmQBFTnRr84M3xNhi3EcWmgZnnBsDgewk4sNtpA3smBsHJ'
 }
 
 // Accounts with AXM coins by default
@@ -78,6 +82,34 @@ const ST_ACCOUNT_10 = {
         '0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6'
 }
 
+const ST_ACCOUNT_11 = {
+    address: '0xd0091F6D0b39B9E9D2E9051fA46d13B63b8C7B18',
+    privateKey:
+        '0x06bf783a69c860a2ab33fe2f99fed38d14bbdba7ef2295bbcb5a073e6c8847ec',
+    p2pId: '16Uiu2HAm2HeK145KTfLaURhcoxBUMZ1PfhVnLRfnmE8qncvXWoZj'
+}
+
+const ST_ACCOUNT_12 = {
+    address: '0xFd19030f51719D5601Bb079e5c5Be1eD07E01de2',
+    privateKey:
+        '0xbfee1d369f1a98070f85b3b5b3508aaf071440fcdf7bdcb9c725fea835f17433',
+    p2pId: '16Uiu2HAm2CVtLveAtroaN7pcR8U2saBKjwYqRAikMSwxqdoYMxtv'
+}
+
+const ST_ACCOUNT_13 = {
+    address: '0xE4b988C0BEa762B8809a0E4D14F3ac3f922B41B3',
+    privateKey:
+        '0x508d3fd4ec16aff6443cc58bf3df44e55d5d384b1e56529bf52b0c25e8fcf8f7',
+    p2pId: '16Uiu2HAmQv3m5SSyYAoafKmYbTbGmXBaS4DXHXR9wxWKQ9xLzC3n'
+}
+
+const ST_ACCOUNT_14 = {
+    address: '0x5FC85d64dE2125986b1581b4805a43Bfb3af5E52',
+    privateKey:
+        '0xffa932acb7c1099de1029070e7def812f8b2c9433adfb8a90b3cb132233a7690',
+    p2pId: '16Uiu2HAkx1o5fzWLdAobanvE6vqbf1XSbDSgCnid3AoqDGQYFVxo'
+}
+
 module.exports = {
     ST_ADMIN_1,
     ST_ADMIN_2,
@@ -92,5 +124,9 @@ module.exports = {
     ST_ACCOUNT_7,
     ST_ACCOUNT_8,
     ST_ACCOUNT_9,
-    ST_ACCOUNT_10
+    ST_ACCOUNT_10,
+    ST_ACCOUNT_11,
+    ST_ACCOUNT_12,
+    ST_ACCOUNT_13,
+    ST_ACCOUNT_14
 }
