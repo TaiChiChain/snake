@@ -16,6 +16,7 @@ import {
     PROPOSAL_TYPE_COUNCIL_ELECT
 } from '../../utils/contracts_static'
 import {stringToByte, hexToString} from '../../utils/util'
+import { toNumber } from '@axiomesh/axiom'
 
 describe('TestCases of council ', () => {
     const client = newRpcClient()
@@ -84,8 +85,7 @@ describe('TestCases of council ', () => {
                         ST_GOVERNANCE_COUNCIL_ADDRESS,
                         'vote',
                         match[0],
-                        0,
-                        stringToByte('')
+                        0
                     )
                 } catch (error) {
                     expect(String(error)).toMatch(
@@ -103,8 +103,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 //console.log(hexToString(receipt_2.logs[0].data))
                 var str = hexToString(receipt_2.logs[0].data)
@@ -120,8 +119,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 //console.log(hexToString(receipt_3.logs[0].data))
                 var str = hexToString(receipt_3.logs[0].data)
@@ -138,8 +136,7 @@ describe('TestCases of council ', () => {
                         ST_GOVERNANCE_COUNCIL_ADDRESS,
                         'vote',
                         match[0],
-                        0,
-                        stringToByte('')
+                        0
                     )
                 } catch (error) {
                     //console.log(error)
@@ -200,8 +197,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 //console.log(hexToString(receipt_2.logs[0].data))
                 var str = hexToString(receipt_2.logs[0].data)
@@ -216,8 +212,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 //console.log(hexToString(receipt_3.logs[0].data))
                 var str = hexToString(receipt_3.logs[0].data)
@@ -259,8 +254,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 var str = hexToString(receipt_2.logs[0].data)
                 expect(str).toMatch('"Status":0')
@@ -272,8 +266,7 @@ describe('TestCases of council ', () => {
                         ST_GOVERNANCE_COUNCIL_ADDRESS,
                         'vote',
                         match[0],
-                        0,
-                        stringToByte('')
+                        0
                     )
                 } catch (error) {
                     //console.log("error message is :", err)
@@ -292,8 +285,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 var str = hexToString(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
@@ -369,8 +361,7 @@ describe('TestCases of council ', () => {
                         ST_GOVERNANCE_COUNCIL_ADDRESS,
                         'vote',
                         match[0],
-                        0,
-                        stringToByte('')
+                        0
                     )
                 } catch (error) {
                     //console.log("error message is :", error)
@@ -389,8 +380,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 //console.log(hexToString(receipt_2.logs[0].data))
                 var str = hexToString(receipt_2.logs[0].data)
@@ -405,8 +395,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 //console.log(hexToString(receipt_3.logs[0].data))
                 var str = hexToString(receipt_3.logs[0].data)
@@ -483,7 +472,8 @@ describe('TestCases of council ', () => {
                     'proposal',
                     match[0]
                 )
-                expect(hexToString(res)).toMatch(match[0])
+                // res is json object
+                expect(res.ID).toBe(BigInt(match[0]))
 
                 console.log('3. finish this proposal')
                 utils2.compile(
@@ -495,8 +485,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 var str = hexToString(receipt_2.logs[0].data)
                 expect(str).toMatch('"Status":0')
@@ -510,8 +499,7 @@ describe('TestCases of council ', () => {
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'vote',
                     match[0],
-                    0,
-                    stringToByte('')
+                    0
                 )
                 var str = hexToString(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
@@ -521,7 +509,7 @@ describe('TestCases of council ', () => {
         test('test abnormal query proposal', async () => {
             console.log('admin1 query a nonexistent proposal')
             try {
-                await utils.call(
+                const receipt = await utils.call(
                     ST_GOVERNANCE_CONTRACT_NAME,
                     ST_GOVERNANCE_COUNCIL_ADDRESS,
                     'proposal',
@@ -529,9 +517,19 @@ describe('TestCases of council ', () => {
                 )
             } catch (error) {
                 expect(JSON.stringify(error)).toMatch(
-                    'council proposal not found for the id'
+                    'not found proposal'
                 )
             }
+        })
+
+        test('test get latest proposal id', async () => {
+            console.log('admin1 query a latest proposal id')
+            const proposalID = await utils.call(
+                ST_GOVERNANCE_CONTRACT_NAME,
+                ST_GOVERNANCE_COUNCIL_ADDRESS,
+                'getLatestProposalID',
+            )
+            console.log(proposalID)
         })
     })
 })
