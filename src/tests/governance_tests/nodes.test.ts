@@ -72,8 +72,8 @@ describe('TestCases for nodes manager', () => {
 
             console.log('1.1 admin1 query this proposal')
             let res = await contract.proposal(obj.ID)
-            //console.log('res is ', hexStringToString(res))
-            expect(hexStringToString(res)).toMatch('"ID":' + obj.ID)
+            // res is json object
+            expect(res.ID).toBe(BigInt(obj.ID))
 
             console.log('2. admin2 vote this proposal')
             wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)
@@ -296,8 +296,8 @@ describe('TestCases for nodes manager', () => {
 
             console.log('1.1 admin1 query this proposal')
             let res = await contract.proposal(obj.ID)
-            //console.log('res is ', hexStringToString(res))
-            expect(hexStringToString(res)).toMatch('"ID":' + obj.ID)
+            // res is json object
+            expect(res.ID).toBe(BigInt(obj.ID))
 
             console.log('2. admin2 vote this proposal')
             wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)
@@ -405,8 +405,8 @@ describe('TestCases for nodes upgrade', () => {
 
         console.log('1.1 admin1 query this proposal')
         let res = await contract.proposal(obj.ID)
-        //console.log('res is ', hexStringToString(res))
-        expect(hexStringToString(res)).toMatch('"ID":' + obj.ID)
+        // res is json object
+        expect(res.ID).toBe(BigInt(obj.ID))
 
         console.log('2. admin2 vote this proposal')
         wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)

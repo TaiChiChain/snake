@@ -62,8 +62,8 @@ describe('TestCases for gas price manager', () => {
 
             console.log('1.1 admin1 query this proposal')
             let res = await contract.proposal(obj.ID)
-            //console.log('res is ', hexStringToString(res))
-            expect(hexStringToString(res)).toMatch('"ID":' + obj.ID)
+            // res is json object
+            expect(res.ID).toBe(BigInt(obj.ID))
 
             console.log('2. admin2 vote this proposal')
             wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)
@@ -75,8 +75,7 @@ describe('TestCases for gas price manager', () => {
 
             const result_2 = await contract.vote(
                 obj.ID,
-                0,
-                stringToUint8Array('test')
+                0
             )
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
@@ -94,8 +93,7 @@ describe('TestCases for gas price manager', () => {
             )
             const result_3 = await contract.vote(
                 obj.ID,
-                0,
-                stringToUint8Array('test')
+                0
             )
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
@@ -114,8 +112,7 @@ describe('TestCases for gas price manager', () => {
             try {
                 const result_4 = await contract.vote(
                     obj.ID,
-                    0,
-                    stringToUint8Array('test')
+                    0
                 )
                 await result_4.wait()
                 expect(true).toBe(false)
@@ -430,8 +427,7 @@ describe('TestCases for gas price manager', () => {
 
             const result_2 = await contract.vote(
                 obj.ID,
-                1,
-                stringToUint8Array('test')
+                1
             )
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
@@ -449,8 +445,7 @@ describe('TestCases for gas price manager', () => {
             )
             const result_3 = await contract.vote(
                 obj.ID,
-                1,
-                stringToUint8Array('test')
+                1
             )
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
