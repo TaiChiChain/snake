@@ -21,7 +21,7 @@ describe('TestCases of Filter API', () => {
                     {
                         fromBlock: '0x1',
                         toBlock: '0x10',
-                        address: '0x0000000000000000000000000000000000001002'
+                        address: '0x0000000000000000000000000000000000001001'
                     }
                 ],
                 '0x'
@@ -44,7 +44,7 @@ describe('TestCases of Filter API', () => {
                     {
                         fromBlock: '0x1',
                         toBlock: 'latest',
-                        address: '0x0000000000000000000000000000000000001002',
+                        address: '0x0000000000000000000000000000000000001001',
                         topics: [
                             '0x2b570ce470e27ef2de4c22e8f2345f2426cea348f782b3d37fc6c6a2c2d3f0e3'
                         ]
@@ -154,13 +154,13 @@ describe('TestCases of Filter API', () => {
             //case0-2 : only fill fromBlock
             [
                 [{fromBlock: '0x1'}],
-                '0x0000000000000000000000000000000000001002'
+                '0x0000000000000000000000000000000000001001'
             ],
             //[[{fromBlock: 'latest'}], '0x'],
             //case3-6 : fill fromBlock and toBlock
             [
                 [{fromBlock: '0x1', toBlock: 'latest'}],
-                '0x0000000000000000000000000000000000001002'
+                '0x0000000000000000000000000000000000001001'
             ]
         ]
 
@@ -175,6 +175,7 @@ describe('TestCases of Filter API', () => {
                     )
                     //console.log('res is', res)
                     expect(res.result).not.toBeNull()
+                    console.log(res.result)
                     expect(JSON.stringify(res.result)).toMatch(
                         cases_of_get_logs[i][1]
                     )
@@ -207,7 +208,7 @@ describe('TestCases of Filter API', () => {
                 {
                     fromBlock: '0x1',
                     toBlock: 'latest',
-                    address: '0x0000000000000000000000000000000000001002'
+                    address: '0x0000000000000000000000000000000000001001'
                 }
             ])
             var filterId = res.result
@@ -215,7 +216,7 @@ describe('TestCases of Filter API', () => {
             //console.log('post eth_getFilterLogs normal', res)
             expect(res.result).not.toBeNull()
             expect(res.result[0]?.address).toMatch(
-                '0x0000000000000000000000000000000000001002'
+                '0x0000000000000000000000000000000000001001'
             )
 
             // get a nonexistent filter's logs
@@ -231,7 +232,7 @@ describe('TestCases of Filter API', () => {
                 {
                     fromBlock: '0x1',
                     toBlock: 'latest',
-                    address: '0x0000000000000000000000000000000000001002'
+                    address: '0x0000000000000000000000000000000000001001'
                 }
             ])
             var filterId = res.result
