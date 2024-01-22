@@ -155,7 +155,7 @@ export async function transfer(
         from: fromAddr,
         to: toAddr,
         value: amount,
-        gasPrice: gasPrice,
+        gasPrice:  gasPrice * BigInt(20),
         gasLimit: 21000,
         nonce: nonce
     }
