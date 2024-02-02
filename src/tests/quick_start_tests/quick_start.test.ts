@@ -31,11 +31,14 @@ describe('test_connect_axiom', () => {
         const tx = {
             to: addressTo,
             value: ethers.parseEther('1')
+            //type: 3
         }
         // Sign and send tx - wait for receipt
         const createReceipt = await wallet.sendTransaction(tx)
         await createReceipt.wait()
         console.log('Transaction successful with hash:', createReceipt.hash)
+        const res = await provider.getTransaction(createReceipt.hash)
+        console.log('Transaction receipt:', res)
     })
 
     test('deploy and invoke ERC20 contract', async () => {

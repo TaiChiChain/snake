@@ -2,6 +2,7 @@ import {test, expect} from '@jest/globals'
 import {ethers} from '@axiomesh/axiom'
 import {ST_ACCOUNT_4} from '../../utils/accounts_static'
 import {newProvider, request, transferAXM} from '../../utils/rpc'
+import {waitAsync} from '../../utils/util'
 
 //The first column of the cases element is the call input parameter
 //The second column of the cases elements is the result expected to be returned
@@ -387,17 +388,127 @@ describe('TestCases of Transaction API', () => {
             const wallet_random = ethers.Wallet.createRandom()
             const addressTo = await wallet_random.getAddress()
             console.log('transfer AXM from', wallet.address, 'to', addressTo)
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_4.address)
             // Create tx object
             const tx = {
+                nonce: nonce,
                 chainId: '1234',
                 to: addressTo,
+                gasLimit: 21000,
                 value: ethers.parseEther('1')
             }
             // Signtx - wait for receipt
             const singnedTx = await wallet.signTransaction(tx)
             var res = await request('eth_sendRawTransaction', [singnedTx])
-            //console.log('res is :', res)
-            expect(JSON.stringify(res.error)).toMatch('verify tx err')
+            expect(JSON.stringify(res.error)).toMatch('precheck failed')
+        })
+
+        test('sendRawTransaction with Incentive type', async () => {
+            const wallet_random = ethers.Wallet.createRandom()
+            const addressTo = await wallet_random.getAddress()
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_4.address)
+            console.log('transfer AXM from', wallet.address, 'to', addressTo)
+            // Create tx object with Incentive type
+            const tx = {
+                nonce: nonce,
+                chainId: '1356',
+                to: addressTo,
+                value: ethers.parseEther('1'),
+                gasLimit: 21000,
+                type: 3,
+                incentiveAddress: ST_ACCOUNT_4.address
+            }
+            // Signtx - wait for receipt
+            const singnedTx = await wallet.signTransaction(tx)
+            let receipt = await request('eth_sendRawTransaction', [singnedTx])
+            await waitAsync(2000)
+            let res = await request('eth_getTransactionByHash', [
+                receipt.result
+            ])
+            //console.log('response is :', res)
+            expect(res.result.incentiveAddress).toMatch(
+                ST_ACCOUNT_4.address.toLowerCase()
+            )
+            expect(res.result.type).toMatch('0x3')
+        })
+
+        test('sendRawTransaction without Incentive type', async () => {
+            const wallet_random = ethers.Wallet.createRandom()
+            const addressTo = await wallet_random.getAddress()
+            let nonce = await provider.getTransactionCount(ST_ACCOUNT_4.address)
+            console.log('transfer AXM from', wallet.address, 'to', addressTo)
+            // Create tx object with Incentive type
+            const tx = {
+                nonce: nonce,
+                chainId: '1356',
+                to: addressTo,
+                value: ethers.parseEther('1'),
+                gasLimit: 21000,
+                type: 2,
+                incentiveAddress: ST_ACCOUNT_4.address
+            }
+            // Signtx - wait for receipt
+            const singnedTx = await wallet.signTransaction(tx)
+            let receipt = await request('eth_sendRawTransaction', [singnedTx])
+            await waitAsync(2000)
+            let res = await request('eth_getTransactionByHash', [
+                receipt.result
+            ])
+            //console.log('response is :', res)
+            expect(res.result.incentiveAddress).toMatch(
+                '0x0000000000000000000000000000000000000000'
+            )
+            expect(res.result.type).toMatch('0x2')
+        })
+
+        test('use axiom.js sendTransaction with Incentive type', async () => {
+            const wallet_random = ethers.Wallet.createRandom()
+            const addressTo = await wallet_random.getAddress()
+            let rpc_incentiveAddress = await request('axm_getIncentiveAddress')
+            expect(rpc_incentiveAddress).not.toBeNull()
+
+            console.log('transfer AXM from', wallet.address, 'to', addressTo)
+            // Create tx object with Incentive type
+            const tx = {
+                to: addressTo,
+                value: ethers.parseEther('1'),
+                type: 3,
+                incentiveAddress: ST_ACCOUNT_4.address
+            }
+            let receipt = await wallet.sendTransaction(tx)
+            await receipt.wait()
+            //console.log('Transaction successful with hash:', receipt.hash)
+            let res = await provider.getTransaction(receipt.hash)
+            //console.log('Transaction receipt:', res)
+            expect(JSON.stringify(res?.type)).toMatch('3')
+            expect(JSON.stringify(res?.incentiveAddress).toLowerCase()).toMatch(
+                rpc_incentiveAddress.result
+            )
+        })
+
+        test('use axiom.js sendTransaction without Incentive type', async () => {
+            const wallet_random = ethers.Wallet.createRandom()
+            const addressTo = await wallet_random.getAddress()
+            let rpc_incentiveAddress = await request('axm_getIncentiveAddress')
+            expect(rpc_incentiveAddress).not.toBeNull()
+
+            console.log('transfer AXM from', wallet.address, 'to', addressTo)
+            // Create tx object with Incentive type
+            const tx = {
+                to: addressTo,
+                value: ethers.parseEther('1'),
+                type: 2,
+                incentiveAddress: ST_ACCOUNT_4.address
+            }
+            let receipt = await wallet.sendTransaction(tx)
+            await receipt.wait()
+            console.log('Transaction successful with hash:', receipt.hash)
+            let res = await provider.getTransaction(receipt.hash)
+            //console.log('Transaction receipt:', res)
+            expect(JSON.stringify(res?.type)).toMatch('2')
+            expect(JSON.stringify(res?.incentiveAddress)).toMatch(
+                '0x0000000000000000000000000000000000000000'
+            )
         })
     })
 })

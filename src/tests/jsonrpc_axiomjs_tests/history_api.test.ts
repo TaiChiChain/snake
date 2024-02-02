@@ -9,7 +9,7 @@ import {
     request,
     transferAXM
 } from '../../utils/rpc'
-import {hexStringToString, waitAsync} from '../../utils/util'
+import {waitAsync} from '../../utils/util'
 
 describe('TestCases of Historical Status API', () => {
     const provider = newProvider()
