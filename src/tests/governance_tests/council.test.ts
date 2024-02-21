@@ -1,5 +1,5 @@
 import {test, expect, describe} from '@jest/globals'
-import {newRpcClient, transfer} from '../../utils/rpc'
+import {newRpcClient} from '../../utils/rpc'
 import {
     ST_ADMIN_1,
     ST_ADMIN_2,
@@ -16,7 +16,6 @@ import {
     PROPOSAL_TYPE_COUNCIL_ELECT
 } from '../../utils/contracts_static'
 import {stringToByte, hexToString} from '../../utils/util'
-import { toNumber } from '@axiomesh/axiom'
 
 describe('TestCases of council ', () => {
     const client = newRpcClient()
@@ -516,9 +515,7 @@ describe('TestCases of council ', () => {
                     10000
                 )
             } catch (error) {
-                expect(JSON.stringify(error)).toMatch(
-                    'not found proposal'
-                )
+                expect(JSON.stringify(error)).toMatch('not found proposal')
             }
         })
 
@@ -527,7 +524,7 @@ describe('TestCases of council ', () => {
             const proposalID = await utils.call(
                 ST_GOVERNANCE_CONTRACT_NAME,
                 ST_GOVERNANCE_COUNCIL_ADDRESS,
-                'getLatestProposalID',
+                'getLatestProposalID'
             )
             console.log(proposalID)
         })
