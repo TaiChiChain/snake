@@ -1,15 +1,23 @@
 import {test, expect} from '@jest/globals'
 import * as fs from 'fs'
 import {ethers} from '@axiomesh/axiom'
-import {ST_ACCOUNT_5} from '../../utils/accounts_static'
-import {ST_CONTRACT_DIR} from '../../utils/contracts_static'
+import {
+    ST_ACCOUNT_5,
+    ST_ADMIN_1,
+    ST_ADMIN_2, ST_ADMIN_3
+} from '../../utils/accounts_static'
+import {
+    PROPOSAL_TYPE_NODE_UPGRADE,
+    ST_CONTRACT_DIR,
+    ST_GOVERNANCE_NODE_MANAGER_ADDRESS
+} from '../../utils/contracts_static'
 import {
     deploy_contract,
     newProvider,
     request,
     transferAXM
 } from '../../utils/rpc'
-import {hexStringToString, waitAsync} from '../../utils/util'
+import {hexStringToString, stringToUint8Array, waitAsync} from '../../utils/util'
 
 describe('TestCases of Historical Status API', () => {
     const provider = newProvider()
@@ -89,6 +97,104 @@ describe('TestCases of Historical Status API', () => {
                 ])
             } catch (error) {
                 expect(JSON.stringify(error)).toMatch('invalid argument')
+            }
+        })
+
+        test('debug_traceTransaction for governance', async () => {
+            const abi = fs.readFileSync(
+                ST_CONTRACT_DIR + 'Governance/governance.abi',
+                'utf8'
+            )
+            let upgradeExtraArgs = {
+                DownloadUrls: [
+                    'https://github.com/axiomesh/axiom-ledger/archive/refs/tags/v0.0.1.tar.gz',
+                    'https://github.com/axiomesh/axiom-ledger/archive/refs/tags/v0.0.2.tar.gz'
+                ],
+                CheckHash:
+                    'ed15d72d6d437db61a00abc6fa20c3d34f33a9221b8dc770df5ae32149b369bb'
+            }
+            let upgradeArgs = stringToUint8Array(JSON.stringify(upgradeExtraArgs))
+
+            // repeat propose will not cause panic
+            var proposeHash = []
+            for (let i = 0; i < 2; i++) {
+                console.log("1. admin1 propose node upgrade propose")
+                let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
+                let govern_contract = new ethers.Contract(ST_GOVERNANCE_NODE_MANAGER_ADDRESS, abi, wallet)
+
+                const propose = await govern_contract.propose(
+                    PROPOSAL_TYPE_NODE_UPGRADE,
+                    'test upgrade node',
+                    'test upgrade node',
+                    100,
+                    upgradeArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
+                )
+
+                await propose.wait()
+                const receipt = await provider.getTransactionReceipt(propose.hash)
+                expect(receipt?.to).toBe(ST_GOVERNANCE_NODE_MANAGER_ADDRESS)
+                let data = hexStringToString(receipt?.logs[0].data)
+                let obj = JSON.parse(data)
+                expect(obj.ID).toBeGreaterThan(0)
+                expect(obj.Type).toBe(PROPOSAL_TYPE_NODE_UPGRADE)
+                expect(obj.Status).toBe(0)
+                console.log("Propose hash:", propose.hash)
+
+                console.log('2. admin2 vote this proposal')
+                wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)
+                govern_contract = new ethers.Contract(
+                    ST_GOVERNANCE_NODE_MANAGER_ADDRESS,
+                    abi,
+                    wallet
+                )
+
+                const result_2 = await govern_contract.vote(
+                    obj.ID,
+                    0,
+                    stringToUint8Array('test')
+                )
+                await result_2.wait()
+                const receipt_2 = await provider.getTransactionReceipt(result_2.hash)
+                data = hexStringToString(receipt_2?.logs[0].data)
+                expect(data).toMatch('"Status":0')
+
+                console.log('3. admin3 vote this proposal')
+                wallet = new ethers.Wallet(ST_ADMIN_3.privateKey, provider)
+                govern_contract = new ethers.Contract(
+                    ST_GOVERNANCE_NODE_MANAGER_ADDRESS,
+                    abi,
+                    wallet
+                )
+                const result_3 = await govern_contract.vote(
+                    obj.ID,
+                    0,
+                    stringToUint8Array('test')
+                )
+                await result_3.wait()
+                const receipt_3 = await provider.getTransactionReceipt(result_3.hash)
+                data = hexStringToString(receipt_3?.logs[0].data)
+                expect(data).toMatch('"Status":1')
+
+                // save hash for trace
+                proposeHash.push(propose.hash)
+            }
+
+            // trace govern propose are not allowed
+            const res = await request('debug_traceTransaction', [
+                proposeHash[0],
+                {
+                    tracer: 'callTracer'
+                }
+            ])
+
+            if (res && res.error) {
+                const {message} = res.error; // 从res.error中解构message属性
+                expect(message).not.toBeNull()
+                expect(message).toMatch('system contract cannot be traced')
             }
         })
     })
