@@ -19,7 +19,7 @@ import {
     ST_ACCOUNT_14,
     ST_ACCOUNT_1
 } from '../../utils/accounts_static'
-import {hexStringToString, stringToUint8Array} from '../../utils/util'
+import {hexToString, stringToUint8Array} from '../../utils/util'
 import fs from 'fs'
 
 describe('TestCases for nodes manager', () => {
@@ -58,12 +58,16 @@ describe('TestCases for nodes manager', () => {
                 'test add node',
                 'test add node',
                 1000000,
-                args
+                args,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
             expect(receipt?.to).toBe(ST_GOVERNANCE_NODE_MANAGER_ADDRESS)
-            let data = hexStringToString(receipt?.logs[0].data)
+            let data = hexToString(receipt?.logs[0].data)
             //console.log(data)
             let obj = JSON.parse(data)
             expect(obj.ID).toBeGreaterThan(0)
@@ -86,13 +90,16 @@ describe('TestCases for nodes manager', () => {
             const result_2 = await contract.vote(
                 obj.ID,
                 0,
-                stringToUint8Array('test')
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
                 result_2.hash
             )
-            data = hexStringToString(receipt_2?.logs[0].data)
+            data = hexToString(receipt_2?.logs[0].data)
             expect(data).toMatch('"Status":0')
 
             console.log('3. admin3 vote this proposal')
@@ -105,13 +112,16 @@ describe('TestCases for nodes manager', () => {
             const result_3 = await contract.vote(
                 obj.ID,
                 0,
-                stringToUint8Array('test')
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
                 result_3.hash
             )
-            data = hexStringToString(receipt_3?.logs[0].data)
+            data = hexToString(receipt_3?.logs[0].data)
             expect(data).toMatch('"Status":1')
 
             console.log('4. admin4 vote this proposal')
@@ -125,7 +135,10 @@ describe('TestCases for nodes manager', () => {
                 const result_4 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_4.wait()
             } catch (error: any) {
@@ -148,7 +161,11 @@ describe('TestCases for nodes manager', () => {
                     'test add node',
                     'test add node',
                     1000000,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -187,7 +204,11 @@ describe('TestCases for nodes manager', () => {
                     'test add node',
                     'test add node',
                     1000000,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -211,7 +232,11 @@ describe('TestCases for nodes manager', () => {
                     'test add node',
                     'test add node',
                     1,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -235,7 +260,11 @@ describe('TestCases for nodes manager', () => {
                     'test remove node',
                     'test remove node',
                     1000000,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -259,7 +288,11 @@ describe('TestCases for nodes manager', () => {
                     'test remove node',
                     'test remove node',
                     1,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -283,12 +316,16 @@ describe('TestCases for nodes manager', () => {
                 'test remove node',
                 'test remove node',
                 1000000,
-                args
+                args,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
             expect(receipt?.to).toBe(ST_GOVERNANCE_NODE_MANAGER_ADDRESS)
-            let data = hexStringToString(receipt?.logs[0].data)
+            let data = hexToString(receipt?.logs[0].data)
             let obj = JSON.parse(data)
             expect(obj.ID).toBeGreaterThan(0)
             expect(obj.Type).toBe(PROPOSAL_TYPE_NODE_REMOVE)
@@ -310,13 +347,16 @@ describe('TestCases for nodes manager', () => {
             const result_2 = await contract.vote(
                 obj.ID,
                 0,
-                stringToUint8Array('test')
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
                 result_2.hash
             )
-            data = hexStringToString(receipt_2?.logs[0].data)
+            data = hexToString(receipt_2?.logs[0].data)
             expect(data).toMatch('"Status":0')
 
             console.log('3. admin3 vote this proposal')
@@ -329,13 +369,16 @@ describe('TestCases for nodes manager', () => {
             const result_3 = await contract.vote(
                 obj.ID,
                 0,
-                stringToUint8Array('test')
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
                 result_3.hash
             )
-            data = hexStringToString(receipt_3?.logs[0].data)
+            data = hexToString(receipt_3?.logs[0].data)
             expect(data).toMatch('"Status":1')
 
             console.log('4. admin4 vote this proposal')
@@ -349,7 +392,10 @@ describe('TestCases for nodes manager', () => {
                 const result_4 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_4.wait()
             } catch (error: any) {
@@ -390,13 +436,17 @@ describe('TestCases for nodes upgrade', () => {
             'test upgrade node',
             'test upgrade node',
             1000000,
-            upgradeArgs
+            upgradeArgs,
+            {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            }
         )
         await propose.wait()
         const receipt = await provider.getTransactionReceipt(propose.hash)
         expect(receipt?.to).toBe(ST_GOVERNANCE_NODE_MANAGER_ADDRESS)
         //console.log('receipt is ', receipt)
-        let data = hexStringToString(receipt?.logs[0].data)
+        let data = hexToString(receipt?.logs[0].data)
         //console.log('data is ', data)
         let obj = JSON.parse(data)
         expect(obj.ID).toBeGreaterThan(0)
@@ -419,11 +469,14 @@ describe('TestCases for nodes upgrade', () => {
         const result_2 = await contract.vote(
             obj.ID,
             0,
-            stringToUint8Array('test')
+            {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            }
         )
         await result_2.wait()
         const receipt_2 = await provider.getTransactionReceipt(result_2.hash)
-        data = hexStringToString(receipt_2?.logs[0].data)
+        data = hexToString(receipt_2?.logs[0].data)
         expect(data).toMatch('"Status":0')
 
         console.log('3. admin3 vote this proposal')
@@ -436,11 +489,14 @@ describe('TestCases for nodes upgrade', () => {
         const result_3 = await contract.vote(
             obj.ID,
             0,
-            stringToUint8Array('test')
+            {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            }
         )
         await result_3.wait()
         const receipt_3 = await provider.getTransactionReceipt(result_3.hash)
-        data = hexStringToString(receipt_3?.logs[0].data)
+        data = hexToString(receipt_3?.logs[0].data)
         expect(data).toMatch('"Status":1')
 
         console.log('4. admin4 vote this proposal')
@@ -454,7 +510,10 @@ describe('TestCases for nodes upgrade', () => {
             const result_4 = await contract.vote(
                 obj.ID,
                 0,
-                stringToUint8Array('test')
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_4.wait()
         } catch (error: any) {
@@ -486,7 +545,11 @@ describe('TestCases for nodes upgrade', () => {
                 'test upgrade node',
                 'test upgrade node',
                 1000000,
-                upgradeArgs
+                upgradeArgs,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             expect(false).toBe(true)
@@ -510,7 +573,11 @@ describe('TestCases for nodes upgrade', () => {
                 'test upgrade node',
                 'test upgrade node',
                 1,
-                upgradeArgs
+                upgradeArgs,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             expect(false).toBe(true)
@@ -534,7 +601,11 @@ describe('TestCases for nodes upgrade', () => {
                 'test upgrade node',
                 'test upgrade node',
                 1,
-                upgradeArgs
+                upgradeArgs,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             expect(false).toBe(true)

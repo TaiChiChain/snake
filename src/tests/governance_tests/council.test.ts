@@ -16,7 +16,7 @@ import {
     PROPOSAL_TYPE_COUNCIL_ELECT
 } from '../../utils/contracts_static'
 import {stringToByte, hexToString} from '../../utils/util'
-import { toNumber } from '@axiomesh/axiom'
+import {ethers, toNumber} from '@axiomesh/axiom'
 
 describe('TestCases of council ', () => {
     const client = newRpcClient()
@@ -68,15 +68,15 @@ describe('TestCases of council ', () => {
             )
 
             expect(receipt.to).toBe(ST_GOVERNANCE_COUNCIL_ADDRESS)
-            var str = hexToString(receipt.logs[0].data)
+            var str = ethers.toUtf8String(receipt.logs[0].data)
             expect(str).toMatch('"Status":0')
 
             const tx = await client.eth.getTransaction(receipt.transactionHash)
             expect(hexToString(tx.data)).toMatch(JSON.stringify(extraArgs))
 
             //console.log(hexToString(receipt.logs[0].data))
+            // search the proposal id
             const match = str.match(/(\d+)/g)
-            //console.log(match)
             if (match) {
                 console.log('2. admin1 vote this proposal')
                 try {
@@ -88,9 +88,8 @@ describe('TestCases of council ', () => {
                         0
                     )
                 } catch (error) {
-                    expect(String(error)).toMatch(
-                        'Transaction has been reverted'
-                    )
+                    const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                    expect(innerMessage).toMatch('user has already voted');
                 }
 
                 console.log('3. admin2 vote this proposal')
@@ -106,7 +105,7 @@ describe('TestCases of council ', () => {
                     0
                 )
                 //console.log(hexToString(receipt_2.logs[0].data))
-                var str = hexToString(receipt_2.logs[0].data)
+                var str = ethers.toUtf8String(receipt_2.logs[0].data)
                 expect(str).toMatch('"Status":0')
 
                 console.log('4. admin3 vote this proposal')
@@ -122,7 +121,7 @@ describe('TestCases of council ', () => {
                     0
                 )
                 //console.log(hexToString(receipt_3.logs[0].data))
-                var str = hexToString(receipt_3.logs[0].data)
+                var str = ethers.toUtf8String(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
 
                 console.log('5. admin4 vote this proposal')
@@ -139,10 +138,8 @@ describe('TestCases of council ', () => {
                         0
                     )
                 } catch (error) {
-                    //console.log(error)
-                    expect(String(error)).toMatch(
-                        'Transaction has been reverted'
-                    )
+                    const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                    expect(innerMessage).toMatch('proposal has already finished');
                 }
             }
         })
@@ -161,7 +158,7 @@ describe('TestCases of council ', () => {
             )
 
             expect(receipt.to).toBe(ST_GOVERNANCE_COUNCIL_ADDRESS)
-            var str = hexToString(receipt.logs[0].data)
+            var str = ethers.toUtf8String(receipt.logs[0].data)
             expect(str).toMatch('"Status":0')
 
             const tx = await client.eth.getTransaction(receipt.transactionHash)
@@ -180,8 +177,8 @@ describe('TestCases of council ', () => {
                     stringToByte(JSON.stringify(extraArgs))
                 )
             } catch (error) {
-                //console.log("error message is :", error)
-                expect(String(error)).toMatch('Transaction has been reverted')
+                const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                expect(innerMessage).toMatch('exist not finished proposal, must finished all proposal then propose council proposal');
             }
 
             // finish the proposal
@@ -200,7 +197,7 @@ describe('TestCases of council ', () => {
                     0
                 )
                 //console.log(hexToString(receipt_2.logs[0].data))
-                var str = hexToString(receipt_2.logs[0].data)
+                var str = ethers.toUtf8String(receipt_2.logs[0].data)
                 expect(str).toMatch('"Status":0')
 
                 utils3.compile(
@@ -215,7 +212,7 @@ describe('TestCases of council ', () => {
                     0
                 )
                 //console.log(hexToString(receipt_3.logs[0].data))
-                var str = hexToString(receipt_3.logs[0].data)
+                var str = ethers.toUtf8String(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
             }
         })
@@ -234,7 +231,7 @@ describe('TestCases of council ', () => {
             )
 
             expect(receipt.to).toBe(ST_GOVERNANCE_COUNCIL_ADDRESS)
-            var str = hexToString(receipt.logs[0].data)
+            var str = ethers.toUtf8String(receipt.logs[0].data)
             expect(str).toMatch('"Status":0')
 
             const tx = await client.eth.getTransaction(receipt.transactionHash)
@@ -256,7 +253,7 @@ describe('TestCases of council ', () => {
                     match[0],
                     0
                 )
-                var str = hexToString(receipt_2.logs[0].data)
+                var str = ethers.toUtf8String(receipt_2.logs[0].data)
                 expect(str).toMatch('"Status":0')
 
                 console.log('3. admin2 repeat vote this proposal')
@@ -269,10 +266,8 @@ describe('TestCases of council ', () => {
                         0
                     )
                 } catch (error) {
-                    //console.log("error message is :", err)
-                    expect(String(error)).toMatch(
-                        'Transaction has been reverted'
-                    )
+                    const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                    expect(innerMessage).toMatch('user has already voted');
                 }
 
                 // finish the proposal
@@ -287,7 +282,7 @@ describe('TestCases of council ', () => {
                     match[0],
                     0
                 )
-                var str = hexToString(receipt_3.logs[0].data)
+                var str = ethers.toUtf8String(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
             }
         })
@@ -312,6 +307,7 @@ describe('TestCases of council ', () => {
                 {address: ST_ADMIN_4.address, weight: 1, name: 'test user4'}
             ]
         }
+
         test('test community user propose', async () => {
             console.log('2. community user5 post a proposal')
             try {
@@ -326,8 +322,8 @@ describe('TestCases of council ', () => {
                     stringToByte(JSON.stringify(extraArgs))
                 )
             } catch (error) {
-                //console.log("error message is :", error)
-                expect(String(error)).toMatch('Transaction has been reverted')
+                const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                expect(innerMessage).toMatch('council member is not found');
             }
         })
 
@@ -344,7 +340,7 @@ describe('TestCases of council ', () => {
                 stringToByte(JSON.stringify(extraArgs))
             )
             expect(receipt.to).toBe(ST_GOVERNANCE_COUNCIL_ADDRESS)
-            var str = hexToString(receipt.logs[0].data)
+            var str = ethers.toUtf8String(receipt.logs[0].data)
             expect(str).toMatch('"Status":0')
 
             const tx = await client.eth.getTransaction(receipt.transactionHash)
@@ -364,10 +360,8 @@ describe('TestCases of council ', () => {
                         0
                     )
                 } catch (error) {
-                    //console.log("error message is :", error)
-                    expect(String(error)).toMatch(
-                        'Transaction has been reverted'
-                    )
+                    const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                    expect(innerMessage).toMatch('council member is not found');
                 }
 
                 // finish the proposal
@@ -383,7 +377,7 @@ describe('TestCases of council ', () => {
                     0
                 )
                 //console.log(hexToString(receipt_2.logs[0].data))
-                var str = hexToString(receipt_2.logs[0].data)
+                var str = ethers.toUtf8String(receipt_2.logs[0].data)
                 expect(str).toMatch('"Status":0')
 
                 utils3.compile(
@@ -398,7 +392,7 @@ describe('TestCases of council ', () => {
                     0
                 )
                 //console.log(hexToString(receipt_3.logs[0].data))
-                var str = hexToString(receipt_3.logs[0].data)
+                var str = ethers.toUtf8String(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
             }
         })
@@ -431,12 +425,8 @@ describe('TestCases of council ', () => {
                     stringToByte(JSON.stringify(extraArgs))
                 )
             } catch (error) {
-                expect(JSON.stringify(error)).toMatch(
-                    'Transaction has been reverted'
-                )
-                expect(JSON.stringify(error)).toMatch(
-                    'block number is out of date'
-                )
+                const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                expect(innerMessage).toMatch('block number is out of date');
             }
         })
     })
@@ -456,7 +446,7 @@ describe('TestCases of council ', () => {
             )
 
             expect(receipt.to).toBe(ST_GOVERNANCE_COUNCIL_ADDRESS)
-            var str = hexToString(receipt.logs[0].data)
+            var str = ethers.toUtf8String(receipt.logs[0].data)
             expect(str).toMatch('"Status":0')
 
             const tx = await client.eth.getTransaction(receipt.transactionHash)
@@ -487,7 +477,7 @@ describe('TestCases of council ', () => {
                     match[0],
                     0
                 )
-                var str = hexToString(receipt_2.logs[0].data)
+                var str = ethers.toUtf8String(receipt_2.logs[0].data)
                 expect(str).toMatch('"Status":0')
 
                 utils3.compile(
@@ -501,7 +491,7 @@ describe('TestCases of council ', () => {
                     match[0],
                     0
                 )
-                var str = hexToString(receipt_3.logs[0].data)
+                var str = ethers.toUtf8String(receipt_3.logs[0].data)
                 expect(str).toMatch('"Status":1')
             }
         })
@@ -516,9 +506,8 @@ describe('TestCases of council ', () => {
                     10000
                 )
             } catch (error) {
-                expect(JSON.stringify(error)).toMatch(
-                    'not found proposal'
-                )
+                const innerMessage = (error as any)?.innerError?.message as string | undefined;
+                expect(innerMessage).toMatch('not found proposal');
             }
         })
 
