@@ -49,7 +49,11 @@ describe('TestCases for gas price manager', () => {
                 'test change gasPrice',
                 'test change gasPrice',
                 1000000,
-                gasArgs
+                gasArgs,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
@@ -75,7 +79,11 @@ describe('TestCases for gas price manager', () => {
 
             const result_2 = await contract.vote(
                 obj.ID,
-                0
+                0,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
@@ -93,7 +101,11 @@ describe('TestCases for gas price manager', () => {
             )
             const result_3 = await contract.vote(
                 obj.ID,
-                0
+                0,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
@@ -112,13 +124,16 @@ describe('TestCases for gas price manager', () => {
             try {
                 const result_4 = await contract.vote(
                     obj.ID,
-                    0
+                    0,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_4.wait()
                 expect(true).toBe(false)
             } catch (error: any) {
-                //console.log('error is:', error.message)
-                expect(error.message).toMatch('transaction execution reverted')
+                expect(error.message).toMatch('transaction execution reverted');
             }
 
             console.log('5. admin1 query epochInfo')
@@ -159,7 +174,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -192,7 +211,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -225,7 +248,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -258,7 +285,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -291,7 +322,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -324,7 +359,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -357,7 +396,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -389,7 +432,11 @@ describe('TestCases for gas price manager', () => {
                 'test change gasPrice',
                 'test change gasPrice',
                 1000000,
-                gasArgs
+                gasArgs,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
@@ -407,7 +454,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gasPrice',
                     'test change gasPrice',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose_2.wait()
                 expect(true).toBe(false)
@@ -427,7 +478,11 @@ describe('TestCases for gas price manager', () => {
 
             const result_2 = await contract.vote(
                 obj.ID,
-                1
+                1,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
@@ -445,7 +500,11 @@ describe('TestCases for gas price manager', () => {
             )
             const result_3 = await contract.vote(
                 obj.ID,
-                1
+                1,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
@@ -469,7 +528,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1000000,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)
@@ -493,7 +556,11 @@ describe('TestCases for gas price manager', () => {
                     'test change gas price',
                     'test change gas price',
                     1,
-                    gasArgs
+                    gasArgs,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
                 expect(true).toBe(false)

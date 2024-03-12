@@ -51,7 +51,11 @@ describe('TestCases for kyc service', () => {
                 'add kyc services',
                 'add kyc services',
                 1000,
-                args
+                args,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
@@ -75,7 +79,10 @@ describe('TestCases for kyc service', () => {
                 const result_2 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_2.wait()
                 const receipt_2 = await provider.getTransactionReceipt(
@@ -94,7 +101,10 @@ describe('TestCases for kyc service', () => {
                 const result_3 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_3.wait()
                 const receipt_3 = await provider.getTransactionReceipt(
@@ -118,7 +128,11 @@ describe('TestCases for kyc service', () => {
                 'test remove kyc services',
                 'test remove kyc services',
                 1000,
-                args
+                args,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             let recipet = await provider.getTransactionReceipt(propose.hash)
@@ -138,7 +152,10 @@ describe('TestCases for kyc service', () => {
                 const result_2 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_2.wait()
                 const receipt_2 = await provider.getTransactionReceipt(
@@ -157,7 +174,10 @@ describe('TestCases for kyc service', () => {
                 const result_3 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_3.wait()
                 const receipt_3 = await provider.getTransactionReceipt(
@@ -184,7 +204,11 @@ describe('TestCases for kyc service', () => {
                 'add kyc services',
                 'add kyc services',
                 1000,
-                args
+                args,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
@@ -200,7 +224,11 @@ describe('TestCases for kyc service', () => {
                     'add kyc services',
                     'add kyc services',
                     1000,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await res.wait()
             } catch (err) {
@@ -220,7 +248,10 @@ describe('TestCases for kyc service', () => {
                 const result_2 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_2.wait()
                 const receipt_2 = await provider.getTransactionReceipt(
@@ -234,7 +265,10 @@ describe('TestCases for kyc service', () => {
                     let res = await contract.vote(
                         obj.ID,
                         0,
-                        stringToUint8Array('test')
+                        {
+                            gasPrice: 10000000000000,
+                            gasLimit: 300000
+                        }
                     )
                     await res.wait()
                 } catch (err) {
@@ -254,7 +288,10 @@ describe('TestCases for kyc service', () => {
                 const result_3 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_3.wait()
                 const receipt_3 = await provider.getTransactionReceipt(
@@ -293,7 +330,11 @@ describe('TestCases for kyc service', () => {
                     'add kyc services',
                     'add kyc services',
                     1000,
-                    args_1
+                    args_1,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
             } catch (error) {
@@ -330,7 +371,11 @@ describe('TestCases for kyc service', () => {
                     'remove kyc services',
                     'remove kyc services',
                     1000,
-                    args_2
+                    args_2,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
             } catch (error) {
@@ -354,7 +399,11 @@ describe('TestCases for kyc service', () => {
                     'add kyc services',
                     'add kyc services',
                     1000,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
             } catch (error) {
@@ -376,7 +425,11 @@ describe('TestCases for kyc service', () => {
                     'remove kyc services',
                     'remove kyc services',
                     1000,
-                    args
+                    args,
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await propose.wait()
             } catch (error) {
@@ -408,7 +461,11 @@ describe('TestCases for kyc service', () => {
                 'add kyc services',
                 'add kyc services',
                 1000,
-                args_3
+                args_3,
+                {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                }
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
@@ -432,7 +489,10 @@ describe('TestCases for kyc service', () => {
                     const res_2 = await contract.vote(
                         obj.ID,
                         0,
-                        stringToUint8Array('test')
+                        {
+                            gasPrice: 10000000000000,
+                            gasLimit: 300000
+                        }
                     )
                     await res_2.wait()
                 } catch (error) {
@@ -453,7 +513,10 @@ describe('TestCases for kyc service', () => {
                 const result_2 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_2.wait()
                 const receipt_2 = await provider.getTransactionReceipt(
@@ -472,7 +535,10 @@ describe('TestCases for kyc service', () => {
                 const result_3 = await contract.vote(
                     obj.ID,
                     0,
-                    stringToUint8Array('test')
+                    {
+                        gasPrice: 10000000000000,
+                        gasLimit: 300000
+                    }
                 )
                 await result_3.wait()
                 const receipt_3 = await provider.getTransactionReceipt(
