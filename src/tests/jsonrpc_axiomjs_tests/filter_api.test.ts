@@ -175,7 +175,7 @@ describe('TestCases of Filter API', () => {
                     )
                     //console.log('res is', res)
                     expect(res.result).not.toBeNull()
-                    console.log(res.result)
+                    // console.log(res.result)
                     expect(JSON.stringify(res.result)).toMatch(
                         cases_of_get_logs[i][1]
                     )
