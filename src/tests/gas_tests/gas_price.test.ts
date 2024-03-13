@@ -38,7 +38,7 @@ describe('test gas price change', () => {
             var start = performance.now();
             await sendTransaction(MAX_BATCH_SIZE)
             var end = performance.now();
-            console.log('cost is', `${end - start}ms`)
+            // console.log('cost is', `${end - start}ms`)
         }
         const price = await client.eth.getGasPrice()
         expect(price).toBe(BigInt(MAX_PRICE))

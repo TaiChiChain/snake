@@ -393,7 +393,7 @@ describe('TestCases of BlockChain API', () => {
             try {
                 await request('eth_feeHistory', [1, 1, []])
             } catch (err) {
-                console.log(err)
+                // console.log(err)
                 expect(err).toHaveProperty(
                     'message',
                     'Returned error: unsupported interface'
