@@ -10,7 +10,7 @@ describe('TestCases of Transaction API', () => {
     const provider = newProvider()
     const wallet = new ethers.Wallet(ST_ACCOUNT_4.privateKey, provider)
 
-    describe('test tx correctly replaced in tx_pool ', () => {
+    describe('test tx correctly replaced in tx_pool queued', () => {
         test('tx with same nonce, gas_price increase', async () => {
             const wallet_random = ethers.Wallet.createRandom()
             const addressTo = await wallet_random.getAddress()
@@ -21,7 +21,7 @@ describe('TestCases of Transaction API', () => {
                 // Create tx object
                 const tx = {
                     chainId: '1356',
-                    nonce: nonce + 1,
+                    nonce: nonce + i,
                     gasLimit: 21000,
                     gasPrice: 10000000000000 * i,
                     to: addressTo,
@@ -42,30 +42,55 @@ describe('TestCases of Transaction API', () => {
         })
     })
 
-    describe('test eth_sendRawTransaction ', () => {
-        test('transfer AXM', async () => {
+    describe('test tx correctly replaced in tx_pool pending ', () => {
+        test('tx with correct nonce increase', async () => {
             const wallet_random = ethers.Wallet.createRandom()
             const addressTo = await wallet_random.getAddress()
             const nonce = await provider.getTransactionCount(wallet.address)
             console.log('nonce is', nonce)
             console.log('transfer AXM from', wallet.address, 'to', addressTo)
-            // Create tx object
-            const tx = {
-                chainId: '1356',
-                nonce: nonce + 1,
-                gasLimit: 21000,
-                gasPrice: ethers.parseUnits('20000', 'gwei'),
-                to: addressTo,
-                value: ethers.parseEther('1')
+            for (let i = 0; i < 100; i++) {
+                // Create tx object
+                let tx = {
+                    chainId: '1356',
+                    nonce: nonce + i,
+                    gasLimit: 21000,
+                    gasPrice: 10000000000000 * (i + 1),
+                    to: addressTo,
+                    value: ethers.parseEther('1')
+                }
+                // signTx
+                let singnedTx = await wallet.signTransaction(tx)
+                // sendTx
+                let res = await request('eth_sendRawTransaction', [singnedTx])
+                console.log('res is :', res)
+                expect(JSON.stringify(res.result)).toMatch(/0x[0-9a-fA-F]+/)
+                let res2 = await request('txpool_content')
+                console.log('res2 is :', res2)
+                // Confirm the tx was correctly replaced
+                expect(JSON.stringify(res2.result.pending)).toMatch(res.result)
+
+                // send another tx with same nonce
+                let tx2 = {
+                    chainId: '1356',
+                    nonce: nonce + i,
+                    gasLimit: 21000,
+                    gasPrice: 10000000000000 * 2 * (i + 1),
+                    to: addressTo,
+                    value: ethers.parseEther('1')
+                }
+                // signTx
+                let singnedTx2 = await wallet.signTransaction(tx2)
+                // sendTx
+                let res3 = await request('eth_sendRawTransaction', [singnedTx2])
+                console.log('res3 is :', res3)
+                expect(JSON.stringify(res3.result)).toMatch(/0x[0-9a-fA-F]+/)
+                let res4 = await request('txpool_content')
+                console.log('res4 is :', res4)
+                // Confirm the tx was correctly replaced
+                expect(JSON.stringify(res4.result.pending)).toMatch(res3.result)
+                expect(res4.result.readyTxCount).toEqual(i + 1)
             }
-            // Signtx - wait for receipt
-            const singnedTx = await wallet.signTransaction(tx)
-            let res = await request('eth_sendRawTransaction', [singnedTx])
-            console.log('res is :', res)
-            let res2 = await request('txpool_content')
-            console.log('res2 is :', res2)
-            expect(res2.result.notReadyTxCount).toEqual(1)
-            //expect(JSON.stringify(res.error)).toMatch('verify tx err')
         })
     })
 })
