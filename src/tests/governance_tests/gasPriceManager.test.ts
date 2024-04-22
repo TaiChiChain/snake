@@ -28,10 +28,7 @@ describe('TestCases for gas price manager', () => {
         'utf8'
     )
     let gasExtraArgs = {
-        MaxGasPrice: 20000000000000,
-        MinGasPrice: 1000000000000,
-        InitGasPrice: 1000000000000,
-        GasChangeRateValue: 1000
+        MinGasPrice: 100000000000
     }
     let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
     describe('test proposal to change gas price ', () => {
@@ -77,14 +74,10 @@ describe('TestCases for gas price manager', () => {
                 wallet
             )
 
-            const result_2 = await contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_2 = await contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
                 result_2.hash
@@ -99,14 +92,10 @@ describe('TestCases for gas price manager', () => {
                 abi,
                 wallet
             )
-            const result_3 = await contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_3 = await contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
                 result_3.hash
@@ -122,18 +111,14 @@ describe('TestCases for gas price manager', () => {
                 wallet
             )
             try {
-                const result_4 = await contract.vote(
-                    obj.ID,
-                    0,
-                    {
-                        gasPrice: 10000000000000,
-                        gasLimit: 300000
-                    }
-                )
+                const result_4 = await contract.vote(obj.ID, 0, {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                })
                 await result_4.wait()
                 expect(true).toBe(false)
             } catch (error: any) {
-                expect(error.message).toMatch('transaction execution reverted');
+                expect(error.message).toMatch('transaction execution reverted')
             }
 
             console.log('5. admin1 query epochInfo')
@@ -146,17 +131,8 @@ describe('TestCases for gas price manager', () => {
 
             const result_6 = await contract_epoch.nextEpoch()
             expect(result_6.FinanceParams.StartGasPriceAvailable).toBe(true)
-            expect(result_6.FinanceParams.GasChangeRateValue).toEqual(
-                BigInt(gasExtraArgs.GasChangeRateValue)
-            )
-            expect(result_6.FinanceParams.MaxGasPrice).toEqual(
-                BigInt(gasExtraArgs.MaxGasPrice)
-            )
             expect(result_6.FinanceParams.MinGasPrice).toEqual(
                 BigInt(gasExtraArgs.MinGasPrice)
-            )
-            expect(result_6.FinanceParams.StartGasPrice).toEqual(
-                BigInt(gasExtraArgs.InitGasPrice)
             )
         })
 
@@ -188,7 +164,7 @@ describe('TestCases for gas price manager', () => {
             }
         })
 
-        test('admin post a proposal to change gas price with error args (max < min)', async () => {
+        test('admin post a proposal to change gas price with error min args ', async () => {
             console.log('1. admin1 post a proposal to change gas price')
             let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
             let contract = new ethers.Contract(
@@ -198,10 +174,7 @@ describe('TestCases for gas price manager', () => {
             )
 
             let gasExtraArgs = {
-                MaxGasPrice: 20000000000,
-                MinGasPrice: 2000000000000,
-                InitGasPrice: 5000000000000,
-                GasChangeRateValue: 1000
+                MinGasPrice: -100000000000000
             }
             let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
 
@@ -225,7 +198,7 @@ describe('TestCases for gas price manager', () => {
             }
         })
 
-        test('admin post a proposal to change gas price with error args (max < init )', async () => {
+        test('admin post a proposal to change gas price with error args (MinGasPrice is string )', async () => {
             console.log('1. admin1 post a proposal to change gas price')
             let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
             let contract = new ethers.Contract(
@@ -235,158 +208,7 @@ describe('TestCases for gas price manager', () => {
             )
 
             let gasExtraArgs = {
-                MaxGasPrice: 20000000000000,
-                MinGasPrice: 2000000000000,
-                InitGasPrice: 5000000000000000,
-                GasChangeRateValue: 1000
-            }
-            let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
-
-            try {
-                let propose = await contract.propose(
-                    PROPOSAL_TYPE_GAS_PRICE_UPDATE,
-                    'test change gas price',
-                    'test change gas price',
-                    1000000,
-                    gasArgs,
-                    {
-                        gasPrice: 10000000000000,
-                        gasLimit: 300000
-                    }
-                )
-                await propose.wait()
-                expect(true).toBe(false)
-            } catch (error: any) {
-                //console.log('error is:', error.message)
-                expect(error.message).toMatch('transaction execution reverted')
-            }
-        })
-
-        test('admin post a proposal to change gas price with error args (min > init )', async () => {
-            console.log('1. admin1 post a proposal to change gas price')
-            let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
-            let contract = new ethers.Contract(
-                ST_GASPRICE_MANAGER_ADDRESS,
-                abi,
-                wallet
-            )
-
-            let gasExtraArgs = {
-                MaxGasPrice: 20000000000000,
-                MinGasPrice: 2000000000000,
-                InitGasPrice: 500000000000,
-                GasChangeRateValue: 1000
-            }
-            let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
-
-            try {
-                let propose = await contract.propose(
-                    PROPOSAL_TYPE_GAS_PRICE_UPDATE,
-                    'test change gas price',
-                    'test change gas price',
-                    1000000,
-                    gasArgs,
-                    {
-                        gasPrice: 10000000000000,
-                        gasLimit: 300000
-                    }
-                )
-                await propose.wait()
-                expect(true).toBe(false)
-            } catch (error: any) {
-                //console.log('error is:', error.message)
-                expect(error.message).toMatch('transaction execution reverted')
-            }
-        })
-
-        test('admin post a proposal to change gas price with error args (max&min&init < 0 )', async () => {
-            console.log('1. admin1 post a proposal to change gas price')
-            let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
-            let contract = new ethers.Contract(
-                ST_GASPRICE_MANAGER_ADDRESS,
-                abi,
-                wallet
-            )
-
-            let gasExtraArgs = {
-                MaxGasPrice: -10000000000,
-                MinGasPrice: -100000000000000,
-                InitGasPrice: -500000000000,
-                GasChangeRateValue: 1000
-            }
-            let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
-
-            try {
-                let propose = await contract.propose(
-                    PROPOSAL_TYPE_GAS_PRICE_UPDATE,
-                    'test change gas price',
-                    'test change gas price',
-                    1000000,
-                    gasArgs,
-                    {
-                        gasPrice: 10000000000000,
-                        gasLimit: 300000
-                    }
-                )
-                await propose.wait()
-                expect(true).toBe(false)
-            } catch (error: any) {
-                //console.log('error is:', error.message)
-                expect(error.message).toMatch('transaction execution reverted')
-            }
-        })
-
-        test('admin post a proposal to change gas price with error args (ChangeRate < 0 )', async () => {
-            console.log('1. admin1 post a proposal to change gas price')
-            let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
-            let contract = new ethers.Contract(
-                ST_GASPRICE_MANAGER_ADDRESS,
-                abi,
-                wallet
-            )
-
-            let gasExtraArgs = {
-                MaxGasPrice: 10000000000000,
-                MinGasPrice: 100000000000,
-                InitGasPrice: 500000000000,
-                GasChangeRateValue: -1000
-            }
-            let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
-
-            try {
-                let propose = await contract.propose(
-                    PROPOSAL_TYPE_GAS_PRICE_UPDATE,
-                    'test change gas price',
-                    'test change gas price',
-                    1000000,
-                    gasArgs,
-                    {
-                        gasPrice: 10000000000000,
-                        gasLimit: 300000
-                    }
-                )
-                await propose.wait()
-                expect(true).toBe(false)
-            } catch (error: any) {
-                //console.log('error is:', error.message)
-                expect(error.message).toMatch('transaction execution reverted')
-            }
-        })
-
-        test('admin post a proposal to change gas price with error args (ChangeRate is string )', async () => {
-            console.log('1. admin1 post a proposal to change gas price')
-            let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
-            let contract = new ethers.Contract(
-                ST_GASPRICE_MANAGER_ADDRESS,
-                abi,
-                wallet
-            )
-
-            let gasExtraArgs = {
-                MaxGasPrice: 10000000000000,
-                MinGasPrice: 100000000000,
-                InitGasPrice: 500000000000,
-                GasChangeRateValue: '1000'
+                MinGasPrice: '100000000000'
             }
             let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
 
@@ -420,10 +242,7 @@ describe('TestCases for gas price manager', () => {
             )
 
             let gasExtraArgs = {
-                MaxGasPrice: 10000000000000,
-                MinGasPrice: 1000000000000,
-                InitGasPrice: 1500000000000,
-                GasChangeRateValue: 1000
+                MinGasPrice: 200000000000
             }
             let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
 
@@ -476,14 +295,10 @@ describe('TestCases for gas price manager', () => {
                 wallet
             )
 
-            const result_2 = await contract.vote(
-                obj.ID,
-                1,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_2 = await contract.vote(obj.ID, 1, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
                 result_2.hash
@@ -498,14 +313,10 @@ describe('TestCases for gas price manager', () => {
                 abi,
                 wallet
             )
-            const result_3 = await contract.vote(
-                obj.ID,
-                1,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_3 = await contract.vote(obj.ID, 1, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
                 result_3.hash
@@ -522,6 +333,10 @@ describe('TestCases for gas price manager', () => {
                 abi,
                 wallet
             )
+            let gasExtraArgs = {
+                MinGasPrice: 300000000000
+            }
+            let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
             try {
                 let propose = await contract.propose(
                     PROPOSAL_TYPE_GAS_PRICE_UPDATE,
@@ -550,6 +365,10 @@ describe('TestCases for gas price manager', () => {
                 abi,
                 wallet
             )
+            let gasExtraArgs = {
+                MinGasPrice: 400000000000
+            }
+            let gasArgs = stringToUint8Array(JSON.stringify(gasExtraArgs))
             try {
                 let propose = await contract.propose(
                     PROPOSAL_TYPE_GAS_PRICE_UPDATE,
