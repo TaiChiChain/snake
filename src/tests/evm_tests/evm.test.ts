@@ -1,5 +1,5 @@
 import {test, expect, describe} from '@jest/globals'
-import {newRpcClient} from '../../utils/rpc'
+import {newRpcClient, request} from '../../utils/rpc'
 import {ContractUtils} from '../../utils/contract'
 import {ST_ACCOUNT_1} from '../../utils/accounts_static'
 import {
@@ -144,7 +144,6 @@ describe('test evm context', () => {
         expect(value).toBe(0)
     })
 
-    /*
     test('test tx.gasprice', async () => {
         const address = await utils.deploy(ST_EVM_CONTRACT_NAME)
         const receipt = await utils.call(
@@ -152,11 +151,13 @@ describe('test evm context', () => {
             address,
             'txGasprice'
         )
-        const gasprice = client.utils.hexToNumber(receipt.logs[0].data)
-        expect(gasprice).toBeGreaterThanOrEqual(BigInt(1000 * 1e9))
-        expect(gasprice).toBeLessThanOrEqual(BigInt(10000 * 1e9))
+
+        const evm_gasprice = client.utils.hexToNumber(receipt.logs[0].data)
+        const tx = await request('eth_getTransactionByHash', [
+            receipt.transactionHash
+        ])
+        expect(evm_gasprice).toBe(client.utils.hexToNumber(tx.result.gasPrice))
     })
-    */
 
     test('test tx.origin', async () => {
         const address = await utils.deploy(ST_EVM_CONTRACT_NAME)
