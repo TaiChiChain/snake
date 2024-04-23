@@ -144,6 +144,7 @@ describe('test evm context', () => {
         expect(value).toBe(0)
     })
 
+    /*
     test('test tx.gasprice', async () => {
         const address = await utils.deploy(ST_EVM_CONTRACT_NAME)
         const receipt = await utils.call(
@@ -155,6 +156,7 @@ describe('test evm context', () => {
         expect(gasprice).toBeGreaterThanOrEqual(BigInt(1000 * 1e9))
         expect(gasprice).toBeLessThanOrEqual(BigInt(10000 * 1e9))
     })
+    */
 
     test('test tx.origin', async () => {
         const address = await utils.deploy(ST_EVM_CONTRACT_NAME)

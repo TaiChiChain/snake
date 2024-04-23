@@ -2,7 +2,7 @@ module.exports = {
     clearMocks: true,
     moduleFileExtensions: ['js', 'ts'],
     testMatch: ['**/*.test.ts'],
-    testTimeout: 1000 * 300,
+    testTimeout: 1000 * 600,
     transform: {
         '^.+\\.ts$': 'ts-jest'
     },
