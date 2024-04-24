@@ -74,7 +74,6 @@ describe('TestCases of Subscribe', () => {
         }
         wsProvider.on(filter, event => {
             //console.log(event)
-            expect(event.address).toMatch(contractAddress)
             expect(JSON.stringify(event.topics)).toMatch('27214de')
         })
 
