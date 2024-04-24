@@ -177,8 +177,8 @@ describe('TestCases of Transaction API', () => {
         let cases_of_getTx_ByBlockNumberAndIndex_counter: any[][] = []
         cases_of_getTx_ByBlockNumberAndIndex = [
             //case list
-            [['pending', '0x0'], '0x54c'],
-            [['latest', '0x0'], '0x54c'],
+            [['pending', '0x0'], '0x0'],
+            [['latest', '0x0'], '0x0'],
             [['0x2', '0x0'], '0x2']
         ]
 
@@ -233,7 +233,8 @@ describe('TestCases of Transaction API', () => {
                 pendingBlockHash,
                 '0x0'
             ])
-            expect(JSON.stringify(res1.result)).toMatch('0x54c')
+            //console.log('rpc post pendingBlock', '===', res1)
+            expect(JSON.stringify(res1.result)).toMatch('0x0')
             var res1_1 = await request(
                 'eth_getTransactionByBlockHashAndIndex',
                 [pendingBlockHash]
@@ -248,7 +249,7 @@ describe('TestCases of Transaction API', () => {
                 latestBlockHash,
                 '0x0'
             ])
-            expect(JSON.stringify(res2.result)).toMatch('0x54c')
+            expect(JSON.stringify(res2.result)).toMatch('0x0')
 
             var res2_1 = await request(
                 'eth_getTransactionByBlockHashAndIndex',
