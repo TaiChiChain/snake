@@ -22,8 +22,8 @@ enum ProposalStrategy {
 
 enum ProposalStatus {
     Voting,
-	Approved,
-	Rejected
+    Approved,
+    Rejected
 }
 
 struct Proposal {
@@ -41,16 +41,41 @@ struct Proposal {
     bytes Extra;
     uint64 CreatedBlockNumber;
     uint64 EffectiveBlockNumber;
+    bool ExecuteSuccess;
+    string ExecuteFailedMsg;
 }
 
 // Governance contract is a system contract that needn't be deployed
 // this is only used for generate governance ABI
 interface Governance {
-    function propose(ProposalType proposalType, string calldata  title, string calldata desc, uint64 blockNumber, bytes calldata extra) external;
+    // TODO: Remain compatible with before, update proposal 'bytes' to 'Proposal'
+    event Propose(
+        uint64 indexed proposalID,
+        ProposalType indexed proposalType,
+        address indexed proposer,
+        bytes proposal
+    );
+
+    event Vote(
+        uint64 indexed proposalID,
+        ProposalType indexed proposalType,
+        address indexed proposer,
+        bytes proposal
+    );
+
+    function propose(
+        ProposalType proposalType,
+        string calldata title,
+        string calldata desc,
+        uint64 deadlineBlockNumber,
+        bytes calldata extra
+    ) external;
 
     function vote(uint64 proposalID, VoteResult voteResult) external;
 
-    function proposal(uint64 proposalID) external view returns (Proposal calldata proposal);
+    function proposal(
+        uint64 proposalID
+    ) external view returns (Proposal calldata proposal);
 
     function getLatestProposalID() external view returns (uint64);
 }

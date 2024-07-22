@@ -1,6 +1,7 @@
 const path = require('path')
 
 const ST_CONTRACT_DIR = path.dirname(__dirname) + '/contracts/'
+const ST_SCRIPTS_DIR = path.dirname(__dirname) + '/scripts/'
 
 const ST_STORAGE_FILENAME = 'storage.sol'
 const ST_STORAGE_CONTRACT_NAME = 'EIP1153Skeleton'
@@ -37,6 +38,7 @@ const BASIC_USER = 0
 
 module.exports = {
     ST_CONTRACT_DIR,
+    ST_SCRIPTS_DIR,
     ST_STORAGE_FILENAME,
     ST_STORAGE_CONTRACT_NAME,
     ST_EVM_FILENAME,

@@ -1,6 +1,7 @@
 .vscode
 .idea
-
+src/scripts/new-nodes
+src/scripts/*.info
 node_modules
 coverage
 lib

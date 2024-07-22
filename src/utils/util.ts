@@ -1,3 +1,5 @@
+const util = require('util')
+const child_process = require('child_process')
 export function stringToByte(str: string) {
     const bytes = []
     let c: number
@@ -70,4 +72,29 @@ export function getValue(str: string, key: any) {
 
 export async function waitAsync(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+export function isString(value: unknown): value is string {
+    return typeof value === 'string'
+}
+
+export async function runShellScript(script: any, args: any) {
+    const exec = util.promisify(child_process.exec)
+    return new Promise((resolve, reject) => {
+        exec(
+            `bash ${script} ${args}`,
+            (error: any, stdout: any, stderr: any) => {
+                if (error) {
+                    console.error(`exec error info: ${error}`)
+                    return
+                }
+
+                if (stderr) {
+                    console.log(`stderr info: ${stderr}`)
+                    return
+                }
+                resolve(stdout ? stdout : stderr)
+            }
+        )
+    })
 }

@@ -1,8 +1,73 @@
 [
   {
+    "anonymous": false,
+    "inputs":
+    [
+      {
+        "indexed": true,
+        "internalType": "uint64",
+        "name": "proposalID",
+        "type": "uint64"
+      },
+      {
+        "indexed": true,
+        "internalType": "enum ProposalType",
+        "name": "proposalType",
+        "type": "uint8"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "proposal",
+        "type": "bytes"
+      }
+    ],
+    "name": "Propose",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs":
+    [
+      {
+        "indexed": true,
+        "internalType": "uint64",
+        "name": "proposalID",
+        "type": "uint64"
+      },
+      {
+        "indexed": true,
+        "internalType": "enum ProposalType",
+        "name": "proposalType",
+        "type": "uint8"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "proposal",
+        "type": "bytes"
+      }
+    ],
+    "name": "Vote",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "getLatestProposalID",
-    "outputs": [
+    "outputs":
+    [
       {
         "internalType": "uint64",
         "name": "",
@@ -13,7 +78,8 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs":
+    [
       {
         "internalType": "uint64",
         "name": "proposalID",
@@ -21,9 +87,11 @@
       }
     ],
     "name": "proposal",
-    "outputs": [
+    "outputs":
+    [
       {
-        "components": [
+        "components":
+        [
           {
             "internalType": "uint64",
             "name": "ID",
@@ -55,7 +123,7 @@
             "type": "string"
           },
           {
-            "internalType": "string",
+            "internalType": "uint64",
             "name": "BlockNumber",
             "type": "uint64"
           },
@@ -93,6 +161,16 @@
             "internalType": "uint64",
             "name": "EffectiveBlockNumber",
             "type": "uint64"
+          },
+          {
+            "internalType": "bool",
+            "name": "ExecuteSuccess",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "ExecuteFailedMsg",
+            "type": "string"
           }
         ],
         "internalType": "struct Proposal",
@@ -104,7 +182,8 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs":
+    [
       {
         "internalType": "enum ProposalType",
         "name": "proposalType",
@@ -122,7 +201,7 @@
       },
       {
         "internalType": "uint64",
-        "name": "blockNumber",
+        "name": "deadlineBlockNumber",
         "type": "uint64"
       },
       {
@@ -137,7 +216,8 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs":
+    [
       {
         "internalType": "uint64",
         "name": "proposalID",
