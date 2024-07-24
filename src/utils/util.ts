@@ -89,7 +89,7 @@ export function turnLogs(log: {topics: ReadonlyArray<string>; data: string}) {
 
 export async function runShellScript(script: any, args: any) {
     const exec = util.promisify(child_process.exec)
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         exec(
             `bash ${script} ${args}`,
             (error: any, stdout: any, stderr: any) => {
