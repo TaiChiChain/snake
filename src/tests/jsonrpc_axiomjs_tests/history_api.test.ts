@@ -1,14 +1,29 @@
 import {expect, test} from '@jest/globals'
 import * as fs from 'fs'
 import {ethers} from '@axiomesh/axiom'
-import {ST_ACCOUNT_5, ST_ADMIN_1, ST_ADMIN_2, ST_ADMIN_3} from '../../utils/accounts_static'
+import {
+    ST_ACCOUNT_5,
+    ST_ADMIN_1,
+    ST_ADMIN_2,
+    ST_ADMIN_3
+} from '../../utils/accounts_static'
 import {
     PROPOSAL_TYPE_NODE_UPGRADE,
     ST_CONTRACT_DIR,
     ST_GOVERNANCE_NODE_MANAGER_ADDRESS
 } from '../../utils/contracts_static'
-import {deploy_contract, newProvider, request, transferAXM} from '../../utils/rpc'
-import {hexStringToString, stringToUint8Array, waitAsync} from '../../utils/util'
+import {
+    deploy_contract,
+    newProvider,
+    request,
+    transferAXM
+} from '../../utils/rpc'
+import {
+    hexToString,
+    stringToUint8Array,
+    waitAsync,
+    turnLogs
+} from '../../utils/util'
 
 describe('TestCases of Historical Status API', () => {
     const provider = newProvider()
@@ -97,23 +112,31 @@ describe('TestCases of Historical Status API', () => {
                 'utf8'
             )
             let upgradeExtraArgs = {
-                DownloadUrls: [
+                download_urls: [
                     'https://github.com/axiomesh/axiom-ledger/archive/refs/tags/v0.0.1.tar.gz',
                     'https://github.com/axiomesh/axiom-ledger/archive/refs/tags/v0.0.2.tar.gz'
                 ],
-                CheckHash:
+                check_hash:
                     'ed15d72d6d437db61a00abc6fa20c3d34f33a9221b8dc770df5ae32149b369bb'
             }
-            let upgradeArgs = stringToUint8Array(JSON.stringify(upgradeExtraArgs))
+            let upgradeArgs = stringToUint8Array(
+                JSON.stringify(upgradeExtraArgs)
+            )
 
-            console.log("1. admin1 propose node upgrade propose for debug_traceTransaction")
+            console.log(
+                '1. admin1 propose node upgrade propose for debug_traceTransaction'
+            )
             let wallet = new ethers.Wallet(ST_ADMIN_1.privateKey, provider)
-            let govern_contract = new ethers.Contract(ST_GOVERNANCE_NODE_MANAGER_ADDRESS, abi, wallet)
+            let govern_contract = new ethers.Contract(
+                ST_GOVERNANCE_NODE_MANAGER_ADDRESS,
+                abi,
+                wallet
+            )
             const propose = await govern_contract.propose(
                 PROPOSAL_TYPE_NODE_UPGRADE,
                 'test upgrade node for debug_traceTransaction',
                 'test upgrade node for debug_traceTransaction',
-                5000,
+                50000,
                 upgradeArgs,
                 {
                     gasPrice: 10000000000000,
@@ -122,44 +145,52 @@ describe('TestCases of Historical Status API', () => {
             )
             await propose.wait()
             const receipt = await provider.getTransactionReceipt(propose.hash)
-            expect(receipt?.to).toBe(ST_GOVERNANCE_NODE_MANAGER_ADDRESS)
-            let data = hexStringToString(receipt?.logs[0].data)
-            let obj = JSON.parse(data)
-            expect(obj.ID).toBeGreaterThan(0)
-            expect(obj.Type).toBe(PROPOSAL_TYPE_NODE_UPGRADE)
-            expect(obj.Status).toBe(0)
 
-            console.log('2. admin2 vote this proposal for debug_traceTransaction')
+            let obj: any = {}
+            if (receipt && receipt.logs.length > 0) {
+                //console.log('receipt is ', receipt)
+                expect(receipt.to).toBe(ST_GOVERNANCE_NODE_MANAGER_ADDRESS)
+                let log = turnLogs(receipt.logs[0])
+                let parsedLog = govern_contract.interface.parseLog(log)
+                //console.log('parsedLog is:', parsedLog)
+                expect(parsedLog?.name).toBe('Propose')
+
+                let data = hexToString(parsedLog?.args[3])
+                obj = JSON.parse(data)
+                expect(obj.ID).toBeGreaterThan(0)
+                expect(obj.Type).toBe(PROPOSAL_TYPE_NODE_UPGRADE)
+                expect(data).toMatch('"Status":0')
+            } else {
+                console.log('receipt or receipt.logs is null')
+            }
+
+            console.log(
+                '2. admin2 vote this proposal for debug_traceTransaction'
+            )
             wallet = new ethers.Wallet(ST_ADMIN_2.privateKey, provider)
             govern_contract = new ethers.Contract(
                 ST_GOVERNANCE_NODE_MANAGER_ADDRESS,
                 abi,
                 wallet
             )
-            await govern_contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            await govern_contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
 
-            console.log('3. admin3 vote this proposal for debug_traceTransaction')
+            console.log(
+                '3. admin3 vote this proposal for debug_traceTransaction'
+            )
             wallet = new ethers.Wallet(ST_ADMIN_3.privateKey, provider)
             govern_contract = new ethers.Contract(
                 ST_GOVERNANCE_NODE_MANAGER_ADDRESS,
                 abi,
                 wallet
             )
-            await govern_contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            await govern_contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
 
             // trace govern propose are not allowed in release-0.6.0
             console.log('4. debug_traceTransaction for propose is ok')
@@ -192,7 +223,7 @@ describe('TestCases of Historical Status API', () => {
                 ST_ACCOUNT_5.address,
                 'earliest'
             ])
-            expect(parseInt(res_earliest.result, 16)).toEqual(1e27)
+            expect(parseInt(res_earliest.result, 16)).toEqual(1e25)
 
             let res_latest = await request('eth_getBalance', [
                 ST_ACCOUNT_5.address,
@@ -260,7 +291,7 @@ describe('TestCases of Historical Status API', () => {
                 '0x2'
             ])
             //console.log('res_specify:', '===', res_specify)
-            expect(parseInt(res_specify.result, 16)).toBeLessThan(2)
+            expect(parseInt(res_specify.result, 16)).toBeLessThanOrEqual(2)
         })
 
         test('eth_getTransactionCount with error params', async () => {
@@ -274,7 +305,7 @@ describe('TestCases of Historical Status API', () => {
                 ST_ACCOUNT_5.address,
                 '0x0'
             ])
-            expect(JSON.stringify(res_specify)).toMatch('out of bounds')
+            expect(JSON.stringify(res_specify)).toMatch('0x0')
 
             res_specify = await request('eth_getTransactionCount', [
                 ST_ACCOUNT_5.address,

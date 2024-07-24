@@ -87,14 +87,10 @@ describe('TestCases for nodes manager', () => {
                 wallet
             )
 
-            const result_2 = await contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_2 = await contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
                 result_2.hash
@@ -109,14 +105,10 @@ describe('TestCases for nodes manager', () => {
                 abi,
                 wallet
             )
-            const result_3 = await contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_3 = await contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
                 result_3.hash
@@ -132,14 +124,10 @@ describe('TestCases for nodes manager', () => {
                 wallet
             )
             try {
-                const result_4 = await contract.vote(
-                    obj.ID,
-                    0,
-                    {
-                        gasPrice: 10000000000000,
-                        gasLimit: 300000
-                    }
-                )
+                const result_4 = await contract.vote(obj.ID, 0, {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                })
                 await result_4.wait()
             } catch (error: any) {
                 //console.log('error is:', error.message)
@@ -344,14 +332,10 @@ describe('TestCases for nodes manager', () => {
                 wallet
             )
 
-            const result_2 = await contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_2 = await contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_2.wait()
             const receipt_2 = await provider.getTransactionReceipt(
                 result_2.hash
@@ -366,14 +350,10 @@ describe('TestCases for nodes manager', () => {
                 abi,
                 wallet
             )
-            const result_3 = await contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_3 = await contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_3.wait()
             const receipt_3 = await provider.getTransactionReceipt(
                 result_3.hash
@@ -389,14 +369,10 @@ describe('TestCases for nodes manager', () => {
                 wallet
             )
             try {
-                const result_4 = await contract.vote(
-                    obj.ID,
-                    0,
-                    {
-                        gasPrice: 10000000000000,
-                        gasLimit: 300000
-                    }
-                )
+                const result_4 = await contract.vote(obj.ID, 0, {
+                    gasPrice: 10000000000000,
+                    gasLimit: 300000
+                })
                 await result_4.wait()
             } catch (error: any) {
                 //console.log('error is:', error.message)
@@ -466,14 +442,10 @@ describe('TestCases for nodes upgrade', () => {
             wallet
         )
 
-        const result_2 = await contract.vote(
-            obj.ID,
-            0,
-            {
-                gasPrice: 10000000000000,
-                gasLimit: 300000
-            }
-        )
+        const result_2 = await contract.vote(obj.ID, 0, {
+            gasPrice: 10000000000000,
+            gasLimit: 300000
+        })
         await result_2.wait()
         const receipt_2 = await provider.getTransactionReceipt(result_2.hash)
         data = hexToString(receipt_2?.logs[0].data)
@@ -486,14 +458,10 @@ describe('TestCases for nodes upgrade', () => {
             abi,
             wallet
         )
-        const result_3 = await contract.vote(
-            obj.ID,
-            0,
-            {
-                gasPrice: 10000000000000,
-                gasLimit: 300000
-            }
-        )
+        const result_3 = await contract.vote(obj.ID, 0, {
+            gasPrice: 10000000000000,
+            gasLimit: 300000
+        })
         await result_3.wait()
         const receipt_3 = await provider.getTransactionReceipt(result_3.hash)
         data = hexToString(receipt_3?.logs[0].data)
@@ -507,14 +475,10 @@ describe('TestCases for nodes upgrade', () => {
             wallet
         )
         try {
-            const result_4 = await contract.vote(
-                obj.ID,
-                0,
-                {
-                    gasPrice: 10000000000000,
-                    gasLimit: 300000
-                }
-            )
+            const result_4 = await contract.vote(obj.ID, 0, {
+                gasPrice: 10000000000000,
+                gasLimit: 300000
+            })
             await result_4.wait()
         } catch (error: any) {
             //console.log('error is:', error.message)

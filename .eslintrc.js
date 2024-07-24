@@ -41,6 +41,7 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-namespace': 'off', // 禁止使用自定义 TypeScript 模块和命名空间。
         '@typescript-eslint/no-var-requires': 0,
-        '@typescript-eslint/semi': 'off'
+        '@typescript-eslint/semi': 'off',
+        'no-console': 'off'
     }
 }
