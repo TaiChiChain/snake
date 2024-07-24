@@ -78,6 +78,15 @@ export function isString(value: unknown): value is string {
     return typeof value === 'string'
 }
 
+export function turnLogs(log: {topics: ReadonlyArray<string>; data: string}) {
+    const topics = log.topics.slice()
+    const data = log.data
+    return {
+        topics,
+        data
+    }
+}
+
 export async function runShellScript(script: any, args: any) {
     const exec = util.promisify(child_process.exec)
     return new Promise((resolve, reject) => {

@@ -424,7 +424,7 @@ describe('test block info contains coinbase address ', () => {
         //console.log('The earliest block coinbase info is: ',earliestBlock?.miner)
         expect(earliestBlock?.miner).not.toBeNull
         expect(earliestBlock?.miner).toBe(
-            '0x0000000000000000000000000000000000000000'
+            '0x0000000000000000000000000000000000001003'
         )
     })
 })

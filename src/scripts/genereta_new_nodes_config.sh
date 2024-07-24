@@ -66,7 +66,7 @@ function recordNewnodesConfig() {
     p2pId=$(echo "$nodeInfo" |grep p2p-id | awk {'print $2'})
     echo "######## $i #####record#####"
     nodeName=$(echo "node$i" | base64)
-cat << EOF >> "${CURRENT_PATH}"/new-nodes-"$starId"-"$endId"-"$recordTime".info
+cat << EOF >> "${CURRENT_PATH}"/new-nodes.info 
 export const node$i = {
     NodeId: '$p2pId',
     ConsensusPubkey: '$consensusPubkey',

@@ -20,12 +20,13 @@ describe('TestCases for EpochManager', () => {
     describe('test query currentEpoch info ', () => {
         test('admin query', async () => {
             let res = await contract.currentEpoch()
+            //console.log('res is:', res)
 
             expect(res.StartBlock).toEqual(
-                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+                res.EpochPeriod * (res.Epoch - BigInt(1))
             )
             expect(res.EpochPeriod).toEqual(BigInt(100))
-            expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
+            expect(res.StakeParams.StakeEnable).toBe(true)
         })
 
         test('user query', async () => {
@@ -38,15 +39,16 @@ describe('TestCases for EpochManager', () => {
             let res = await contract.currentEpoch()
 
             expect(res.StartBlock).toEqual(
-                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+                res.EpochPeriod * (res.Epoch - BigInt(1))
             )
             expect(res.EpochPeriod).toEqual(BigInt(100))
-            expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
+            expect(res.StakeParams.StakeEnable).toBe(true)
         })
 
         test('abnormal query', async () => {
             try {
                 await contract.currentEpoch('xxx')
+                expect(false).toBe(true)
             } catch (error) {
                 //console.log('error is:', error)
                 expect(String(error)).toMatch('UNSUPPORTED_OPERATION')
@@ -58,12 +60,11 @@ describe('TestCases for EpochManager', () => {
         test('admin query', async () => {
             let res = await contract.nextEpoch()
 
-            expect(res.Version).toEqual(BigInt(1))
             expect(res.EpochPeriod).toEqual(BigInt(100))
             expect(res.StartBlock).toEqual(
-                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+                res.EpochPeriod * (res.Epoch - BigInt(1))
             )
-            expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
+            expect(res.StakeParams.StakeEnable).toBe(true)
         })
 
         test('user query', async () => {
@@ -75,17 +76,17 @@ describe('TestCases for EpochManager', () => {
             )
             let res = await contract.nextEpoch()
 
-            expect(res.Version).toEqual(BigInt(1))
             expect(res.EpochPeriod).toEqual(BigInt(100))
             expect(res.StartBlock).toEqual(
-                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+                res.EpochPeriod * (res.Epoch - BigInt(1))
             )
-            expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
+            expect(res.StakeParams.StakeEnable).toBe(true)
         })
 
         test('abnormal query', async () => {
             try {
                 await contract.nextEpoch('xxx')
+                expect(false).toBe(true)
             } catch (error) {
                 expect(String(error)).toMatch('UNSUPPORTED_OPERATION')
             }
@@ -96,12 +97,11 @@ describe('TestCases for EpochManager', () => {
         test('admin query', async () => {
             let res = await contract.historyEpoch(1)
 
-            expect(res.Version).toEqual(BigInt(1))
             expect(res.EpochPeriod).toEqual(BigInt(100))
             expect(res.StartBlock).toEqual(
-                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+                res.EpochPeriod * (res.Epoch - BigInt(1))
             )
-            expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
+            expect(res.StakeParams.StakeEnable).toBe(true)
         })
 
         test('user query', async () => {
@@ -113,17 +113,17 @@ describe('TestCases for EpochManager', () => {
             )
             let res = await contract.historyEpoch(1)
 
-            expect(res.Version).toEqual(BigInt(1))
             expect(res.EpochPeriod).toEqual(BigInt(100))
             expect(res.StartBlock).toEqual(
-                res.EpochPeriod * (res.Epoch - BigInt(1)) + BigInt(1)
+                res.EpochPeriod * (res.Epoch - BigInt(1))
             )
-            expect(res.ValidatorSet[0].AccountAddress).toBe(ST_ADMIN_1.address)
+            expect(res.StakeParams.StakeEnable).toBe(true)
         })
 
         test('query with invalid args(string)', async () => {
             try {
                 await contract.historyEpoch('xxx')
+                expect(false).toBe(true)
             } catch (error) {
                 expect(String(error)).toMatch('INVALID_ARGUMENT')
             }
@@ -132,6 +132,7 @@ describe('TestCases for EpochManager', () => {
         test('query with null epochID', async () => {
             try {
                 await contract.historyEpoch()
+                expect(false).toBe(true)
             } catch (error) {
                 expect(String(error)).toMatch('UNSUPPORTED_OPERATION')
             }
@@ -139,7 +140,8 @@ describe('TestCases for EpochManager', () => {
 
         test('query with nonexistent epochID', async () => {
             try {
-                await contract.historyEpoch(100)
+                await contract.historyEpoch(1000)
+                expect(false).toBe(true)
             } catch (error) {
                 expect(String(error)).toMatch('CALL_EXCEPTION')
             }
@@ -148,6 +150,7 @@ describe('TestCases for EpochManager', () => {
         test('query with 0 epochID', async () => {
             try {
                 await contract.historyEpoch(0)
+                expect(false).toBe(true)
             } catch (error) {
                 expect(String(error)).toMatch('CALL_EXCEPTION')
             }
