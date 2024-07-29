@@ -109,11 +109,8 @@ describe('test selfdestruct on creation', () => {
             contractAddress
         )
         // Checking if the contract code is removed
-        try {
-            await provider.getCode(contractAddress)
-            expect(true).toBe(false)
-        } catch (error: any) {
-            expect(error.message).toMatch('method handler crashed')
-        }
+        const code = await provider.getCode(contractAddress)
+        //console.log('code is :', code)
+        expect(code).toBe('0x')
     })
 })
