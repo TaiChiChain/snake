@@ -24,4 +24,5 @@ function propose_node_join() {
   #echo "proposal hash: $proposal_hash"
 }
 
+
 propose_node_join
