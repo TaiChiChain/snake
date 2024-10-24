@@ -13,6 +13,11 @@ import {ST_ADMIN_1} from '../utils/accounts_static'
 
 export const ST_URL = process.env.ST_URL || 'http://127.0.0.1:8881'
 export const WS_URL = process.env.WS_URL || 'ws://127.0.0.1:9991'
+export const BUNDLER_URL ='http://127.0.0.1:4337'
+export const ST_PAYMASTER_URL = 'http://127.0.0.1:10088'
+
+export const SIGNER_KEY = '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
+
 
 export const provider = new ethers.JsonRpcProvider(ST_URL)
 
@@ -124,6 +129,26 @@ export async function deploy_contract(
 export async function transferAXM(
     wallet: Wallet,
     toAddr: Address,
+    nonce: number,
+    amount: string
+): Promise<ethers.TransactionResponse> {
+    //console.log('transfer AXM from', wallet.address, 'to', toAddr)
+    // Create tx object
+    const tx = {
+        to: toAddr,
+        nonce: nonce,
+        value: ethers.parseEther(amount)
+    }
+    // Sign and send tx and wait for receipt
+    const receipt = await wallet.sendTransaction(tx)
+    await receipt.wait()
+    //console.log('Transaction successful with hash:', receipt.hash)
+    return receipt
+}
+
+export async function transferAXc(
+    wallet: Wallet,
+    toAddr: string,
     nonce: number,
     amount: string
 ): Promise<ethers.TransactionResponse> {

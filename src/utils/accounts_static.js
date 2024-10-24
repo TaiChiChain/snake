@@ -110,6 +110,8 @@ const ST_ACCOUNT_14 = {
     p2pId: '16Uiu2HAkx1o5fzWLdAobanvE6vqbf1XSbDSgCnid3AoqDGQYFVxo'
 }
 
+const ST_GUARDIAN='0x539193d0e19859d812e2d2b3763886CB200814d9'
+
 module.exports = {
     ST_ADMIN_1,
     ST_ADMIN_2,
@@ -128,5 +130,6 @@ module.exports = {
     ST_ACCOUNT_11,
     ST_ACCOUNT_12,
     ST_ACCOUNT_13,
-    ST_ACCOUNT_14
+    ST_ACCOUNT_14,
+    ST_GUARDIAN
 }

@@ -1,5 +1,6 @@
 const util = require('util')
 const child_process = require('child_process')
+const fs = require('fs');
 export function stringToByte(str: string) {
     const bytes = []
     let c: number
@@ -87,6 +88,30 @@ export function turnLogs(log: {topics: ReadonlyArray<string>; data: string}) {
     }
 }
 
+
+export function extractAddress(filePath:string) {
+    return new Promise((resolve, reject) => {
+        const rs = fs.createReadStream(filePath);
+        let address = null;
+
+        rs.on('data', (chunk: { toString: () => string; }) => {
+            const lines = chunk.toString().split('\n');
+            for (const line of lines) {
+                if (line.startsWith('Address:')) {
+                    address = line.split(':')[1].trim();
+                    rs.destroy(); // 找到地址后关闭流
+                    resolve(address);
+                    return;
+                }
+            }
+        });
+
+        rs.on('error', (err: string) => {
+            reject(err);
+        });
+    });
+}
+
 export async function runShellScript(script: any, args: any) {
     const exec = util.promisify(child_process.exec)
     return new Promise(resolve => {
@@ -95,14 +120,15 @@ export async function runShellScript(script: any, args: any) {
             (error: any, stdout: any, stderr: any) => {
                 if (error) {
                     console.error(`exec error info: ${error}`)
-                    return
+                    // return
                 }
 
                 if (stderr) {
                     console.log(`stderr info: ${stderr}`)
-                    return
+                    // return
                 }
                 resolve(stdout ? stdout : stderr)
+                // console.log("1111111111")
             }
         )
     })
