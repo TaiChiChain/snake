@@ -344,7 +344,7 @@ describe('AxiomWallet: transfer with password', () => {
 
     })
 
-    test.only("funding wallet with 100 AXC and 100 WETH", async () => {
+    test.only("funding wallet with 100 AXC and 100 WETH and 100 WUSDC and 100 WUSDT", async () => {
         const axcBalance = await viemPublicClient.getBalance({
             address: walletAddress,
         });
@@ -381,7 +381,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(wusdtBalance).toEqual(parseUnits("100", await wusdt.read.decimals()));
     });
 
-    test("estimate gas of AXC transfer", async () => {
+    test.only("estimate gas of AXC transfer", async () => {
         const gasEstimated = await axiomWallet.estimateTransfer(
             "0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013",
             parseEther("1")
@@ -394,7 +394,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test("transfer AXC", async () => {
+    test.only("transfer AXC", async () => {
         const axcBalanceBefore = await viemPublicClient.getBalance({
             address: walletAddress,
         });
@@ -411,20 +411,9 @@ describe('AxiomWallet: transfer with password', () => {
         expect(transactionHash).not.toEqual(zeroHash);
         expect(axcBalanceBefore).toBeGreaterThan(axcBalanceAfter + parseEther("1"));
 
-        // const receipt = await waitForTransactionReceipt(viemPublicClient,{hash:transactionHash as "0x${string}"})
-        //
-        // // const receipt_data = JSON.parse(receipt)
-        // const gasUsed = receipt.gasUsed
-        // console.log(gasUsed)
-        // const gasPrice = receipt.effectiveGasPrice
-        // console.log(gasPrice)
-        // const gas = gasPrice * gasUsed
-        // console.log(gas)
-        // expect(axcBalanceBefore).toEqual(axcBalanceAfter + parseEther("1") + gas);
-
     });
 
-    test.only("Can estimate gas of batch AXC transfer", async () => {
+    test.only("estimate gas of batch AXC transfer", async () => {
         const gasEstimated = await axiomWallet.estimateTransfer(
             [
                 "0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013",
@@ -440,7 +429,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test.only("Can transfer AXC in batches", async () => {
+    test.only("transfer AXC in batches", async () => {
         const axcBalanceBefore = await viemPublicClient.getBalance({
             address: walletAddress,
         });
@@ -458,7 +447,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(axcBalanceBefore).toBeGreaterThan(axcBalanceAfter + parseEther("2"));
     });
 
-    test.only("Can estimate gas of erc20-WETH transfer", async () => {
+    test.only("estimate gas of erc20-WETH transfer", async () => {
         // @ts-ignore
         const weth = await getContract({
             address: process.env.WETH as Address,
@@ -478,7 +467,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test.only("Can transfer erc20-WETH", async () => {
+    test.only("transfer erc20-WETH", async () => {
         // @ts-ignore
         const weth = await getContract({
             address: process.env.WETH as Address,
@@ -536,7 +525,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test.only("Can transfer erc20-WETH in batches", async () => {
+    test.only("transfer erc20-WETH in batches", async () => {
         // @ts-ignore
         const weth = await getContract({
             address: process.env.WETH as Address,
@@ -594,7 +583,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test.only("Can transfer erc20-WUSDC", async () => {
+    test.only("transfer erc20-WUSDC", async () => {
 
         // @ts-ignore
         const wusdc = await getContract({
@@ -655,7 +644,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test.only("Can transfer erc20-WUSDC in batches", async () => {
+    test.only("transfer erc20-WUSDC in batches", async () => {
         // @ts-ignore
         const wusdc = await getContract({
             address: process.env.WUSDC as Address,
@@ -713,7 +702,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test.only("Can transfer erc20-WUSDT", async () => {
+    test.only("transfer erc20-WUSDT", async () => {
 
         // @ts-ignore
         const wusdt = await getContract({
@@ -774,7 +763,7 @@ describe('AxiomWallet: transfer with password', () => {
         expect(gasEstimated).not.toEqual(BigInt(0));
     });
 
-    test.only("Can transfer erc20-WUSDT in batches", async () => {
+    test.only("transfer erc20-WUSDT in batches", async () => {
         // @ts-ignore
         const wusdt = await getContract({
             address: process.env.WUSDT as Address,

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
 
 CURRENT_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd)
 #echo $CURRENT_PATH
