@@ -18,7 +18,6 @@ export const ST_PAYMASTER_URL = 'http://127.0.0.1:10088'
 
 export const SIGNER_KEY = '0xb6477143e17f889263044f6cf463dc37177ac4526c4c39a7a344198457024a2f'
 
-
 export const provider = new ethers.JsonRpcProvider(ST_URL)
 
 export function newRpcClient() {

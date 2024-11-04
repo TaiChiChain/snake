@@ -269,7 +269,7 @@ describe('AxiomWallet: transfer with session key', () => {
             transport: http(ST_URL),
         });
 
-        axiomWallet = await AxiomWallet.fromPassword("12345", "12345", "0", ST_URL, BUNDLER_URL);
+        axiomWallet = await AxiomWallet.fromPassword("12345", "12345", "0");
         walletAddress = await axiomWallet.getAddress();
 
         const axcFundingTransaction = await viemWalletClient.sendTransaction({

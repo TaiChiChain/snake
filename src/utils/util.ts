@@ -112,16 +112,6 @@ export function extractAddress(filePath:string) {
             reject(err);
         });
     });
-
-export function extractAbiAndBytecode(jsonFilePath: string): {
-    abi: any
-    bytecode: any
-} {
-    const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'))
-    const abi = jsonData.abi || ''
-    const bytecode = jsonData.bytecode || ''
-    return {abi, bytecode}
-
 }
 
 export async function runShellScript(script: any, args: any) {

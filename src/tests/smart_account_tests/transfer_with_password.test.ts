@@ -17,7 +17,7 @@ import path from "path";
 import {
     ST_SCRIPTS_DIR, ST_DATA_DIR, ST_CONTRACT_DIR,ST_ACCOUNT_FACTORY,ST_ENTRY_POINT,ST_PAYMASTER
 } from '../../utils/contracts_static';
-import {extractAddress, runShellScript} from "../../utils/util";
+import {extractAddress,runShellScript} from "../../utils/util";
 
 import fs from "fs";
 import {AxiomWallet} from "axiomwallet/dist/cjs/src/axiomWallet";
@@ -270,7 +270,7 @@ describe('AxiomWallet: transfer with password', () => {
         });
 
 
-        axiomWallet = await AxiomWallet.fromPassword("12345", "12345", "0", ST_URL, BUNDLER_URL);
+        axiomWallet = await AxiomWallet.fromPassword("12345", "12345", "0");
         walletAddress = await axiomWallet.getAddress();
 
         const axcFundingTransaction = await viemWalletClient.sendTransaction({
