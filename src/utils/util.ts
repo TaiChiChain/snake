@@ -1,6 +1,7 @@
 const util = require('util')
 const child_process = require('child_process')
-const fs = require('fs');
+const fs = require('fs')
+
 export function stringToByte(str: string) {
     const bytes = []
     let c: number
@@ -89,6 +90,7 @@ export function turnLogs(log: {topics: ReadonlyArray<string>; data: string}) {
 }
 
 
+
 export function extractAddress(filePath:string) {
     return new Promise((resolve, reject) => {
         const rs = fs.createReadStream(filePath);
@@ -110,6 +112,16 @@ export function extractAddress(filePath:string) {
             reject(err);
         });
     });
+
+export function extractAbiAndBytecode(jsonFilePath: string): {
+    abi: any
+    bytecode: any
+} {
+    const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'))
+    const abi = jsonData.abi || ''
+    const bytecode = jsonData.bytecode || ''
+    return {abi, bytecode}
+
 }
 
 export async function runShellScript(script: any, args: any) {
