@@ -62,15 +62,15 @@ process.env.PAYMASTER=ST_PAYMASTER
 process.env.RPC_URL=ST_URL
 let addressList: walletInstance[]=[]
 const provider = newProvider()
-const requestCount=500;
+const requestCount=100;
 describe('AxiomWallet: transfer with password', () => {
 
 
-
+    //部署在本地的时候才需要，否则需要提前手动准备环境
     test.only('deploy', async () => {
         await envDeploy()
     });
-    test.only('generate account and min axc', async () => {
+    test.only('generate account and mint axc', async () => {
         await genSmartAccount(requestCount)
     });
 
@@ -82,8 +82,8 @@ describe('AxiomWallet: transfer with password', () => {
         const promises: any[] = [];
         const startTime = performance.now();
         console.log(startTime)
-        for (let i = 0; i < requestCount; i++) {
-            // console.log(i)
+        for (let i = 400; i < requestCount + 400; i++) {
+            console.log(i)
             const promise = transferAXC(result[i].encryptedKey,result[i].senderAddress)
             promises.push(promise)
         }
@@ -137,8 +137,8 @@ describe('AxiomWallet: transfer with password', () => {
         let result:any = [];
         result = await extractEncryptedKeysAndAddresses("account.txt")
 
-        for (let i = 0; i < requestCount; i++) {
-            // console.log(i)
+        for (let i = 500; i < 1000; i++) {
+            console.log(i)
             const wallat = await AxiomWallet.fromEncryptedKey("12345","12345",result[i].encryptedKey,result[i].senderAddress)
             const erc20FundingTransaction_weth = await viemWalletClient.writeContract({
                 address: process.env.WETH as Address,
@@ -200,6 +200,7 @@ describe('AxiomWallet: transfer with password', () => {
         const startTime = performance.now();
         console.log(startTime)
         for (let i = 0; i < requestCount; i++) {
+            console.log(i)
             const promise = transferWeth(result[i].encryptedKey,result[i].senderAddress)
             promises.push(promise)
         }
@@ -435,7 +436,7 @@ async function genSmartAccount(requestCount: number) {
     });
     for (let i = 0; i < requestCount; i++) {
         //准备账户
-        console.log("ready account")
+        console.log(i+1)
         axiomWallet = await AxiomWallet.fromPassword("12345", "12345", "0");
         walletAddress = await axiomWallet.getAddress();
         console.log(walletAddress)
@@ -472,7 +473,7 @@ async function genSmartAccount(requestCount: number) {
         // 追加数据
         fs.appendFile(filename, data, (err) => {
             if (err) throw err;
-            console.log('数据追加成功！');
+            // console.log('数据追加成功！');
         });
 
 
@@ -773,7 +774,7 @@ async function transferAXC(encryptedKey:string,senderAddress:string){
     // let nonce = await wallat.axiomAccount.getNonce()
     const txhash = await wallat.transfer(
         "0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013",
-        parseEther("1")
+        parseEther("0.0000000001")
     );
 
     return txhash
@@ -913,7 +914,7 @@ async function transferWeth(encryptedKey:string,senderAddress:string){
     const transactionHash = await wallat.transferErc20(
         weth.address,
         "0xc7F999b83Af6DF9e67d0a37Ee7e900bF38b3D013",
-        parseUnits("1", await weth.read.decimals())
+        parseUnits("0.000000001", await weth.read.decimals())
     );
 
     return transactionHash

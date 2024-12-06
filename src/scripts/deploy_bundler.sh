@@ -23,7 +23,7 @@ git clone git@github.com:axiomesh/stackup-bundler.git
 cd stackup-bundler
 
 # 切到该分支
-git checkout release-2024-06-13
+git checkout release-2024-07-03
 
 # 安装依赖
 sudo make install-dev
